@@ -1,0 +1,90 @@
+﻿.records-container{
+    margin-top : 40px;
+}
+
+
+.records-header{
+    display : flex;
+    align-items:center;
+}
+
+.record {
+    position: relative;
+    display: inline-block;
+    padding: 5px 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0, 0.1);
+    font-size: 12px;
+    font-weight : 400;
+    font-style: italic;
+    color : #eee;
+    cursor: pointer;
+    transition: all .2s;
+   
+}
+
+.record:hover{
+    transform : translateY(3px);
+}
+
+.record:not(:first-child)
+{
+    margin-left : 40px;
+}
+
+.record-icon {
+    font-size: 175px;
+    color: #374f6b;
+}
+
+.record-name{
+    position : absolute;
+    left : 25px;
+    top : 75px;
+
+}
+
+.record-date{
+    position : absolute;
+    left : 25px;
+    top : 100px;
+}
+
+.record-last-agent{
+    position : absolute;
+    left : 25px;
+    top : 115px;
+}
+
+.record-status{
+    position : absolute;
+    left : 25px;
+    top : 95px;
+}
+
+
+.btn-police {
+    background-color: #374f6b;
+    color: #eee !important;
+    display: inline-block;
+    border-radius: 4px;
+    padding: 8px 8px;
+}
+
+.btn-police-rounded{
+    padding : 8px 12px;
+    border-radius : 4px;
+}
+
+.btn-police:hover{
+    color : #eee;
+}
+
+
+.dropdown-button{
+    color : #eee;
+    text-decoration : none !important;
+}
+
+.dropdown-button:hover{
+    color : #eee;
+}
