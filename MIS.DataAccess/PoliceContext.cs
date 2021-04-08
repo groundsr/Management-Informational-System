@@ -1,10 +1,10 @@
-﻿using API.Model;
+﻿using MSI.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace API.DataAccess
+namespace MSI.DataAccess
 {
     public class PoliceContext : DbContext
     {

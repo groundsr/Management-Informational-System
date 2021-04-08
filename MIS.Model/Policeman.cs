@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace API.Model
+namespace MSI.Model
 {
     public enum Rank{ PrincipalChiefAgent ,ChiefAgent , DeputyChiefAgent ,PrincipalAgent , Agent }
     public class Policeman

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace API.Model
+namespace MSI.Model
 {
     public class PoliceSection
     {

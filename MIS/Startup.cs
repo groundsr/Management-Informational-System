@@ -1,4 +1,4 @@
-using API.DataAccess;
+using MSI.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +13,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MIS.DataAccess.Abstractions;
+using MIS.DataAccess;
+using MIS.BusinessLogic;
 
 namespace MIS
 {
@@ -30,6 +33,9 @@ namespace MIS
         {
             services.AddDbContext<PoliceContext>(options =>
           options.UseSqlServer(Configuration.GetConnectionString("Police")));
+            services.AddScoped<IPoliceStationRepository, EFPoliceStationRepository>();
+            services.AddScoped<PoliceStationService>();
+
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -39,6 +45,7 @@ namespace MIS
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

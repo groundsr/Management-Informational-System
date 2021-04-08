@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace API.Model
+namespace MSI.Model
 {
     public enum Status { Active , Closed};
     public class CriminalRecord
