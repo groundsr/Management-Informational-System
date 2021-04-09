@@ -6,8 +6,8 @@ namespace MSI.Model
 {
     public class PolicemanMeeting
     {
-        public Policeman Policeman { get; set; }
-        public Meeting Meeting { get; set; }
+        public virtual Policeman Policeman { get; set; }
+        public virtual Meeting Meeting { get; set; }
         public Guid Id { get; set; }
     }
 }

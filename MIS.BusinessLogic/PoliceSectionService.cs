@@ -6,11 +6,11 @@ using System.Text;
 
 namespace MIS.BusinessLogic
 {
-    public class PoliceStationService
+    public class PoliceSectionService
     {
-        private readonly IPoliceStationRepository policeStationRepository;
+        private readonly IPoliceSectionRepository policeStationRepository;
 
-        public PoliceStationService(IPoliceStationRepository policeStationRepository)
+        public PoliceSectionService(IPoliceSectionRepository policeStationRepository)
         {
             this.policeStationRepository = policeStationRepository;
         }
@@ -18,6 +18,11 @@ namespace MIS.BusinessLogic
         public IEnumerable<PoliceSection> GetAll()
         {
             return policeStationRepository.GetAll();
+        }
+
+        public void Add(PoliceSection policeSection)
+        {
+            policeStationRepository.Add(policeSection);
         }
 
 

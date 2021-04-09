@@ -7,11 +7,11 @@ using System.Text;
 
 namespace MIS.DataAccess
 {
-    public class EFPoliceStationRepository : EFRepository<PoliceSection>, IPoliceStationRepository
+    public class EFPoliceSectionRepository : EFRepository<PoliceSection>, IPoliceSectionRepository
     {
         private readonly PoliceContext context;
 
-        public EFPoliceStationRepository(PoliceContext context) : base (context)
+        public EFPoliceSectionRepository(PoliceContext context) : base (context)
         {
             this.context = context;
         }

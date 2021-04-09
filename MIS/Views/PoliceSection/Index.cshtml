@@ -2,8 +2,68 @@
 
 @model IEnumerable<PoliceSection>
 
-@foreach(var obj in Model)
-{
-    <p>@obj.Name</p>
-}
+
+@*<div class="input-group  mb-4 mt-4">
+    <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button">Search</button>
+    </div>
+</div>*@
+<div class="search border mt-5 mb-5"> <input type="text" class="search-input" placeholder="Search..." name=""> <a href="#" class="search-icon"> <i class="fa fa-search"></i> </a> </div>
+
+<div class="container mt-4 mb-5">
+    <div class="row p-0 text-center">
+        <div class="col col-4 text-center">
+            <a class="btn btn-success text-center" asp-controller="PoliceSection" asp-action="Create">
+                Create new Police Station
+            </a>
+         </div>
+
+         <div class="col col-4">
+                <a class="btn btn-primary" asp-controller="PoliceSection" asp-action="Create">
+                    Update Police Station
+                </a>
+         </div>
+         <div class="col col-4">
+                <a class="btn btn-danger" asp-controller="PoliceSection" asp-action="Create">
+                    Delete Police Station
+                </a>
+         </div>
+            
+    
+        
+    </div>
+</div>
+
+
+
+<div class="container">
+    <div class="row">
+        @foreach (var obj in Model)
+        {
+            if (obj != null)
+            {
+                <div class="col-4 mb-5 c4rd">
+
+                    <div class="shadow card rounded justify-content-center text-center align-items-center zoom c4rd"
+                         style="width: 18rem; background-color:#374f6b; color:#fff">
+                        <div class="card-body p-0">
+                            <h5 class="card-title">@obj.Name</h5>
+                            
+                                <p>@obj.Policemen.Count <span>police officer</span></p>
+                            
+                            <p class="card-text">
+                                <i class="bi bi-geo-alt"></i>  <span>@obj.Address.City ,</span>
+                                <span>@obj.Address.Street, </span>
+                                <span>@obj.Address.Number</span>
+                            </p>
+                            <a href="#" class="btn btn-light">Go to section</a>
+                        </div>
+                    </div>
+
+                </div>
+            }
+        }
+    </div>
+</div>
 

@@ -33,8 +33,8 @@ namespace MIS
         {
             services.AddDbContext<PoliceContext>(options =>
           options.UseSqlServer(Configuration.GetConnectionString("Police")));
-            services.AddScoped<IPoliceStationRepository, EFPoliceStationRepository>();
-            services.AddScoped<PoliceStationService>();
+            services.AddScoped<IPoliceSectionRepository, EFPoliceSectionRepository>();
+            services.AddScoped<PoliceSectionService>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>

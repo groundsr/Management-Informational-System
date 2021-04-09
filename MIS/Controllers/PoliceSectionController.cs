@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MIS.BusinessLogic;
+using MSI.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +10,36 @@ namespace MIS.Controllers
 {
     public class PoliceSectionController : Controller
     {
-        public PoliceStationService policeStationService;
+        public PoliceSectionService policeSectionService;
 
-        public PoliceSectionController(PoliceStationService policeStationService)
+        public PoliceSectionController(PoliceSectionService policeStationService)
         {
-            this.policeStationService = policeStationService;
+            this.policeSectionService = policeStationService;
         }
 
         public IActionResult Index()
         {
-            var model = policeStationService.GetAll();
+            var model = policeSectionService.GetAll();
             return View(model);
 
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(PoliceSection policeSection)
+        {
+            if (ModelState.IsValid)
+            {
+                policeSectionService.Add(policeSection);
+                return RedirectToAction("Index");
+
+            }
+            return View(policeSection);
         }
     }
 }

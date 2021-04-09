@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MIS.DataAccess.Abstractions
 {
-    public interface IPoliceStationRepository : IRepository<PoliceSection>
+    public interface IPoliceSectionRepository : IRepository<PoliceSection>
     {
 
     }
