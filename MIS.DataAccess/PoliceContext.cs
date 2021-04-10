@@ -1,10 +1,10 @@
-﻿using API.Model;
+﻿using MSI.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace API.DataAccess
+namespace MSI.DataAccess
 {
     public class PoliceContext : DbContext
     {
@@ -19,6 +19,11 @@ namespace API.DataAccess
         public DbSet<Policeman> Policemen { get; set; }
         public DbSet<PoliceSection> PoliceSections { get; set; }
         public DbSet<PolicemanMeeting> PolicemanMeetings { get; set; }
-      
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+        }
+
     }
 }

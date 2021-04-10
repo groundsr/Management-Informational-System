@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace API.Model
+namespace MSI.Model
 {
     public enum Status { Active , Closed};
     public class CriminalRecord
@@ -11,8 +11,8 @@ namespace API.Model
         public DateTime CreatedOn { get; set; }
         public string Description { get; set; }
         public Status Status { get; set; }
-        public Policeman ModifiedBy { get; set; }
-        public List<Policeman> Policemen { get; set; } = new List<Policeman>();
+        public virtual Policeman ModifiedBy { get; set; }
+        public virtual List<Policeman> Policemen { get; set; } = new List<Policeman>();
         public string Type { get; set; }
        
     }

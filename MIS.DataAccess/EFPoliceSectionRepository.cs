@@ -1,0 +1,21 @@
+﻿using MIS.DataAccess.Abstractions;
+using MSI.DataAccess;
+using MSI.Model;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace MIS.DataAccess
+{
+    public class EFPoliceSectionRepository : EFRepository<PoliceSection>, IPoliceSectionRepository
+    {
+        private readonly PoliceContext context;
+
+        public EFPoliceSectionRepository(PoliceContext context) : base (context)
+        {
+            this.context = context;
+        }
+
+
+    }
+}
