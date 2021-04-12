@@ -30,6 +30,9 @@ namespace MIS
         {
             services.AddDbContext<PoliceContext>(options =>
           options.UseSqlServer(Configuration.GetConnectionString("Police")));
+            services.AddScoped<IPoliceSectionRepository, EFPoliceSectionRepository>();
+            services.AddScoped<PoliceSectionService>();
+            services.AddScoped<IEFCriminalRecordRepository, EFCriminalRecordRepository>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -66,7 +69,7 @@ namespace MIS
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
+                    name:"default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });

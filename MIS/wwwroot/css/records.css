@@ -88,3 +88,25 @@
 .dropdown-button:hover{
     color : #eee;
 }
+
+.record-options{
+    display : flex;
+    justify-content : center;
+}
+
+.btn-record-edit {
+    background-color: #F8F6FE;
+    border-radius: 4px;
+    color: #777;
+    font-size: 15.5px;
+    width: 40%;
+    margin-right: 10px;
+}
+
+.btn-record-delete {
+    background-color: #374f6b;
+    border-radius: 4px;
+    font-size: 17px;
+    color: #eee;
+}
+

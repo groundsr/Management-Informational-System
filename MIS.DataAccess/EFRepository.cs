@@ -10,17 +10,18 @@ namespace MIS.DataAccess
 {
     public class EFRepository<T> : IRepository<T> where T : class
     {
-        private readonly PoliceContext context;
+        protected readonly PoliceContext _context;
         private DbSet<T> dbSet;
+
         public EFRepository(PoliceContext context)
         {
-            this.context = context;
+            this._context = context;
             dbSet = context.Set<T>();
         }
         public void Add(T entity)
         {
-            context.Add(entity);
-            context.SaveChanges();
+            _context.Add(entity);
+            _context.SaveChanges();
         }
 
         public T Get(Guid id)
@@ -43,13 +44,18 @@ namespace MIS.DataAccess
         public void Remove(Guid id)
         {
             dbSet.Remove(Get(id));
-            context.SaveChanges();
+            _context.SaveChanges();
+        }
+
+        public void Save()
+        {
+            _context.SaveChanges();
         }
 
         public void Update(T entity)
         {
             dbSet.Update(entity);
-            context.SaveChanges();
+            _context.SaveChanges();
         }
     }
 }

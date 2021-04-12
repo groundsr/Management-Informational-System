@@ -1,4 +1,5 @@
 ﻿using System;
+using MSI.Model;
 using System.Collections.Generic;
 
 namespace API.Model

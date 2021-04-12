@@ -11,5 +11,7 @@ namespace MIS.DataAccess.Abstractions
         void Remove(Guid id);
         void Update(T entity);
         IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null);
+
+        void Save();
     }
 }

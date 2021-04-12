@@ -17,6 +17,12 @@
   <ItemGroup>
     <ProjectReference Include="..\MIS.BusinessLogic\MIS.BusinessLogic.csproj" />
     <ProjectReference Include="..\MIS.DataAccess\MIS.DataAccess.csproj" />
+    <ProjectReference Include="..\MIS.Model\MIS.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Director\" />
+    <Folder Include="Areas\Officer\" />
   </ItemGroup>
 
 </Project>
