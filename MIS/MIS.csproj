@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MIS.BusinessLogic\MIS.BusinessLogic.csproj" />
     <ProjectReference Include="..\MIS.DataAccess\MIS.DataAccess.csproj" />
+    <ProjectReference Include="..\MIS.SignalR\MIS.SignalR.csproj" />
   </ItemGroup>
 
 </Project>

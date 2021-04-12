@@ -5,13 +5,15 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIS", "MIS\MIS.csproj", "{063E415F-B6A2-4305-9EB3-4BEBC3AA6778}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIS.BusinessLogic", "MIS.BusinessLogic\MIS.BusinessLogic.csproj", "{B863802D-45C6-487D-8242-A929EE15D938}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIS.BusinessLogic", "MIS.BusinessLogic\MIS.BusinessLogic.csproj", "{B863802D-45C6-487D-8242-A929EE15D938}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIS.DataAccess.Abstractions", "MIS.DataAccess.Abstractions\MIS.DataAccess.Abstractions.csproj", "{D785703C-5A77-45A1-8A5A-C6C31E6DA565}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIS.DataAccess.Abstractions", "MIS.DataAccess.Abstractions\MIS.DataAccess.Abstractions.csproj", "{D785703C-5A77-45A1-8A5A-C6C31E6DA565}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIS.DataAccess", "MIS.DataAccess\MIS.DataAccess.csproj", "{DF8D26D5-EB6F-4CA4-AF71-44842A7BF775}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIS.DataAccess", "MIS.DataAccess\MIS.DataAccess.csproj", "{DF8D26D5-EB6F-4CA4-AF71-44842A7BF775}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIS.Model", "MIS.Model\MIS.Model.csproj", "{C8B8B50B-C382-4243-9100-64F8DB02A169}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIS.Model", "MIS.Model\MIS.Model.csproj", "{C8B8B50B-C382-4243-9100-64F8DB02A169}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIS.SignalR", "MIS.SignalR\MIS.SignalR.csproj", "{F1D48021-C66D-498C-8EC3-9DB9C1D3F8A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{C8B8B50B-C382-4243-9100-64F8DB02A169}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8B8B50B-C382-4243-9100-64F8DB02A169}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8B8B50B-C382-4243-9100-64F8DB02A169}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1D48021-C66D-498C-8EC3-9DB9C1D3F8A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1D48021-C66D-498C-8EC3-9DB9C1D3F8A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1D48021-C66D-498C-8EC3-9DB9C1D3F8A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1D48021-C66D-498C-8EC3-9DB9C1D3F8A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
