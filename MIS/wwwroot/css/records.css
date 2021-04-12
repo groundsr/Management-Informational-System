@@ -19,17 +19,15 @@
     color : #eee;
     cursor: pointer;
     transition: all .2s;
-   
+    margin-right : 40px;
+    margin-top : 15px;
 }
 
 .record:hover{
     transform : translateY(3px);
 }
 
-.record:not(:first-child)
-{
-    margin-left : 40px;
-}
+
 
 .record-icon {
     font-size: 175px;
@@ -88,3 +86,25 @@
 .dropdown-button:hover{
     color : #eee;
 }
+
+.record-options{
+    display : flex;
+    justify-content : center;
+}
+
+.btn-record-edit {
+    background-color: #F8F6FE;
+    border-radius: 4px;
+    color: #777;
+    font-size: 15.5px;
+    width: 40%;
+    margin-right: 10px;
+}
+
+.btn-record-delete {
+    background-color: #374f6b;
+    border-radius: 4px;
+    font-size: 17px;
+    color: #eee;
+}
+

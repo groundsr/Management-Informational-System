@@ -1,0 +1,104 @@
+﻿.btn-add{
+    padding : 4px 10px;
+    display : flex;
+    align-items : center;
+    margin-left : 90%;
+    margin-top : 40px;
+    margin-bottom : 40px;
+    font-size : 18px;
+}
+
+.meetings {
+    min-height: 400px;
+    /*padding : 20px 20px;*/
+    border : 1px solid #eee;
+}
+
+.meeting {
+    min-height: 50px;
+    border-radius: 40px;
+    width: 80%;
+    margin: auto;
+    background-color: #374f6b;
+    margin-bottom : 20px;
+    padding : 0 20px;   
+   
+    
+}
+
+.meeting-day{
+    padding : 20px 20px;
+    border-bottom : 1px solid #eee;
+    /*text-align : center;*/
+}
+
+.meeting-day-date {
+    font-size: 14px;
+    color : #777;
+    background-color: #e6e6e6;
+    padding: 4px 8px;
+    border-radius: 20px;
+}
+
+.meeting-day-date-container {
+    margin-bottom: 30px;
+    text-align : center;
+}
+
+.meeting-info {
+    display: flex;
+    align-items: center;
+}
+
+.meeting-join {
+    background-color: #fff;
+    display: inline-block;
+    margin-top: 5px;
+    border-radius: 40px;
+    margin-right: 10px;
+    color : rgba(0 , 0 , 0 , .3);
+}
+.meeting-info-buttons{
+    display : flex;
+    flex-basis : 50%;
+    justify-content : flex-end;
+}
+
+.btn-attendees {
+    background-color: #fff;
+    margin-right: 10px;
+    border-radius: 40px;
+    margin-top: 5px;
+}
+
+.meeting-hour{
+    margin-left : auto;
+    color : #eee;
+    margin-top : 3px;
+}
+
+.meeting-name{
+    color : #eee;
+    font-size : 18px;
+}
+
+.meeting-started {
+    background-color: #5beb4d;
+    color : #eee;
+}
+
+.participants-list{
+    font-size : 13px;
+    list-style : none;
+    padding-left : 0;
+    margin-top : 10px;
+}
+
+.participant {
+    display: inline-block;
+    background-color: #e6e6e6;
+    padding: 4px 8px;
+    margin-right : 5px;
+    margin-top : 5px;
+    cursor : pointer;
+}

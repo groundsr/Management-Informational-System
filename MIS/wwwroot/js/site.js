@@ -1,5 +1,9 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function addParticipant(event, value) {
+    if (event.keyCode == 13) {
+        event.preventDefault()
+        var listItem = `<li class="participant" onclick="this.remove()">
+        ${value} <i class="fas fa-times"></i></li > `
+        $('#participantsList').append(listItem)
 
-// Write your JavaScript code.
-
+    }
+}
