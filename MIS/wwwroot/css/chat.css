@@ -1,0 +1,105 @@
+﻿.chat-container {
+    height: 600px;
+    width : 85%;
+    margin : auto;
+    border-radius : 6px;
+}
+
+.chat-header {
+    height: 50px;
+    background-color: #f0eee6;
+    color: #777;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.chat-name{
+    font-size : 16px;
+    color : inherit;
+}
+
+.chat-end-date{
+    font-size : 14px;
+    margin-left : auto;
+    color : inherit;
+}
+
+.chat-body {
+    display : flex;
+    flex-direction : column;
+    height: 500px;
+    background-color: rgba(0, 0, 0, 0.03);
+    padding : 20px 20px;
+}
+
+.chat-footer {
+    height: 50px;
+    background-color: #f0eee6;
+    padding : 5px 20px;
+    display : flex;
+    align-items : center;
+}
+
+.chat-input{
+    border-radius : 40px;
+    width : 95%;
+    border : none;
+    outline : none;
+    height : 100%;
+    padding : 0 20px;
+    color : rgba(0 , 0 , 0 , .8);
+}
+
+.chat-send-icon{
+    font-size : 30px;
+    margin-left : 15px;
+    cursor : pointer;
+}
+
+
+.message-container {
+    margin-bottom: 10px;
+    max-width: 40%;
+}
+
+.message-container-received{
+    align-self : flex-end;
+}
+.message{
+    
+    padding : 8px 15px;
+    display : inline-block;
+    border-radius : 20px;
+}
+
+.message-received{
+    background-color : #fff;
+    color : #444;
+}
+
+.message-content{
+    color : inherit;
+}
+
+.message-date{
+    color : inherit;
+    margin-left : 15px;
+    font-size : 11px;
+}
+
+.message-sent {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.message-receiver-name {
+    font-size: 12px;
+    margin-bottom: 5px;
+    color :#35cd96;
+}
+
+.chat-members-nr{
+    font-size : 14px;
+    margin-bottom : 5px;
+}
