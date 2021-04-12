@@ -8,7 +8,8 @@ namespace MSI.Model
     {
         public Guid Id { get; set; }
         public virtual Policeman Requester { get; set; }
-        public DateTime ScheduledOn { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public string Topic { get; set; }
         public virtual List<Policeman> Policemen { get; set; } = new List<Policeman>();
     }

@@ -12,7 +12,6 @@ namespace MSI.Model
         public string Description { get; set; }
         public Status Status { get; set; }
         public virtual Policeman ModifiedBy { get; set; }
-        public virtual List<Policeman> Policemen { get; set; } = new List<Policeman>();
         public string Type { get; set; }
        
     }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MIS.Model;
 
 namespace MSI.DataAccess
 {
@@ -19,7 +20,8 @@ namespace MSI.DataAccess
         public DbSet<Policeman> Policemen { get; set; }
         public DbSet<PoliceSection> PoliceSections { get; set; }
         public DbSet<PolicemanMeeting> PolicemanMeetings { get; set; }
-
+        public DbSet<Document> Documents { get; set; }
+        public DbSet<CriminalRecordPoliceman> CriminalRecordPolicemen { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies();
