@@ -1,0 +1,22 @@
+﻿
+#recordStatus {
+    color: red;
+    padding: 10px 10px 10px 10px;
+    font-style: oblique;
+    width:350px;
+    display:inline;
+    margin-right:400px;
+    border:groove;
+
+}
+
+#descriptionArea
+{   
+    margin-top:10px;
+    border:groove;
+    padding:10px 10px 10px 10px;
+    font-style:oblique;
+    border-color:darkblue;
+    color:darkblue;
+    font-size:19px;
+}

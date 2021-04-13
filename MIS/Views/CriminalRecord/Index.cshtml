@@ -40,15 +40,14 @@
 
 <div class="records-container">
 
-
     @foreach (var record in Model)
     {
-        <div class="record">
-            <i class="fas fa-folder record-icon"></i>
+        <div class="record" >
+            <i class="fas fa-folder record-icon" onclick="next('@record.Id')"></i>
             <span class="record-name"><i class="fas fa-signature"></i> name : <span>@record.Name</span></span>
             <span class="record-date"><i class="far fa-clock"></i> date : <span> @record.CreatedOn</span></span>
             <div class="record-options">
-                
+
                 <a href="#editCriminalRecord" class="btn btn-record-edit" onclick="loadEditModal('@record.Id', '@record.Name', '@record.Description', '@record.Type')"><i class="far fa-edit" style="font-size : 12px;"></i> edit</a>
                 <form asp-action="Delete" asp-controller="CriminalRecord" asp-route-id="@record.Id">
                     <button type="submit" class="btn btn-record-delete">
@@ -60,9 +59,9 @@
 
             </div>
         </div>
+        <input type="text" name="Id" value="@record.Id" />
 
     }
-
 
     <div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -82,7 +81,7 @@
                             <label for="Description">Description</label>
                             <textarea class="form-control" id="Description" rows="3" placeholder="Description.." name="Description"></textarea>
                         </div>
-                        <button class="btn btn-police btn-police-rounded" onclick="SetDateTime()">Submit</button>
+                        <button class="btn btn-police btn-police-rounded">Submit</button>
                     </form>
                 </div>
 
@@ -110,9 +109,17 @@
 
 
 
-
-
     <script>
+        function next(id) {
+            $.ajax(
+                {
+                    url: "CriminalRecord/Details?recordId=" + id,
+                    type: 'GET',
+                    success: function (data) {
+                        window.location.href = "https://localhost:44300/CriminalRecord/Details?recordId="+id;
+                    }
+                })
+        }
 
         function loadEditModal(id, name, description, type) {
             $("#editRecordId").val(id)
@@ -121,36 +128,68 @@
             $("#editRecordType").val(type)
         }
 
+        function getRecordId() {
+            var id = document.getElementById('recordId').value;
+            return id;
+        }
+
         $(document).ready(function () {
             $('.btn-record-edit').on('click', function () {
                 $('#editCriminalRecord').modal('show');
             });
         });
 
-
-
-        //$(document).ready($(function () {
-
-        //}
-        //        // ------------------------------------------------------- //
-        //        // Multi Level dropdowns
-        //        // ------------------------------------------------------ //
-        //        $("ul.dropdown-menu [data-toggle='dropdown']").on("click", function (event) {
-        //    event.preventDefault();
-        //    event.stopPropagation();
-
-        //    $(this).siblings().toggleClass("show");
-
-
-        //    if (!$(this).next().hasClass('show')) {
-        //        $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
-        //    }
-        //    $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
-        //        $('.dropdown-submenu .show').removeClass("show");
+        //$(document).ready(function () {
+        //    $('#showRecord').click(function () {
+        //        console.log(getRecordId());
+        //        $.ajax(
+        //            {
+        //                url: "CriminalRecord/Details?recordId=" + getRecordId(),
+        //                type: 'GET',
+        //                success: function (data) {
+        //                    window.location.href = "https://localhost:44300/CriminalRecord/Details?recordId=" + getRecordId();
+        //                }
+        //            })
         //    });
-
         //});
-        //    }))
+
+            //$(document).ready(function () {
+            //    $('#showRecord').click(function () {
+            //        $.ajax(
+            //            {
+            //                url: '/SeachCriminalRecord',
+            //                type: 'GET'
+            //                success: function (data) {
+            //                    window.location.href = "http://localhost:44300/CriminalRecord/SearchCriminalRecord";
+            //                }
+            //            })
+            //    })
+            //}
+
+
+
+            //$(document).ready($(function () {
+
+            //}
+            //        // ------------------------------------------------------- //
+            //        // Multi Level dropdowns
+            //        // ------------------------------------------------------ //
+            //        $("ul.dropdown-menu [data-toggle='dropdown']").on("click", function (event) {
+            //    event.preventDefault();
+            //    event.stopPropagation();
+
+            //    $(this).siblings().toggleClass("show");
+
+
+            //    if (!$(this).next().hasClass('show')) {
+            //        $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+            //    }
+            //    $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
+            //        $('.dropdown-submenu .show').removeClass("show");
+            //    });
+
+            //});
+            //    }))
 
 
     </script>
