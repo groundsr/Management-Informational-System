@@ -31,6 +31,7 @@
     height: 500px;
     background-color: rgba(0, 0, 0, 0.03);
     padding : 20px 20px;
+    overflow-y : scroll;
 }
 
 .chat-footer {
@@ -84,8 +85,13 @@
 
 .message-date{
     color : inherit;
-    margin-left : 15px;
+    margin-left : 10px;
     font-size : 11px;
+}
+
+.message-date-received {
+    margin-left: auto;
+    margin-top: 3px;
 }
 
 .message-sent {
@@ -102,4 +108,14 @@
 .chat-members-nr{
     font-size : 14px;
     margin-bottom : 5px;
+}
+
+.message-received-flex{
+    display:flex;
+    align-items:center;
+}
+
+.message-content-received{
+    margin-right: 10px;
+    
 }

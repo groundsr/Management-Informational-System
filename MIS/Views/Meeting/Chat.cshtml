@@ -1,17 +1,23 @@
-﻿<link href="~/css/chat.css" rel="stylesheet" />
+﻿@using MIS.ViewModels.Meeting
+@model ChatUserViewModel
+
+<link href="~/css/chat.css" rel="stylesheet" />
+
 
 <div class="chat-container">
     <div class="chat-header">
-        <div class="chat-name">Consulting  <div class="chat-members-nr"><i class="fas fa-user"></i> 12 online</div></div>
+        <div class="chat-name">Consulting  <div class="chat-members-nr"><i class="fas fa-user"></i> <span id="usersConnected">0</span> online</div></div>
         <span class="chat-end-date"><i class="far fa-clock"></i> 12:30</span>
 
     </div>
-    <div class="chat-body">
+    <div class="chat-body" id="chat-body">
         <div class="message-container">
             <div class="message message-received">
                 <div class="message-receiver-name">Toma Mihnea</div>
-                <span class="message-content">Hiiiiiiiiiiiiiii</span>
-                <span class="message-date">12:04</span>
+                <div class="message-received-flex">
+                    <span class="message-content">Hiiiiiiiiiiiiiii</span>
+                    <span class="message-date message-date-received">12:04</span>
+                </div>
             </div>
         </div>
         <div class="message-container message-container-received">
@@ -36,7 +42,13 @@
     </div>
 
     <div class="chat-footer">
-        <input class="chat-input" />
-        <i class="fas fa-caret-right chat-send-icon "></i>
+        <input class="chat-input" id="chatInput" />
+        <i id="sendMessage" class="fas fa-caret-right chat-send-icon " onclick="sendMessage(event , '@Model.Name' , '@Model.Id')"></i>
     </div>
 </div>
+
+
+
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>
