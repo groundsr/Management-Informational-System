@@ -33,6 +33,7 @@ connection.on("ReceiveMessage", function (content, name, id) {
         </div>
         </div>`
         document.getElementById("chat-body").innerHTML = document.getElementById("chat-body").innerHTML + html
+        document.getElementById("chat-body").scrollTo(0, 100000);
     }
 
 });
@@ -47,22 +48,24 @@ connection.start().then(function () {
 
 function sendMessage(event, userName, userId) {
     var content = document.getElementById("chatInput").value;
-    myId = userId;
-    name = userName;
-    var date = new Date;
-    var hour = date.getHours();
-    var min = date.getMinutes();
+    if (content != "" && content.trim() != "") {
+        myId = userId;
+        name = userName;
+        var date = new Date;
+        var hour = date.getHours();
+        var min = date.getMinutes();
 
-    var html = `<div class="message-container message-container-received">
+        var html = `<div class="message-container message-container-received">
         <div class="message message-sent">
             <span class="message-content">${content}</span>
             <span class="message-date">${hour}:${min}</span>
         </div>
     </div>`
-    document.getElementById("chat-body").innerHTML = document.getElementById("chat-body").innerHTML + html
-    $.get('/Meeting/SendMessage?content=' + content + '&name=' + userName + '&id=' + userId)
-
-
+        document.getElementById("chat-body").innerHTML = document.getElementById("chat-body").innerHTML + html
+        document.getElementById("chatInput").value = ""
+        document.getElementById("chat-body").scrollTo(0, 100000);
+        $.get('/Meeting/SendMessage?content=' + content + '&name=' + userName + '&id=' + userId)
+    }
     event.preventDefault();
 };
 
