@@ -11,6 +11,5 @@ namespace MSI.Model
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Topic { get; set; }
-        public virtual List<Policeman> Policemen { get; set; } = new List<Policeman>();
     }
 }

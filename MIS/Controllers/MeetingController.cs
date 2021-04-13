@@ -37,11 +37,7 @@ namespace MIS.Controllers
             await hubcontext.Clients.All.SendAsync("ReceiveMessage", content, name, id);
             return Ok();
         }
-        public async Task<IActionResult> UserConnectedAsync(int lastConnected)
-        {
-            await hubcontext.Clients.All.SendAsync("UserConnected" , lastConnected);
-            return Ok();
-        }
+       
 
     }
 }
