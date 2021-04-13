@@ -95,17 +95,19 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                <form asp-action="" asp-controller=""  onkeyup="return event.key != 'Enter';"  onkeypress="return event.key != 'Enter';"  onkeydown="return event.key != 'Enter';">
+                <form asp-action="Add" asp-controller="MeetingRequest"  onkeyup="return event.key != 'Enter';"  onkeypress="return event.key != 'Enter';"  onkeydown="return event.key != 'Enter';">
                     <div class="form-group">
                         <label >Topic</label>
-                        <input class="form-control" />
+                        <input name="Topic" class="form-control" />
                     </div>
                     <div class="form-group">
                         <label >Participants</label>
-                        <input class="form-control" onkeyup="addParticipant(event,this.value)" />
+                        <input class="form-control" id="participantEmail" onkeyup="addParticipant(event,this.value)" />
                         <ul id="participantsList" class="participants-list">
                            
                         </ul>
+                        <input name="participants[0]" />
+                        <input name="test" />
                     </div>
                     <button class="btn btn-police">Submit</button>
                 </form>
