@@ -25,7 +25,8 @@ namespace MIS.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            IEnumerable<MeetingRequest> model = meetingRequestService.GetAll();
+            return PartialView("_Index" , model);
         }
         [HttpPost]
         public IActionResult Add(MeetingRequest meetingRequest , List<string> participants)
@@ -38,6 +39,15 @@ namespace MIS.Controllers
             meetingRequestService.CreateRequest(meetingRequest, participants);
             return RedirectToAction("Index" , "Meeting");
         }
-
+        public IActionResult DeclineRequest(Guid requestId)
+        {
+            meetingRequestService.DeclineRequest(requestId);
+            return RedirectToAction("Index");
+        }
+        public IActionResult AcceptRequest(Guid requestId)
+        {
+            meetingRequestService.AcceptRequest(requestId);
+            return RedirectToAction("Index");
+        }
     }
 }

@@ -21,8 +21,8 @@ namespace MIS.BusinessLogic
         }
         public IEnumerable<IEnumerable<Meeting>> GetAllForPoliceman(Policeman policeman)
         {
-            var meetings = meetingPolicemanRepository.GetAllForPoliceman(policeman).Select(x => x.Meeting)
-                .OrderBy(x => x.Start).ThenBy(x => x.End).ToList();
+            var meetings = meetingPolicemanRepository.GetAllForPoliceman(policeman).Select(x => x.Meeting).
+                Where(x => x.End >= DateTime.Now).OrderBy(x => x.Start).ThenBy(x => x.End).ToList();
             List<List<Meeting>> meetingsByDate = new List<List<Meeting>>();
             List<Meeting> currentDayMeetings = new List<Meeting>();
             currentDayMeetings.Add(meetings[0]);

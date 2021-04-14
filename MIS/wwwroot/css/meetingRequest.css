@@ -1,0 +1,44 @@
+﻿.request{
+    display : flex;
+    align-items:center;
+    margin-bottom : 5px;
+    padding : 5px 0px;
+    
+}
+.request:not(:last-child) {
+    border-bottom: 1px solid #eee;
+}
+
+.request-info{
+    display : flex;
+    flex-direction : column;
+    font-size: 14px;
+}
+
+.request-info-user {
+    color: #35cd96;
+    font-size: inherit;
+}
+
+.request-info-date{
+    color : inherit;
+    font-size : inherit;
+}
+
+.request-options{
+    margin-left : auto;
+}
+
+.request-options-accept ,  .request-options-decline {
+    display: inline-block;
+    text-decoration: none;
+    color: #eee;
+    background-color: #374f6b;
+    padding : 4px 8px;
+    border-radius : 4px;
+}
+
+.request-options-accept:hover, .request-options-decline:hover{
+    color : #eee;
+    text-decoration : none;
+}
