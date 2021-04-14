@@ -82,7 +82,20 @@ namespace MIS.Controllers
         [HttpPost]
         public IActionResult Delete(Guid id) { 
 
+
+            List<CriminalRecordPoliceman> criminalRecordPolicemenList =
+                _efCriminalRecordPolicemanRepository.GetAll(x => x.CriminalRecord.Id == id)
+                .ToList();
+
+            for(int i=0;i<criminalRecordPolicemenList.Count;i++)
+            {
+                _efCriminalRecordPolicemanRepository.Remove(criminalRecordPolicemenList[i].Id);
+            }
+
+            _efCriminalRecordPolicemanRepository.Save();
             _efCriminalRecordRepository.Remove(id);
+
+
             _efCriminalRecordRepository.Save();
             return RedirectToAction(nameof(Index));
         
@@ -120,7 +133,7 @@ namespace MIS.Controllers
 
         [HttpPost]
         public IActionResult AddPolicemanToACriminalRecord(string policemanEmail,Guid criminalRecordId )
-        {
+            {
         
             Policeman policeman = _efPolicemanRepository.GetByEmail(policemanEmail);
             CriminalRecord criminalRecord = _efCriminalRecordRepository.Get(criminalRecordId);
