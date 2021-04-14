@@ -42,7 +42,9 @@ namespace MIS
             services.AddScoped<PoliceSectionService>();
             services.AddScoped<MeetingRequestService>();
             services.AddScoped<PolicemanService>();
-
+            services.AddScoped<IMeetingPolicemanRepository, EFMeetingPolicemanRepository>();
+            services.AddScoped<IMeetingRepository, EFMeetingRepository>();
+            services.AddScoped<MeetingService>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("IdentityConnection")));

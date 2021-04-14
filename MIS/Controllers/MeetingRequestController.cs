@@ -36,7 +36,7 @@ namespace MIS.Controllers
             meetingRequestService.Add(meetingRequest);
             participants.Add(policeman.Email);
             meetingRequestService.CreateRequest(meetingRequest, participants);
-            return Ok();
+            return RedirectToAction("Index" , "Meeting");
         }
 
     }

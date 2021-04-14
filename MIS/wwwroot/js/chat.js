@@ -4,17 +4,17 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
 var myId;
 
-connection.on("UserConnected", function (lastConnected) {
+connection.on("UserConnected", function () {
+    console.log("connected");
     var usersConnected = document.getElementById("usersConnected").innerHTML;
-    usersConnected = lastConnected + 1;
-    
+    usersConnected++;
     document.getElementById("usersConnected").innerHTML = usersConnected;
 })
 
 connection.on("UserDisconnected", function () {
     var usersConnected = document.getElementById("usersConnected").innerHTML;
     usersConnected--;
-    console.log("hi")
+    console.log("disconnected");
     document.getElementById("usersConnected").innerHTML = usersConnected;
 })
 
@@ -41,7 +41,6 @@ connection.on("ReceiveMessage", function (content, name, id) {
 
 connection.start().then(function () {
     var usersConnected = document.getElementById("usersConnected").innerHTML;
-    $.get('/Meeting/UserConnected?lastConnected=' + usersConnected);
 }).catch(function (err) {
     return console.error(err.toString());
 });

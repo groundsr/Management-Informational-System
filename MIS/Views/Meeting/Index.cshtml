@@ -1,4 +1,5 @@
-﻿
+﻿@using MSI.Model
+@model IEnumerable<IEnumerable<Meeting>>
 @{
     ViewData["Title"] = "Index";
 }
@@ -7,6 +8,43 @@
 <button class="btn btn-police btn-add" data-toggle="modal" data-target="#newMeeting"><i class="fas fa-plus-circle icon"></i> Meeting </button>
 
 <div class="meetings">
+    @foreach (var it in Model)
+    {
+        <div class="meeting-day">
+            <div class="meeting-day-date-container">
+                <span class="meeting-day-date">@it.ElementAt(0).Start.ToShortDateString()</span>
+            </div>
+            @foreach (var it2 in it)
+            {
+
+                <div class="meeting">
+                    <div class="meeting-info">
+                        <span class="meeting-name"><i class="fas fa-comment"></i> @it2.Topic</span>
+                        <span class="meeting-hour"><i class="far fa-clock"></i> @it2.Start.ToString("HH:mm")</span>
+                        <div class="meeting-info-buttons">
+
+                            <button class="btn btn-attendees"><i class="bi bi-person-circle"></i> Attendees</button>
+                            @if (it2.Start.Hour >= DateTime.Now.Hour && DateTime.Now.Hour <= it2.End.Hour && it2.Start.Day == DateTime.Now.Day && it2.Start.Month == DateTime.Now.Month)
+                            {
+                                <a asp-action="Chat" asp-route-id="@it2.Id" class="btn meeting-join meeting-started">
+                                    <i class="bi bi-box-arrow-in-right"></i>
+                                    Join
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="#" class="btn meeting-join">
+                                    <i class="bi bi-box-arrow-in-right"></i>
+                                    Join
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
     <div class="meeting-day">
         <div class="meeting-day-date-container">
             <span class="meeting-day-date">15/4/2021</span>
@@ -18,7 +56,7 @@
                 <div class="meeting-info-buttons">
 
                     <button class="btn btn-attendees"><i class="bi bi-person-circle"></i> Attendees</button>
-                    <a href="#" class="btn meeting-join meeting-started">
+                    <a href="#" class="btn meeting-join">
                         <i class="bi bi-box-arrow-in-right"></i>
                         Join
                     </a>

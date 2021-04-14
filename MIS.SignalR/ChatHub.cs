@@ -6,10 +6,9 @@ namespace MIS.SignalR
 {
     public class ChatHub : Hub
     {
-     
-        public async Task AfterConnected()
+        public override Task OnConnectedAsync()
         {
-            await Clients.All.SendAsync("UserConnected");
+            return Clients.All.SendAsync("UserConnected");
         }
         public override Task OnDisconnectedAsync(Exception exception)
         {
