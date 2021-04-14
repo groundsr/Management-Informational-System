@@ -1,0 +1,75 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@using MIS.Model
+@using MSI.Model
+@model List<MIS.Model.CriminalRecordPoliceman>
+
+@{CriminalRecord criminalRecord = null; }
+
+@foreach (var item in Model)
+{   
+    <h3 id="recordStatus"> Record Status : @item.CriminalRecord.Status </h3>
+    <h3 id="recordStatus"> Type : @item.CriminalRecord.Type </h3>
+
+    <div class="form-group border p-3" id="descriptionArea">
+        @item.CriminalRecord.Description
+    </div>
+
+    criminalRecord = @item.CriminalRecord;
+    break;
+}
+
+
+
+<form asp-controller="CriminalRecord" asp-action="AddPolicemanToACriminalRecord">
+    <input type="hidden" name="criminalRecordId" id="criminalRecordValue" value="@criminalRecord" />
+    <input type="search" class="search-input" placeholder="Search..." />
+    <input class="fcol-2" type="text" name="policemanEmail" id="emailValue" />
+    <button type="submit" class="btn btn-submit btn-primary">
+        Add policeman
+    </button>
+</form>
+
+
+@foreach (var item in Model)
+{
+    <div>
+        @item.Policeman.Name
+        @item.Policeman.Email
+        @item.Policeman.Seniority
+
+    </div>
+}
+
+
+
+
+
+@*<script>
+        function next(recordId, policemanEmail) {
+            $.ajax(
+                {
+                    url: "CriminalRecord/Details/AddPolicemanToACriminalRecord?policemanEmail=" + policemanEmail + "&criminalRecordId=" + recordId,
+                    type: 'POST',
+                    success: function (data) {
+                        window.location.href = "https://localhost:44300/CriminalRecord/Details/AddPolicemanToACriminalRecord?policemanEmail="
+                            + policemanEmail + "&criminalRecordId=" + recordId;
+                    }
+                })
+        }
+
+        function getEmail() {
+            var email = document.getElementById('emailValue').value;
+            return email;
+        }
+
+    </script>*@
+
+
+
+
+
