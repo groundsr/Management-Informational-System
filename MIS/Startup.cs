@@ -36,10 +36,12 @@ namespace MIS
           options.UseSqlServer(Configuration.GetConnectionString("Police")));
             services.AddScoped<IPoliceSectionRepository, EFPoliceSectionRepository>();
             services.AddScoped<IEFCriminalRecordRepository, EFCriminalRecordRepository>();
-            services.AddScoped<IEFCriminalRecordPolicemanRepository, EFCriminalRecordPolicemanRepository>();
-            services.AddScoped<IEFPolicemanRepository, EFPolicemanRepository>();
+            services.AddScoped<IMeetingRequestRepository, EFMeetingRequestRepository>();
+            services.AddScoped<IMeetingRequestPolicemanRepository, EFMeetingRequestPolicemanRepository>();
+            services.AddScoped<IPolicemanRepository, EFPolicemanRepository>();
             services.AddScoped<PoliceSectionService>();
-
+            services.AddScoped<MeetingRequestService>();
+            services.AddScoped<PolicemanService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

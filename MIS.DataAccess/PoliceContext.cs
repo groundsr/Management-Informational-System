@@ -22,6 +22,7 @@ namespace MSI.DataAccess
         public DbSet<PolicemanMeeting> PolicemanMeetings { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<CriminalRecordPoliceman> CriminalRecordPolicemen { get; set; }
+        public DbSet<MeetingRequestPoliceman> MeetingRequestPolicemen { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies();
