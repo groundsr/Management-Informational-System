@@ -24,6 +24,11 @@ namespace MIS.Controllers
 
         }
 
+        public IActionResult Hierarchy()
+        {
+            return View();
+        }
+
         public IActionResult Create()
         {
             return View();
@@ -41,5 +46,59 @@ namespace MIS.Controllers
             }
             return View(policeSection);
         }
+
+        public IActionResult Update(Guid id)
+        {
+
+            
+            PoliceSection policeSection = policeSectionService.Get(id);
+
+            if (policeSection == null)
+            {
+                return NotFound();
+            }
+
+            return View(policeSection);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(PoliceSection policeSection)
+        {
+            if (ModelState.IsValid)
+            {
+                policeSectionService.Update(policeSection);
+                return RedirectToAction("Index");
+
+            }
+            return View(policeSection);
+        }
+
+        public IActionResult Delete(Guid id)
+        {
+
+
+            PoliceSection policeSection = policeSectionService.Get(id);
+
+            if (policeSection == null)
+            {
+                return NotFound();
+            }
+
+            return View(policeSection);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePost(Guid id)
+        {
+            
+                policeSectionService.Delete(id);
+                return RedirectToAction("Index");
+
+        }
+
     }
 }
