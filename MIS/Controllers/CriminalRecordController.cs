@@ -12,10 +12,10 @@ namespace MIS.Controllers
     public class CriminalRecordController:Controller
     {
         private readonly IEFCriminalRecordRepository _efCriminalRecordRepository;
-        private readonly IEFPolicemanRepository _efPolicemanRepository;
+        private readonly IPolicemanRepository _efPolicemanRepository;
         private readonly IEFCriminalRecordPolicemanRepository _efCriminalRecordPolicemanRepository;
 
-        public CriminalRecordController(IEFCriminalRecordRepository efCriminalRecordRepository, IEFPolicemanRepository efPolicemanRepository, IEFCriminalRecordPolicemanRepository efCriminalRecordPoliceman)
+        public CriminalRecordController(IEFCriminalRecordRepository efCriminalRecordRepository, IPolicemanRepository efPolicemanRepository, IEFCriminalRecordPolicemanRepository efCriminalRecordPoliceman)
         {
             _efCriminalRecordRepository = efCriminalRecordRepository;
             _efPolicemanRepository = efPolicemanRepository;
@@ -122,7 +122,7 @@ namespace MIS.Controllers
         public IActionResult AddPolicemanToACriminalRecord(string policemanEmail,Guid criminalRecordId )
         {
         
-            Policeman policeman = _efPolicemanRepository.GetPolicemanByEmail(policemanEmail);
+            Policeman policeman = _efPolicemanRepository.GetByEmail(policemanEmail);
             CriminalRecord criminalRecord = _efCriminalRecordRepository.Get(criminalRecordId);
 
             if(ModelState.IsValid)
