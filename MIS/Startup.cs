@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using MIS.DataAccess.Abstractions;
 using MIS.DataAccess;
 using MIS.BusinessLogic;
+using MIS.Model;
 
 namespace MIS
 {
@@ -34,9 +35,12 @@ namespace MIS
         {
             services.AddDbContext<PoliceContext>(options =>
           options.UseSqlServer(Configuration.GetConnectionString("Police")));
+
+
             services.AddScoped<IPoliceSectionRepository, EFPoliceSectionRepository>();
             services.AddScoped<IEFCriminalRecordRepository, EFCriminalRecordRepository>();
             services.AddScoped<IMeetingRequestRepository, EFMeetingRequestRepository>();
+            services.AddScoped<IEFCriminalRecordPolicemanRepository, EFCriminalRecordPolicemanRepository>();
             services.AddScoped<IMeetingRequestPolicemanRepository, EFMeetingRequestPolicemanRepository>();
             services.AddScoped<IPolicemanRepository, EFPolicemanRepository>();
             services.AddScoped<PoliceSectionService>();

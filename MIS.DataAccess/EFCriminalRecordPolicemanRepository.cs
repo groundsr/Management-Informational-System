@@ -16,6 +16,27 @@ namespace MIS.DataAccess
         {
         }
 
+
+        public bool CheckIfPolicemanWasAdded(CriminalRecordPoliceman criminalRecordPoliceman)
+        {
+
+            var criminalRecordPolicemenCheck = _context.CriminalRecordPolicemen
+                .Where(x => (x.CriminalRecord.Id == criminalRecordPoliceman.CriminalRecord.Id) &&
+                (x.Policeman.Id == criminalRecordPoliceman.Policeman.Id))
+                .FirstOrDefault();
+
+            if(criminalRecordPolicemenCheck==null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+
+
+        }
+
         public CriminalRecordPoliceman GetCriminalRecordPoliceman(CriminalRecord criminalRecord)
         {
             var criminalRecordPoliceman = _context.CriminalRecordPolicemen
@@ -30,8 +51,11 @@ namespace MIS.DataAccess
             var recordPoliceman= _context.CriminalRecordPolicemen
                 .Where(x => x.CriminalRecord.Id == criminalRecord.Id)
                 .FirstOrDefault();
-            
+
+
             recordPoliceman.CriminalRecord = criminalRecord;
+
+
             if (recordPoliceman.Policeman == null)
             {
                 recordPoliceman.Policeman = policeman;
@@ -42,7 +66,13 @@ namespace MIS.DataAccess
                 var newRecordPoliceman = new CriminalRecordPoliceman();
                 newRecordPoliceman.CriminalRecord = criminalRecord;
                 newRecordPoliceman.Policeman = policeman;
-                _context.CriminalRecordPolicemen.Add(newRecordPoliceman);
+
+
+                if (!(CheckIfPolicemanWasAdded(newRecordPoliceman)))
+                {
+                    _context.CriminalRecordPolicemen.Add(newRecordPoliceman);
+                }
+
             }
             _context.SaveChanges();
 
