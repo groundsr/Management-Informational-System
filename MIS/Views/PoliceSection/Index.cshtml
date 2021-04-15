@@ -9,33 +9,30 @@
         <button class="btn btn-outline-secondary" type="button">Search</button>
     </div>
 </div>*@
-<div class="search border mt-5 mb-5"> <input type="text" class="search-input" 
-                                             placeholder="Search..." name=""> <a href="#" class="search-icon"> 
-    <i class="fa fa-search"></i> </a> </div>
 
 <div class="container mt-4 mb-5">
-    <div class="row p-0 text-center">
+    <div class="row text-center">
         <div class="col col-4 text-center">
-            <a class="btn btn-success text-center" asp-controller="PoliceSection" asp-action="Create">
-                Create new Police Station
+            <a class="btn btn-success text-center" asp-controller="PoliceSection" asp-action="Create" style="width:150px">
+                <h4>Create</h4>
             </a>
-         </div>
-
-         @*<div class="col col-4">
-                <a class="btn btn-primary" asp-controller="policesection" asp-action="update">
-                    update police station
-                </a>
-         </div>
-         <div class="col col-4">
-                <a class="btn btn-danger" asp-controller="policesection" asp-action="delete">
-                    delete police station
-                </a>
-         </div>*@
-            
-    
-        
+        </div>
+        <div class="col col-8 text-center mt-1" style="width:400px; margin-left:auto">
+            <form asp-controller="PoliceSection" asp-action="Index" method="get">
+                <div class="search border">
+                    <input type="text" class="search-input"
+                           placeholder="Search..." name="searchString"> <a href="#" class="search-icon">
+                        <i class="fa fa-search"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
+
+
+
 
 
 

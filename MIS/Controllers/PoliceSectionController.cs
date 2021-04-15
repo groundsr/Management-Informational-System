@@ -17,10 +17,26 @@ namespace MIS.Controllers
             this.policeSectionService = policeStationService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchString)
         {
             var model = policeSectionService.GetAll();
+            if(!String.IsNullOrEmpty(searchString))
+            {
+                model = model.Where(s => s.Name.Contains(searchString));
+            }
             return View(model);
+            //var model = policeSectionService.GetAll();
+            //return View(model);
+
+        }
+
+        public IActionResult AddPolicemanToStation(Guid id, string email)
+        {
+            var policeSection = policeSectionService.Get(id);
+
+            policeSectionService.AddPoliceToSection(policeSection, email);
+
+            return RedirectToAction("Index");
 
         }
 
@@ -66,6 +82,7 @@ namespace MIS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Update(PoliceSection policeSection)
         {
+            
             if (ModelState.IsValid)
             {
                 policeSectionService.Update(policeSection);
