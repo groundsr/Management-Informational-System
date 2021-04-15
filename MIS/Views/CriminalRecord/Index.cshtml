@@ -22,6 +22,51 @@
             </li>
         </ul>
     </div>
+
+
+
+
+
+    @*<label> Choose type search</label>
+    <select id="SearchBy" class="form-control">
+        <option value="Enable"> Enable</option>
+        <option value="Name"> Name </option>
+    </select>
+
+    <br />
+    <label> Entry Key</label>
+    <div style="display:flex;">
+        <input class="form-control" id="Search" />
+        <input class="btn btn-primary" type="submit" id="searchButton" value="Search" />
+    </div>
+
+    <br /><br />
+
+    <table class="table-bordered">
+        <thead>
+            <tbody id="dataSearching">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @item.Name
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+
+        </thead>
+
+    </table>*@
+
+
+
+
+
+
     <form asp-controller="CriminalRecord" asp-action="Index" method="get" id="searchForm">
         <div class="search">
             <input type="search" class="search-input" placeholder="Search..." name="Name">
@@ -110,34 +155,57 @@
 
 
     <script>
-        function next(id) {
-            $.ajax(
-                {
-                    url: "CriminalRecord/Details?recordId=" + id,
-                    type: 'GET',
-                    success: function (data) {
-                        window.location.href = "https://localhost:44300/CriminalRecord/Details?recordId="+id;
-                    }
-                })
-        }
+        //function next(id) {
+        //    $.ajax(
+        //        {
+        //            url: "CriminalRecord/Details?recordId=" + id,
+        //            type: 'GET',
+        //            success: function (data) {
+        //                window.location.href = "https://localhost:44300/CriminalRecord/Details?recordId="+id;
+        //            }
+        //        })
+        //}
 
-        function loadEditModal(id, name, description, type) {
-            $("#editRecordId").val(id)
-            $("#editRecordName").val(name)
-            $("#editRecordDescription").val(description)
-            $("#editRecordType").val(type)
-        }
+        //function loadEditModal(id, name, description, type) {
+        //    $("#editRecordId").val(id)
+        //    $("#editRecordName").val(name)
+        //    $("#editRecordDescription").val(description)
+        //    $("#editRecordType").val(type)
+        //}
 
-        function getRecordId() {
-            var id = document.getElementById('recordId').value;
-            return id;
-        }
+        //function getRecordId() {
+        //    var id = document.getElementById('recordId').value;
+        //    return id;
+        //}
 
-        $(document).ready(function () {
-            $('.btn-record-edit').on('click', function () {
-                $('#editCriminalRecord').modal('show');
-            });
-        });
+        //$(document).ready(function () {
+        //    $('.btn-record-edit').on('click', function () {
+        //        $('#editCriminalRecord').modal('show');
+        //    });
+        //});
+
+        //$(document).ready(function () {
+        //    $('#Search').click(function () {
+        //        var searchBy = $('#SearchBy').val;
+        //        var searchValue = $('#Search').val;
+        //        var setData = $('DataSearching');
+
+        //        setData.html("");
+
+        //        $.ajax({
+        //            type: "POST";
+        //            url: "CriminalRecord/GetSearchData?SearchBy=" + searchBy + "&SearchValue" + searchValue,
+        //            contentType: "html",
+        //            success: function (result) {
+
+        //            }
+
+        //            })
+
+
+        //        )
+        //})
+
 
         //$(document).ready(function () {
         //    $('#showRecord').click(function () {
@@ -168,29 +236,27 @@
 
 
 
-            //$(document).ready($(function () {
+            $(document).ready($(function () {   
+                    // ------------------------------------------------------- //
+                    // Multi Level dropdowns
+                    // ------------------------------------------------------ //
+                    $("ul.dropdown-menu [data-toggle='dropdown']").on("click", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
 
-            //}
-            //        // ------------------------------------------------------- //
-            //        // Multi Level dropdowns
-            //        // ------------------------------------------------------ //
-            //        $("ul.dropdown-menu [data-toggle='dropdown']").on("click", function (event) {
-            //    event.preventDefault();
-            //    event.stopPropagation();
-
-            //    $(this).siblings().toggleClass("show");
+                $(this).siblings().toggleClass("show");
 
 
-            //    if (!$(this).next().hasClass('show')) {
-            //        $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
-            //    }
-            //    $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
-            //        $('.dropdown-submenu .show').removeClass("show");
-            //    });
+                if (!$(this).next().hasClass('show')) {
+                    $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+                }
+                $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
+                    $('.dropdown-submenu .show').removeClass("show");
+                });
 
-            //});
-            //    }))
-
+            });
+                }))
+       
 
     </script>
 

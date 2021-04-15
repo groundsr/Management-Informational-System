@@ -134,7 +134,7 @@ namespace MIS.Controllers
         [HttpPost]
         public IActionResult AddPolicemanToACriminalRecord(string policemanEmail,Guid criminalRecordId )
             {
-        
+                
             Policeman policeman = _efPolicemanRepository.GetByEmail(policemanEmail);
             CriminalRecord criminalRecord = _efCriminalRecordRepository.Get(criminalRecordId);
 
@@ -145,6 +145,21 @@ namespace MIS.Controllers
                 return Redirect("https://localhost:44300/CriminalRecord");
             }
             return RedirectToPage(nameof(Details));
+            }
+
+        public JsonResult GetSearchData(string SearchBy,string SearchValue)
+        {
+            List<CriminalRecord> criminalRecordsList = new List<CriminalRecord>();
+
+            if(SearchBy=="Name")
+            {
+                criminalRecordsList = _efCriminalRecordRepository
+                    .GetCriminalRecordsByName(SearchValue)
+                    .ToList();
+                return Json(criminalRecordsList);
+            }
+            return null;
+
         }
 
     }

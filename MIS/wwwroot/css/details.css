@@ -3,16 +3,16 @@
     color: red;
     padding: 10px 10px 10px 10px;
     font-style: oblique;
-    width:350px;
+    width:200px;
     display:inline;
-    margin-right:400px;
+    margin-right:200px;
     border:groove;
-
+    margin-top:auto;
 }
 
 #descriptionArea
 {   
-    margin-top:10px;
+    margin-top:50px;
     border:groove;
     padding:10px 10px 10px 10px;
     font-style:oblique;

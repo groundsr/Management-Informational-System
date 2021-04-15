@@ -22,7 +22,7 @@ namespace MIS.DataAccess
 
             var criminalRecordPolicemenCheck = _context.CriminalRecordPolicemen
                 .Where(x => (x.CriminalRecord.Id == criminalRecordPoliceman.CriminalRecord.Id) &&
-                (x.Policeman.Id == criminalRecordPoliceman.Id))
+                (x.Policeman.Id == criminalRecordPoliceman.Policeman.Id))
                 .FirstOrDefault();
 
             if(criminalRecordPolicemenCheck==null)
