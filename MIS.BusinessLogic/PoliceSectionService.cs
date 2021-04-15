@@ -9,10 +9,19 @@ namespace MIS.BusinessLogic
     public class PoliceSectionService
     {
         private readonly IPoliceSectionRepository policeStationRepository;
+        private readonly IPolicemanRepository policemanRepository;
 
-        public PoliceSectionService(IPoliceSectionRepository policeStationRepository)
+        public PoliceSectionService(IPoliceSectionRepository policeStationRepository, IPolicemanRepository policemanRepository)
         {
             this.policeStationRepository = policeStationRepository;
+            this.policemanRepository = policemanRepository;
+        }
+
+        public void AddPoliceToSection (PoliceSection policeSection, string email)
+        {
+            var policeman = policemanRepository.GetByEmail(email);
+            policeSection.Policemen.Add(policeman);
+            policeStationRepository.Update(policeSection);
         }
 
         public IEnumerable<PoliceSection> GetAll()
@@ -27,6 +36,7 @@ namespace MIS.BusinessLogic
 
         public void Update(PoliceSection policeSection)
         {
+            
             policeStationRepository.Update(policeSection);
         }
 
