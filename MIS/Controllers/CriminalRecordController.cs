@@ -12,10 +12,10 @@ namespace MIS.Controllers
     public class CriminalRecordController:Controller
     {
         private readonly IEFCriminalRecordRepository _efCriminalRecordRepository;
-        private readonly IEFPolicemanRepository _efPolicemanRepository;
+        private readonly IPolicemanRepository _efPolicemanRepository;
         private readonly IEFCriminalRecordPolicemanRepository _efCriminalRecordPolicemanRepository;
 
-        public CriminalRecordController(IEFCriminalRecordRepository efCriminalRecordRepository, IEFPolicemanRepository efPolicemanRepository, IEFCriminalRecordPolicemanRepository efCriminalRecordPoliceman)
+        public CriminalRecordController(IEFCriminalRecordRepository efCriminalRecordRepository, IPolicemanRepository efPolicemanRepository, IEFCriminalRecordPolicemanRepository efCriminalRecordPoliceman)
         {
             _efCriminalRecordRepository = efCriminalRecordRepository;
             _efPolicemanRepository = efPolicemanRepository;
@@ -82,7 +82,20 @@ namespace MIS.Controllers
         [HttpPost]
         public IActionResult Delete(Guid id) { 
 
+
+            List<CriminalRecordPoliceman> criminalRecordPolicemenList =
+                _efCriminalRecordPolicemanRepository.GetAll(x => x.CriminalRecord.Id == id)
+                .ToList();
+
+            for(int i=0;i<criminalRecordPolicemenList.Count;i++)
+            {
+                _efCriminalRecordPolicemanRepository.Remove(criminalRecordPolicemenList[i].Id);
+            }
+
+            _efCriminalRecordPolicemanRepository.Save();
             _efCriminalRecordRepository.Remove(id);
+
+
             _efCriminalRecordRepository.Save();
             return RedirectToAction(nameof(Index));
         
@@ -120,9 +133,9 @@ namespace MIS.Controllers
 
         [HttpPost]
         public IActionResult AddPolicemanToACriminalRecord(string policemanEmail,Guid criminalRecordId )
-        {
-        
-            Policeman policeman = _efPolicemanRepository.GetPolicemanByEmail(policemanEmail);
+            {
+                
+            Policeman policeman = _efPolicemanRepository.GetByEmail(policemanEmail);
             CriminalRecord criminalRecord = _efCriminalRecordRepository.Get(criminalRecordId);
 
             if(ModelState.IsValid)
@@ -132,6 +145,21 @@ namespace MIS.Controllers
                 return Redirect("https://localhost:44300/CriminalRecord");
             }
             return RedirectToPage(nameof(Details));
+            }
+
+        public JsonResult GetSearchData(string SearchBy,string SearchValue)
+        {
+            List<CriminalRecord> criminalRecordsList = new List<CriminalRecord>();
+
+            if(SearchBy=="Name")
+            {
+                criminalRecordsList = _efCriminalRecordRepository
+                    .GetCriminalRecordsByName(SearchValue)
+                    .ToList();
+                return Json(criminalRecordsList);
+            }
+            return null;
+
         }
 
     }

@@ -3,20 +3,37 @@
     color: red;
     padding: 10px 10px 10px 10px;
     font-style: oblique;
-    width:350px;
+    width:200px;
     display:inline;
-    margin-right:400px;
+    margin-right:200px;
     border:groove;
-
+    margin-top:auto;
 }
 
 #descriptionArea
 {   
-    margin-top:10px;
+    margin-top:50px;
     border:groove;
     padding:10px 10px 10px 10px;
     font-style:oblique;
     border-color:darkblue;
     color:darkblue;
     font-size:19px;
+}
+
+.list-group
+{   
+    margin-top:20px;
+    display:inline-block;
+    color:aqua;
+    padding:5px 5px 5px 5px;
+}
+
+#mySpan{
+    background-color:cornflowerblue;
+    color:black;
+    margin-left:10px;
+    margin-right:10px;
+    padding:5px 5px 5px 5px;
+
 }
