@@ -19,12 +19,15 @@ namespace MIS.BusinessLogic
             this.meetingRepository = meetingRepository;
             this.meetingPolicemanRepository = meetingPolicemanRepository;
         }
-        public IEnumerable<IEnumerable<Meeting>> GetAllForPoliceman(Policeman policeman)
+        public IEnumerable<IEnumerable<Meeting>> GetCurrentMonthMeetings(Policeman policeman)
         {
             var meetings = meetingPolicemanRepository.GetAllForPoliceman(policeman).Select(x => x.Meeting).
-                Where(x => x.End >= DateTime.Now).OrderBy(x => x.Start).ThenBy(x => x.End).ToList();
+                Where(x => x.End >= DateTime.Now && x.Start.Month == DateTime.Now.Month).OrderBy(x => x.Start).
+                ThenBy(x => x.End).ToList();
             List<List<Meeting>> meetingsByDate = new List<List<Meeting>>();
             List<Meeting> currentDayMeetings = new List<Meeting>();
+            if (meetings.Count == 0)
+                return null;
             currentDayMeetings.Add(meetings[0]);
             for(int i = 1; i < meetings.Count(); i++)
             {

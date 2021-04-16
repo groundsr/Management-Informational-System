@@ -9,8 +9,8 @@
             <span class="request-info-date">@it.StartDate - @it.EndDate.ToString("HH:mm")</span>
         </div>
         <div class="request-options">
-            <a data-ajax="true" data-ajax-update="#requestsBody" asp-controller="MeetingRequest" asp-action="DeclineRequest" asp-route-requestId="@it.Id" class="request-options-accept">Decline</a>
-            <a data-ajax="true" data-ajax-update="#requestsBody" asp-controller="MeetingRequest" asp-action="AcceptRequest" asp-route-requestId="@it.Id" class="request-options-decline">Accept</a>
+            <a data-ajax="true" data-ajax-update="#requestsBody" asp-controller="MeetingRequest" asp-action="DeclineRequest" asp-route-requestId="@it.Id" class="request-options-decline">Decline</a>
+            <a data-ajax="true" data-ajax-update="#requestsBody" asp-controller="MeetingRequest" asp-action="AcceptRequest" asp-route-requestId="@it.Id" class="request-options-accept">Accept</a>
         </div>
     </div>
 

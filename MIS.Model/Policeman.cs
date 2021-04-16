@@ -13,6 +13,18 @@ namespace MSI.Model
         public int Seniority { get; set; }
         public string Email { get; set; }
         public virtual List<Policeman> Subordinates { get; set; } = new List<Policeman>();
+        public Policeman(string email , int age , Rank rank , string name , Guid id)
+        {
+            Email = email;
+            Age = age;
+            Rank = rank;
+            Name = name;
+            Id = id;
+        }
+        public Policeman()
+        {
+
+        }
          
     }
 }

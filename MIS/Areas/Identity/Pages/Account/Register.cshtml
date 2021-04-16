@@ -18,6 +18,27 @@
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Input.Name"></label>
+                <input asp-for="Input.Name" class="form-control" />
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Age"></label>
+                <input asp-for="Input.Age" class="form-control" />
+                <span asp-validation-for="Input.Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Rank"></label>
+                <select asp-for="Input.Rank" class="form-control">
+                    <option value="0">PrincipalChiefAgent</option>
+                    <option value="1">ChiefAgent</option>
+                    <option value="2">DeputyChiefAgent</option>
+                    <option value="3">PrincipalAgent</option>
+                    <option value="4">Agent</option>
+                </select>
+                <span asp-validation-for="Input.Rank" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Input.Password"></label>
                 <input asp-for="Input.Password" class="form-control" />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>

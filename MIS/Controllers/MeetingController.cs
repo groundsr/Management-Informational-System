@@ -19,8 +19,8 @@ namespace MIS.Controllers
         private readonly PolicemanService policemanService;
         private readonly MeetingService meetingService;
 
-        public MeetingController(IHubContext<ChatHub> hubcontext, UserManager<IdentityUser> userManager , 
-            PolicemanService policemanService , MeetingService meetingService)
+        public MeetingController(IHubContext<ChatHub> hubcontext, UserManager<IdentityUser> userManager,
+            PolicemanService policemanService, MeetingService meetingService)
         {
             this.hubcontext = hubcontext;
             this.userManager = userManager;
@@ -31,14 +31,14 @@ namespace MIS.Controllers
         {
             var user = userManager.GetUserAsync(User).GetAwaiter().GetResult();
             var policeman = policemanService.GetByUserId(user.Id);
-            var model = meetingService.GetAllForPoliceman(policeman);
+            var model = meetingService.GetCurrentMonthMeetings(policeman);
             return View(model);
         }
         public IActionResult Chat(Guid id)
         {
             Meeting meeting = meetingService.GetById(id);
             var user = userManager.GetUserAsync(User).GetAwaiter().GetResult();
-            ChatViewModel model = new ChatViewModel() { Id = user.Id, Name = user.UserName ,End = meeting.End , Topic = meeting.Topic};
+            ChatViewModel model = new ChatViewModel() { Id = user.Id, Name = user.UserName, End = meeting.End, Topic = meeting.Topic };
             return View(model);
         }
 
@@ -48,7 +48,21 @@ namespace MIS.Controllers
             await hubcontext.Clients.All.SendAsync("ReceiveMessage", content, name, id);
             return Ok();
         }
-       
 
+        public IEnumerable<int> GetMeetingsDay()
+        {
+            var user = userManager.GetUserAsync(User).GetAwaiter().GetResult();
+            var policeman = policemanService.GetByUserId(user.Id);
+            var model = meetingService.GetCurrentMonthMeetings(policeman).Select(x => x.ElementAt(0).Start.Day);
+            return model;
+        }
+        public IEnumerable<Meeting> GetMeetingsForDay(int day)
+        {
+            var user = userManager.GetUserAsync(User).GetAwaiter().GetResult();
+            var policeman = policemanService.GetByUserId(user.Id);
+            var model = meetingService.GetCurrentMonthMeetings(policeman).Where(x => 
+            x.ElementAt(0).Start.Day == day).FirstOrDefault();
+            return model;
+        }
     }
 }

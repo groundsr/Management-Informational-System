@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using MIS.DataAccess.Abstractions;
+using MSI.Model;
 
 namespace MIS.Areas.Identity.Pages.Account
 {
@@ -23,17 +25,20 @@ namespace MIS.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IPolicemanRepository _policemanRepository;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IPolicemanRepository policemanRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            this._policemanRepository = policemanRepository;
         }
 
         [BindProperty]
@@ -60,6 +65,15 @@ namespace MIS.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            [Required]
+            [Display(Name = "Name")]
+            public string Name { get; set; }
+            [Required]
+            [Display(Name = "Rank")]
+            public Rank Rank { get; set; }
+            [Required]
+            [Display(Name = "Age")]
+            public int Age { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -79,6 +93,10 @@ namespace MIS.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    Policeman policeman = new Policeman(Input.Email, Input.Age, Input.Rank, Input.Name, Guid.Parse(user.Id)); 
+                    _policemanRepository.Add(policeman);
+
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

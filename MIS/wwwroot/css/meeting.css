@@ -1,11 +1,14 @@
-﻿.btn-add{
-    padding : 4px 10px;
-    display : flex;
-    align-items : center;
-    margin-left : 90%;
-    margin-top : 40px;
-    margin-bottom : 40px;
-    font-size : 18px;
+﻿.btn-add {
+    padding: 4px 10px;
+    display: flex;
+    align-items: center;
+    margin-left: 90%;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-size: 18px;
+    box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+    color: #3367d6 !important;
+    background-color: #fff;
 }
 
 .meetings {
@@ -17,7 +20,7 @@
 .meeting {
     min-height: 50px;
     border-radius: 40px;
-    width: 80%;
+    width: 100%;
     margin: auto;
     background-color: #374f6b;
     margin-bottom : 20px;
@@ -29,7 +32,7 @@
 .meeting-day{
     padding : 20px 20px;
     border-bottom : 1px solid #eee;
-    /*text-align : center;*/
+    
 }
 
 .meeting-day-date {
@@ -48,6 +51,7 @@
 .meeting-info {
     display: flex;
     align-items: center;
+    justify-content : space-between;
 }
 
 .meeting-join {
@@ -55,12 +59,11 @@
     display: inline-block;
     margin-top: 5px;
     border-radius: 40px;
-    margin-right: 10px;
     color : rgba(0 , 0 , 0 , .3);
 }
 .meeting-info-buttons{
     display : flex;
-    flex-basis : 50%;
+    /*flex-basis : 50%;*/
     justify-content : flex-end;
 }
 
@@ -72,14 +75,15 @@
 }
 
 .meeting-hour{
-    margin-left : auto;
+    /*margin-left : auto;*/
     color : #eee;
     margin-top : 3px;
+    font-size : 14px;
 }
 
 .meeting-name{
     color : #eee;
-    font-size : 18px;
+    font-size : 16px;
 }
 
 .meeting-started {
@@ -101,4 +105,52 @@
     margin-right : 5px;
     margin-top : 5px;
     cursor : pointer;
+}
+
+
+
+#app-calendar {
+    display:grid;
+    grid-template-columns : repeat(7 , 1fr);
+    grid-template-rows : repeat(5 , 100px);
+    height : 100%;
+}
+
+.day {
+    border-bottom: 1px solid #DADCE0;
+    border-right: 1px solid #DADCE0;
+    text-align: center;
+    padding-top: 3px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 200ms, color 200ms;
+}
+
+.day-name {
+    padding-bottom: 5px;
+}
+
+.weekend {
+    color: #1B9CE2;
+}
+
+.selected {
+    background-color: #1B9CE2;
+    color: white;
+}
+
+.calendar-meetings {
+    align-items: center;
+    margin-top: 10px;
+    font-size: 14px;
+    box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+    color: #3367d6;
+    background-color: #fff;
+    display : inline-block;
+    padding : 5px 5px;
+    transition : all .2s;
+}
+
+.calendar-meetings:hover {
+    transform : translateY(2px);
 }

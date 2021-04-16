@@ -32,13 +32,25 @@
 .request-options-accept ,  .request-options-decline {
     display: inline-block;
     text-decoration: none;
-    color: #eee;
-    background-color: #374f6b;
     padding : 4px 8px;
     border-radius : 4px;
 }
 
-.request-options-accept:hover, .request-options-decline:hover{
-    color : #eee;
-    text-decoration : none;
+.request-options-accept {
+    box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+    color: #3367d6;
+    background-color: #fff;
+}
+
+.request-options-decline {
+    color: #eee;
+    background-color: #374f6b;
+}
+
+.request-options-accept:hover, .request-options-decline:hover {
+    text-decoration: none
+}
+
+.request-options-decline:hover {
+    color: #eee;
 }
