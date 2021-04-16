@@ -56,8 +56,10 @@ namespace MIS
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddSingleton<IManageConnectedUsers, ManageConnectedUsers>();
             services.AddControllersWithViews();
             services.AddSignalR();
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

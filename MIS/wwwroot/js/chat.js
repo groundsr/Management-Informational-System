@@ -4,18 +4,16 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
 var myId;
 
-connection.on("UserConnected", function () {
-    console.log("connected");
+connection.on("UserConnected", function (connected) {
     var usersConnected = document.getElementById("usersConnected").innerHTML;
     usersConnected++;
-    document.getElementById("usersConnected").innerHTML = usersConnected;
+    document.getElementById("usersConnected").innerHTML = connected;
 })
 
-connection.on("UserDisconnected", function () {
+connection.on("UserDisconnected", function (connected) {
     var usersConnected = document.getElementById("usersConnected").innerHTML;
     usersConnected--;
-    console.log("disconnected");
-    document.getElementById("usersConnected").innerHTML = usersConnected;
+    document.getElementById("usersConnected").innerHTML = connected;
 })
 
 connection.on("ReceiveMessage", function (content, name, id) {

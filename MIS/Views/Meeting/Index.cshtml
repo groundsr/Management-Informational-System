@@ -225,7 +225,7 @@
                     var meetingTime = convertFromJsonToDate(data[i].start, data[i].end);
                     
                     if (meetingTime.start.getHours() >= @DateTime.Now.Hour && @DateTime.Now.Hour <= meetingTime.end.getHours() && meetingTime.start.getDate() == @DateTime.Now.Day) {
-                        join = ` <a asp-action="Chat" asp-route-id="${data[i].id}" class="btn meeting-join meeting-started">
+                        join = ` <a href="Meeting/Chat?id=${data[i].id}"  class="btn meeting-join meeting-started">
                         <i class="bi bi-box-arrow-in-right"></i>
                         Join
                     </a>`
