@@ -1,27 +1,127 @@
-﻿<div class="tf-tree tf-gap-lg">
-    <ul>
-        <li>
-            <span class="tf-nc">1</span>
-            <ul>
-                <li>
-                    <span class="tf-nc">2</span>
-                    <ul>
-                        <li><span class="tf-nc">4</span></li>
-                        <li><span class="tf-nc">5</span></li>
-                    </ul>
-                </li>
-                <li>
-                    <span class="tf-nc">3</span>
-                    <ul>
-                        <li><span class="tf-nc">6</span></li>
-                        <li><span class="tf-nc">7</span></li>
-                    </ul>
+﻿@using MSI.Model
+@model PoliceSection
+
+<style>
+    span {
+        border: 2px solid #fff !important;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+    }
+
+        span:hover + ul span {
+            border: 2px solid #3367d6 !important;
+        }
+</style>
+
+<div class="section">
+
+    <div class="tf-tree tf-gap-lg">
+        <ul>
+            <li id="@Model.RootPoliceman.Id">
+                <span class="tf-nc" data-toggle="modal" data-target="#policemanDetails"
+                      onclick="loadPoliceman('@Model.RootPoliceman.Id' , '@Model.RootPoliceman.Name', '@Model.RootPoliceman.Age' , '@Model.RootPoliceman.Seniority')">@Model.RootPoliceman.Name</span>
+                    @*<ul>
+                        <li>
+                            <span class="tf-nc">2</span>
+                            <ul>
+                                <li><span class="tf-nc">4</span></li>
+                                <li><span class="tf-nc">5</span></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <span class="tf-nc">3</span>
+                            <ul>
+                                <li><span class="tf-nc">6</span></li>
+                                <li><span class="tf-nc">7</span></li>
+                            </ul>
+                        </li>*@
+                    @*</ul>*@
                 </li>
             </ul>
-        </li>
-    </ul>
-</div>
-<div class="col">
-    <input type="submit" class="btn btn-info w-100" value="Create" />
-</div>
+        </div>
+        <div class="section-info">
+            <div class="section-name"><i class="fas fa-hotel" style="color: #3367d6;font-size: 20px;margin-right:10px;"></i>  @Model.Name</div>
+            <div class="section-address"><i class="fas fa-map-marker-alt" style="color: #3367d6;font-size: 20px;margin-right:10px;"></i> @Model.Address.City, @Model.Address.Street, @Model.Address.Number</div>
+            <div class="section-name"><i class="fas fa-clock" style="color: #3367d6;font-size: 20px;margin-right:10px;"></i>23/12/1980</div>
+            <div class="section-name"><i class="fas fa-phone" style="color: #3367d6;font-size: 20px;margin-right:10px;"></i>0773820330</div>
+        </div>
+    </div>
 
+
+
+    @*<div class="col">
+            <input type="submit" class="btn btn-info w-100" value="Create" />
+        </div>*@
+
+
+    <div class="modal fade" id="policemanDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="policemanName" class="policeman-info"></div>
+                    <div id="policemanAge" class="policeman-info"></div>
+                    <div id="policemanSeniority" class="policeman-info"></div>
+                    <form asp-controller="Policeman" asp-action="AddSubordinate" class="new-subordinate" data-ajax="true" data-ajax-complete="loadHierarchy()">
+                        <h5 class="new-subordinate-header">Add Subordinate</h5>
+                        <input type="hidden" id="policemanId" name="policemanId" />
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input class="form-control" name="email" />
+                        </div>
+                        <button class="btn outlined-button" onclick="closePolicemanModal()">Submit</button>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        function closePolicemanModal() {
+            $('#policemanDetails .close').click();
+    }
+    function loadPoliceman(id, name, age, seniority) {
+        $('#policemanName').html('Name: ' + name);
+        $('#policemanAge').html('Age: ' + age);
+        $('#policemanSeniority').html('Activity: '  + seniority);
+        $('#policemanId').val(id);
+    }
+        var id = '@Model.Id';
+        var rootPoliceman = '@Model.RootPoliceman.Id';
+        function loadHierarchy() {
+            var root = document.getElementById('' + rootPoliceman + '')
+            if (root.children.length > 1) {
+                root.removeChild(root.children[1]);
+            }
+            $.ajax({
+                url: "/PoliceSection/PolicemenHierarchy?sectionId=" + id,
+                success: function (data) {
+                    for (let i = 0; i < data.length; i++) {
+                        $('#' + data[i][0].id).append(`<ul id=${data[i][0].id + 'child'}></ul>`);
+                        for (let j = 1; j < data[i].length; j++) {
+                            $('#' + data[i][j].id).append(`<ul id=${data[i][j].id + 'child'}></ul>`);
+                            $('#' + data[i][0].id + 'child').append(`<li id=${data[i][j].id}><span
+                        class="tf-nc" onclick="loadPoliceman('${data[i][j].id}' ,'${data[i][j].name}' ,'${data[i][j].age}'
+                        ,' ${data[i][j].seniority}  ')">${data[i][j].name}</span></li>`)
+                        }
+                    }
+                    $('span').attr('data-toggle', 'modal');
+                    $('span').attr('data-target', '#policemanDetails');
+
+                }
+
+            })
+        }
+
+    $(document).ready(function () {
+        loadHierarchy();
+
+
+    })
+    </script>

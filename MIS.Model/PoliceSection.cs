@@ -10,6 +10,7 @@ namespace MSI.Model
         public virtual List<Policeman> Policemen { get; set; } = new List<Policeman>();
         public string Name { get; set; }
         public virtual Address Address { get; set; }
+        public virtual Policeman RootPoliceman { get; set; }
 
     }
 }

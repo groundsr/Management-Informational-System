@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MIS.BusinessLogic;
 using MSI.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace MIS.Controllers
         public IActionResult Index(string searchString)
         {
             var model = policeSectionService.GetAll();
-            if(!String.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(searchString))
             {
                 model = model.Where(s => s.Name.Contains(searchString));
             }
@@ -40,9 +41,9 @@ namespace MIS.Controllers
 
         }
 
-        public IActionResult Hierarchy()
+        public IActionResult Hierarchy(Guid id)
         {
-            return View();
+            return View(policeSectionService.Get(id));
         }
 
         public IActionResult Create()
@@ -66,7 +67,7 @@ namespace MIS.Controllers
         public IActionResult Update(Guid id)
         {
 
-            
+
             PoliceSection policeSection = policeSectionService.Get(id);
 
             if (policeSection == null)
@@ -82,7 +83,7 @@ namespace MIS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Update(PoliceSection policeSection)
         {
-            
+
             if (ModelState.IsValid)
             {
                 policeSectionService.Update(policeSection);
@@ -111,10 +112,25 @@ namespace MIS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(Guid id)
         {
-            
-                policeSectionService.Delete(id);
-                return RedirectToAction("Index");
+            policeSectionService.Delete(id);
+            return RedirectToAction("Index");
+        }
 
+        //there are some problems when converting dictionary into json so I am gonna return a list of lists
+        //where in each list the first item is a dictionary key and the following elements are the value for
+        //that specific key
+        public List<List<Policeman>> PolicemenHierarchy(Guid sectionId)
+        {
+            var dictionaryHierarch = policeSectionService.PolicemenHierarchy(sectionId);
+            List<List<Policeman>> leveledHierarchy = new List<List<Policeman>>();
+            foreach(var key in dictionaryHierarch.Keys)
+            {
+                List<Policeman> current = new List<Policeman>();
+                current.Add(key);
+                current.AddRange(dictionaryHierarch[key]);
+                leveledHierarchy.Add(current);
+            }
+            return leveledHierarchy;
         }
 
     }

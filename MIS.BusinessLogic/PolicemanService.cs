@@ -17,5 +17,13 @@ namespace MIS.BusinessLogic
         {
             return policemanRepository.GetByUserId(Guid.Parse(id));
         }
+
+        public void AddSubordinate(Guid policemanId, string email)
+        {
+            var policeman = policemanRepository.Get(policemanId);
+            var subordinate = policemanRepository.GetByEmail(email);
+            policeman.Subordinates.Add(subordinate);
+            policemanRepository.Update(policeman);
+        }
     }
 }
