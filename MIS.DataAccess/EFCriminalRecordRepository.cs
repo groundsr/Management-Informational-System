@@ -44,5 +44,23 @@ namespace MIS.DataAccess
                 return true;
             }
         }
+
+        public int GetStatus(CriminalRecord criminalRecord)
+        {
+            CriminalRecord criminalRecordToChange = _context.CriminalRecords
+                    .Where(x => x.Id == criminalRecord.Id)
+                    .FirstOrDefault();
+
+            if(criminalRecordToChange.Status==Status.Active)
+            {
+                return 1;
+            }
+            else if(criminalRecordToChange.Status==Status.Closed)
+            {
+                return 0;
+            }
+
+            return 1;
+        }
     }
 }

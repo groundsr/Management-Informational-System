@@ -103,6 +103,11 @@ namespace MIS.BusinessLogic
             return( _criminalRecord.GetCriminalRecordsByName(name));
         }
 
+        public IEnumerable<CriminalRecordPoliceman> GetAllCriminalRecordsPolicemanForARecord(CriminalRecord criminalRecordDetails)
+        {
+            return (_criminalRecordPoliceman.GetAllCriminalRecordsPolicemanForARecord(criminalRecordDetails));
+        }
+
         public bool CheckIfRecordExists(CriminalRecord criminalRecord)
         {
             return (_criminalRecord.CheckIfRecordExists(criminalRecord));
@@ -131,6 +136,26 @@ namespace MIS.BusinessLogic
         public Policeman GetPolicemanByEmail(string email)
         {
            return( _policemanRepository.GetByEmail(email));
+        }
+
+        public void EnableStatus(int enumValue,Guid criminalRecordId)
+        {
+            CriminalRecord record=_criminalRecord.Get(criminalRecordId);
+            record.Status = Status.Active;
+            _criminalRecord.Save();
+        }
+
+        public void DisableStatus(int enumValue,Guid criminalRecordId)
+        {
+            CriminalRecord record = _criminalRecord.Get(criminalRecordId);
+
+            record.Status = Status.Closed;
+            _criminalRecord.Save();
+        }
+
+        public int GetStatus(CriminalRecord criminalRecord)
+        {
+           return  _criminalRecord.GetStatus(criminalRecord);
         }
 
     }

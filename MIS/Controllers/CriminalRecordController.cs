@@ -33,7 +33,30 @@ namespace MIS.Controllers
                 result = _criminalRecordService.GetAllCriminalRecords().ToList();
             }
             return View(result);
+        }
 
+
+        public int GetCriminalRecordStatus(Guid criminalRecordId)
+        {
+            CriminalRecord criminalRecord = _criminalRecordService.GetCriminalRecordById(criminalRecordId);
+           return( _criminalRecordService.GetStatus(criminalRecord));
+        }
+
+
+        [HttpPost]
+        public IActionResult SetStatus(int enumValue, Guid criminalRecordId)
+        {
+            CriminalRecord criminalRecord = _criminalRecordService.GetCriminalRecordById(criminalRecordId);
+
+            if(enumValue==0)
+            {
+                _criminalRecordService.DisableStatus(enumValue,criminalRecordId);
+            }
+            else if(enumValue==1)
+            {
+                _criminalRecordService.EnableStatus(enumValue, criminalRecordId);
+            }
+            return RedirectToAction(nameof(Details));
         }
 
         [HttpPost]
@@ -113,7 +136,7 @@ namespace MIS.Controllers
             var criminalRecordDetails = _criminalRecordService.GetCriminalRecordById(recordId);
 
             IEnumerable<CriminalRecordPoliceman> criminalRecordPolicemen =
-                _criminalRecordService.GetAllCriminalRecordsPoliceman(criminalRecordDetails);
+                _criminalRecordService.GetAllCriminalRecordsPolicemanForARecord(criminalRecordDetails);
 
             return View(criminalRecordPolicemen); 
         }

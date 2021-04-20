@@ -10,6 +10,7 @@ namespace MIS.DataAccess.Abstractions
         bool CheckIfRecordExists(CriminalRecord criminalRecord);
         IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name);
 
+        int GetStatus(CriminalRecord criminalRecord);
 
 
     }

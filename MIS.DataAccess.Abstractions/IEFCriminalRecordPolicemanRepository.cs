@@ -13,6 +13,8 @@ namespace MIS.DataAccess.Abstractions
         bool CheckIfPolicemanWasAdded(CriminalRecordPoliceman criminalRecordPoliceman);
         IEnumerable<CriminalRecordPoliceman> GetAllById(Guid id);
         IEnumerable<CriminalRecordPoliceman> GetCriminalRecordPolicemenByRecordId(Guid id);
+        IEnumerable<CriminalRecordPoliceman> GetAllCriminalRecordsPolicemanForARecord(CriminalRecord criminalRecord);
+
 
     }
 }

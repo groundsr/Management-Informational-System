@@ -4,7 +4,7 @@
 
 
 .records-header{
-    display : flex;
+    display : inline-flex;
     align-items:center;
 }
 
@@ -66,6 +66,7 @@
     display: inline-block;
     border-radius: 4px;
     padding: 8px 8px;
+    
 }
 
 .btn-police-rounded{
@@ -81,6 +82,7 @@
 .dropdown-button{
     color : #eee;
     text-decoration : none !important;
+    margin-right:100px;
 }
 
 .dropdown-button:hover{

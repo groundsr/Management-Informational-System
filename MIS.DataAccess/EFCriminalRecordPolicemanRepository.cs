@@ -68,6 +68,16 @@ namespace MIS.DataAccess
             return criminalRecordPolicemen;
         }
 
+        public IEnumerable<CriminalRecordPoliceman> GetAllCriminalRecordsPolicemanForARecord(CriminalRecord criminalRecord)
+        {
+            IEnumerable<CriminalRecordPoliceman> criminalRecordPolicemen = _context.CriminalRecordPolicemen
+                                .Where(x => x.CriminalRecord.Id == criminalRecord.Id)
+                                .ToList();
+
+            return criminalRecordPolicemen;
+
+        }
+
         public IEnumerable<CriminalRecordPoliceman> GetAll(CriminalRecord criminalRecord)
         {
             IEnumerable<CriminalRecordPoliceman> criminalRecordList = (IEnumerable<CriminalRecordPoliceman>)

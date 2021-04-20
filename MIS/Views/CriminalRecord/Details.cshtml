@@ -12,10 +12,33 @@
 
 @foreach (var item in Model)
 {
-    <h3 id="recordStatus"> Record Status : @item.CriminalRecord.Status </h3>
-    <h3 id="recordStatus"> Type : @item.CriminalRecord.Type </h3>
+    <div class="row p-2" > 
+        <div class="col-lg-3 col-md-2 col-sm-2 col-xs-5" style="text-align:center;">
+            <form asp-controller="CriminalRecord" asp-action="SetStatus">
+                <input type="hidden" value="1" name="enumValue" />
+                <input type="hidden" value="@item.CriminalRecord.Id"  name="criminalRecordId"/>
+                <button id="enableButton" type="submit" class="form-control btn-primary">Enable</button>
+            </form>
+        </div>
+    
+        <div class="col-lg-3 col-md-2 col-sm-2 col-xs-5" style="text-align:center;">
+            <form asp-controller="CriminalRecord" asp-action="SetStatus">
+                <input type="hidden" value="0" name="enumValue" />
+                <input type="hidden" value="@item.CriminalRecord.Id" name="criminalRecordId" />
+                <button id="disableButton" type="submit" class="form-control btn-primary">Disable</button>
+            </form>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-5" style="text-align:center;">
+            <h3 id="recordStatus"> Record Status : @item.CriminalRecord.Status </h3>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-5" style="text-align:center;">
+            <h3 id="recordStatus"> Type : @item.CriminalRecord.Type </h3>
+        </div>
+    </div>
 
-    <div class="form-group border p-3" id="descriptionArea">
+
+
+    <div class="ml-lg-5 mb-lg-5 col-lg-10 col-md-5 col-sm-5 border p-2 " id="descriptionArea">
         @item.CriminalRecord.Description
     </div>
 
@@ -26,23 +49,23 @@
 
 
 <form asp-controller="CriminalRecord" asp-action="AddPolicemanToACriminalRecord">
-    <input type="hidden" name="criminalRecordId" id="criminalRecordValue" value="@criminalRecord.Id" />
-    <input class="fcol-2" type="text" name="policemanEmail" placeholder="Email.." id="emailValue" />
-    <button type="submit" class="btn btn-submit btn-primary">
-        Add policeman
-    </button>
-    @*<div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">Email</span>
-            </div>
-            <input type="text" class="form-group w-25 h-100 " placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-        </div>*@
+    <div class="row">
+        <div class="col-lg-10 col-md-5 col-sm-3 col-xs-5">
+            <input type="hidden" name="criminalRecordId" value="@criminalRecord.Id" />
+            <input type="text" class=" form-control-sm" name="policemanEmail" placeholder="Email.." id="emailValue" />
+            <button type="submit" class="btn btn-submit btn-sm btn-primary col-2">
+                Add policeman
+            </button>
+            <button type="button" id="myButton" class="btn btn-primary btn-sm col-2 " onclick="DisplayBlock()"> See list</button>
+            <button type="button" id="myBackButton" style="display:none" class="btn btn-primary btn-sm col-2 " onclick="DisplayNone()"> Undo</button>
+        </div>
+
+    </div>
 
 </form>
 
 
-<button type="button" id="myButton" class="btn btn-info" onclick="DisplayBlock()"> Click Here.</button>
-<button type="button" id="myBackButton" style="display:none" class="btn btn-info" onclick="DisplayNone()"> Undo</button>
+
 
 
 <div id="policemenList" style="display:none">
@@ -56,10 +79,10 @@
 
             else
             {
-                <li class="list-group-item active">
-                    <span id="mySpan">Name : @item.Policeman.Name </span>
-                    <span id="mySpan">Email : @item.Policeman.Email</span>
-                    <span id="mySpan">Seniority : @item.Policeman.Seniority</span>
+                <li class="list-group-item ml-lg-5 mr-5 p-2 " style="cursor:pointer">
+                    <a id="detailsA"> <span id="mySpan">Name : @item.Policeman.Name </span></a>
+                    <a><span id="mySpan">Email : @item.Policeman.Email</span></a>
+                    <a><span id="mySpan">Seniority : @item.Policeman.Seniority</span></a>
                 </li>
             }
         </ul>
@@ -71,23 +94,38 @@
 
 
     function displayPoliceman(value) {
-        document.getElementById('policemenList').style.display = value;
-        console.log(value);
-    }
+                document.getElementById('policemenList').style.display = value;
+                console.log(value);
+            }
 
     function DisplayBlock() {
-        displayPoliceman('block');
-        document.getElementById('myBackButton').style.display = 'block';
-        document.getElementById('myButton').style.display = 'none';
+                    displayPoliceman('block');
+                    document.getElementById('myBackButton').style.display = 'block';
+                    document.getElementById('myButton').style.display = 'none';
 
-    }
+                }
 
     function DisplayNone() {
-        displayPoliceman('None');
-        document.getElementById('myButton').style.display = 'block';
-        document.getElementById('myBackButton').style.display = 'none';
-    }
+                    displayPoliceman('None');
+                    document.getElementById('myButton').style.display = 'block';
+                    document.getElementById('myBackButton').style.display = 'none';
+                }
 
+    //function setEnable(int id) {
+    //                $('#enableButton')
+
+    //                $(document).ready(function () {
+    //                    var myUrl = window.location.href;
+    //                    $.ajax({
+    //                        type: "GET",
+    //                        url: myUrl + '/GetCriminalRecordStatus/' + id,
+    //                    })
+    //                }
+    //}
+
+    //function enablueButton(int criminalRecord) {
+    //            $('#enableButton')=
+    //       }
 
 </script>
 

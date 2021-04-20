@@ -1,13 +1,17 @@
 ﻿
 #recordStatus {
-    color: red;
-    padding: 10px 10px 10px 10px;
-    font-style: oblique;
-    width:200px;
-    display:inline;
-    margin-right:200px;
-    border:groove;
-    margin-top:auto;
+    color: darkblue ;
+    padding: 2px 2px 2px 2px;
+    border:solid;
+    border-color:aliceblue;
+    font-style:oblique;
+}
+
+
+.center-aligment {
+    display: flex;
+    align - items:center;
+    justify - content:center;
 }
 
 #descriptionArea
@@ -23,16 +27,21 @@
 
 .list-group
 {   
-    color:aqua;
+    color:aliceblue;
     padding:5px 5px 5px 5px;
     text-align:center;
 }
 
 #mySpan {
-    background-color: cornflowerblue;
+    background-color:aliceblue;
     color: black;
     margin-left: 10px;
     margin-right: 10px;
     padding: 5px 5px 5px 5px;
     text-align: center;
+}
+
+#detailsA
+{
+    cursor:pointer;
 }
