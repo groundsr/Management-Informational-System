@@ -28,7 +28,6 @@ namespace MIS.Controllers
             return View(model);
             //var model = policeSectionService.GetAll();
             //return View(model);
-
         }
 
         public IActionResult AddPolicemanToStation(Guid id, string email)

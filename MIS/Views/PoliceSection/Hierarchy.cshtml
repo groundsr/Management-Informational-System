@@ -123,5 +123,22 @@
         loadHierarchy();
 
 
+
+<form asp-action="AddPolicemanToStation" asp-controller="PoliceSection">
+    <div class="input-group mb-4 mt-4 display-1">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <input type="text" class="form-control" placeholder="Policeman e-mail ..." name="email">
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">Add to section</button>
+        </div>
+    </div>
+</form>
+
+
+
+
+
+
+
     })
     </script>
