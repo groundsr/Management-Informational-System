@@ -20,14 +20,13 @@ namespace MIS.Controllers
         public IActionResult Index(string searchString)
         {
             var model = policeSectionService.GetAll();
-            if(!String.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty(searchString))
             {
                 model = model.Where(s => s.Name.Contains(searchString));
             }
             return View(model);
             //var model = policeSectionService.GetAll();
             //return View(model);
-
         }
 
         public IActionResult AddPolicemanToStation(Guid id, string email)
@@ -40,9 +39,11 @@ namespace MIS.Controllers
 
         }
 
-        public IActionResult Hierarchy()
+        public IActionResult Hierarchy(Guid id)
         {
-            return View();
+            var policeSection = policeSectionService.Get(id);
+
+            return View(policeSection);
         }
 
         public IActionResult Create()

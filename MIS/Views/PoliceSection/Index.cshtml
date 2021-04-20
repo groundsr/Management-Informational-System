@@ -2,25 +2,24 @@
 
 @model IEnumerable<PoliceSection>
 
-
 @*<div class="input-group  mb-4 mt-4">
-    <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
-    <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button">Search</button>
-    </div>
-</div>*@
+        <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button">Search</button>
+        </div>
+    </div>*@
 
 <div class="container mt-4 mb-5">
     <div class="row text-center">
         <div class="col col-4 text-center">
-            <a class="btn btn-success text-center" asp-controller="PoliceSection" asp-action="Create" style="width:150px">
+            <a class="btn btn-primary text-center" asp-controller="PoliceSection" asp-action="Create" style="width:150px">
                 <h4>Create</h4>
             </a>
         </div>
-        <div class="col col-8 text-center mt-1" style="width:400px; margin-left:auto">
-            <form asp-controller="PoliceSection" asp-action="Index" method="get">
+        <div class="col col-8 text-center" style="width:400px; margin-left:auto">
+            <form asp-controller="PoliceSection" asp-action="Index" id="textsearch" method="get">
                 <div class="search border">
-                    <input type="text" class="search-input"
+                    <input type="text" class="search-input" id="textsearch"
                            placeholder="Search..." name="searchString"> <a href="#" class="search-icon">
                         <i class="fa fa-search"></i>
                     </a>
@@ -38,43 +37,74 @@
 
 <div class="container">
     <div class="row">
-        @foreach (var obj in Model)
-        {
-            if (obj != null)
+        <div class="card-group">
+            @foreach (var obj in Model)
             {
-                <div class="col-4 mb-5" >
+                if (obj != null)
+                {
+                    <div class="col-4 mb-5">
 
-                    <div class="shadow card rounded justify-content-center text-center align-items-center zoom c4rd"
-                         style="width: 18rem; background-color:#374f6b; height:auto ;color:#fff; border-radius:50px">
-                        <div class="card-body p-0">
-                            <h5 class="card-title">@obj.Name</h5>
+                        <div class="shadow card rounded justify-content-center text-center align-items-center zoom c4rd"
+                             style="width: 18rem; background-color:#374f6b; height:300px ;color:#fff; border-radius:50px">
+                            <div class="card-body p-0">
+                                <h5 class="card-title">@obj.Name</h5>
+                                @if (obj.Policemen.Count.Equals(1))
+                                {
+                                    <p>@obj.Policemen.Count <span>police officer</span></p>
+                                }
+                                else
+                                {<p>@obj.Policemen.Count <span>police officers</span></p>}
 
-                            <p>@obj.Policemen.Count <span>police officer</span></p>
 
-                            <p class="card-text">
-                                <i class="bi bi-geo-alt"></i>  <span>@obj.Address.City ,</span>
-                                <span>@obj.Address.Street, </span>
-                                <span>@obj.Address.Number</span>
-                            </p>
-                            <div class="row text-center mb-4">
-                                <div class="col col-6">
-                                    <a class="btn btn-primary" asp-route-Id="@obj.Id" asp-controller="policesection" asp-action="Update">
-                                        Update  
-                                    </a>
+                                <p class="card-text">
+                                    <i class="bi bi-geo-alt"></i>  <span>@obj.Address.City ,</span>
+                                    <span>@obj.Address.Street, </span>
+                                    <span>@obj.Address.Number</span>
+                                </p>
+                                <div class="row text-center mb-4">
+                                    <div class="col col-6">
+                                        <a class="btn btn-primary" asp-route-Id="@obj.Id" asp-controller="policesection" asp-action="Update">
+                                            Update
+                                        </a>
+                                    </div>
+                                    <div class="col col-4">
+                                        <a class="btn btn-danger" asp-route-Id="@obj.Id" asp-controller="policesection" asp-action="Delete">
+                                            Delete
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="col col-4">
-                                    <a class="btn btn-danger" asp-route-Id="@obj.Id" asp-controller="policesection" asp-action="Delete">
-                                        Delete 
-                                    </a>
-                                </div>
+                                <a asp-controller="policesection" asp-action="Hierarchy" asp-route-Id="@obj.Id" class="btn btn-light">Go to section</a>
                             </div>
-                            <a asp-controller="policesection" asp-action="Hierarchy" class="btn btn-light">Go to section</a>
                         </div>
-                    </div>
 
-                </div>
+                    </div>
+                }
             }
-        }
+        </div>
     </div>
 </div>
+
+
+
+
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $("textsearch").on("keyup",function() {
+        var textenter = $(this).val();
+        $("card cr").each(function (results) {
+            if (results != 0) {
+                var id = $(this).find("h5:nth-child(1)").text();
+                if (id.indexOf(textcenter) != 0 && id.toLowerCase().indexOf(textenter.toLowerCase()) < 0) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            }
+        });
+    }
+    )
+</script>*@
+
+
 
