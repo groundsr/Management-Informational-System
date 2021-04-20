@@ -9,13 +9,12 @@ using System.Text;
 
 namespace MIS.DataAccess
 {
-    public class EFCriminalRecordPolicemanRepository:EFRepository<CriminalRecordPoliceman>,IEFCriminalRecordPolicemanRepository
+    public class EFCriminalRecordPolicemanRepository : EFRepository<CriminalRecordPoliceman>, IEFCriminalRecordPolicemanRepository
     {
 
         public EFCriminalRecordPolicemanRepository( PoliceContext policeContext):base(policeContext)
         {
         }
-
 
         public bool CheckIfPolicemanWasAdded(CriminalRecordPoliceman criminalRecordPoliceman)
         {
@@ -33,8 +32,6 @@ namespace MIS.DataAccess
             {
                 return true;
             }
-
-
         }
 
         public CriminalRecordPoliceman GetCriminalRecordPoliceman(CriminalRecord criminalRecord)
@@ -46,36 +43,29 @@ namespace MIS.DataAccess
             return criminalRecordPoliceman;
         }
 
-        public void AddPolicemanToCriminalRecord(Policeman policeman,CriminalRecord criminalRecord)
+        public IEnumerable<CriminalRecordPoliceman> GetCriminalRecordPolicemenByRecordId(Guid id)
         {
-            var recordPoliceman= _context.CriminalRecordPolicemen
-                .Where(x => x.CriminalRecord.Id == criminalRecord.Id)
+            CriminalRecord criminalRecord = _context.CriminalRecords
+                .Where(x => x.Id == id)
                 .FirstOrDefault();
 
+            List<CriminalRecordPoliceman> criminalRecordPolicemen =
+                _context.CriminalRecordPolicemen
+                .Where(x => x.CriminalRecord.Id == criminalRecord.Id)
+                .ToList();
 
-            recordPoliceman.CriminalRecord = criminalRecord;
+            return criminalRecordPolicemen;
 
+        }
 
-            if (recordPoliceman.Policeman == null)
-            {
-                recordPoliceman.Policeman = policeman;
-                _context.Update(recordPoliceman);
-            }
-            else
-            {
-                var newRecordPoliceman = new CriminalRecordPoliceman();
-                newRecordPoliceman.CriminalRecord = criminalRecord;
-                newRecordPoliceman.Policeman = policeman;
+        public IEnumerable<CriminalRecordPoliceman> GetAllById(Guid id)
+        {
+            IEnumerable<CriminalRecordPoliceman> criminalRecordPolicemen =
+                _context.CriminalRecordPolicemen
+                .Where(x => x.Id == id)
+                .ToList();
 
-
-                if (!(CheckIfPolicemanWasAdded(newRecordPoliceman)))
-                {
-                    _context.CriminalRecordPolicemen.Add(newRecordPoliceman);
-                }
-
-            }
-            _context.SaveChanges();
-
+            return criminalRecordPolicemen;
         }
 
         public IEnumerable<CriminalRecordPoliceman> GetAll(CriminalRecord criminalRecord)

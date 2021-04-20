@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MIS.BusinessLogic;
 using MIS.DataAccess.Abstractions;
 using MIS.Model;
 using MSI.Model;
@@ -11,20 +12,11 @@ namespace MIS.Controllers
 {
     public class CriminalRecordController:Controller
     {
-        private readonly IEFCriminalRecordRepository _efCriminalRecordRepository;
-        private readonly IPolicemanRepository _efPolicemanRepository;
-        private readonly IEFCriminalRecordPolicemanRepository _efCriminalRecordPolicemanRepository;
 
-        public CriminalRecordController(IEFCriminalRecordRepository efCriminalRecordRepository, IPolicemanRepository efPolicemanRepository, IEFCriminalRecordPolicemanRepository efCriminalRecordPoliceman)
+        private readonly CriminalRecordService _criminalRecordService;
+        public CriminalRecordController( CriminalRecordService criminalRecordService)
         {
-            _efCriminalRecordRepository = efCriminalRecordRepository;
-            _efPolicemanRepository = efPolicemanRepository;
-            _efCriminalRecordPolicemanRepository = efCriminalRecordPoliceman;
-        }
-
-        public IActionResult SearchCriminalRecord()
-        {
-            return View();
+            _criminalRecordService = criminalRecordService;
         }
 
         public IActionResult Index(string name)
@@ -33,12 +25,12 @@ namespace MIS.Controllers
 
             if (name != null)
             {
-                result = _efCriminalRecordRepository.GetCriminalRecordsByName(name).ToList();
+                result = _criminalRecordService.GetCriminalRecordsByName(name);
                 return View(result);
             }
             else
             {
-                result = _efCriminalRecordRepository.GetAll().ToList();
+                result = _criminalRecordService.GetAllCriminalRecords().ToList();
             }
             return View(result);
 
@@ -50,7 +42,7 @@ namespace MIS.Controllers
 
             if (ModelState.IsValid)
             {
-                if (_efCriminalRecordRepository.CheckIfRecordExists(criminalRecord))
+                if (_criminalRecordService.CheckIfRecordExists(criminalRecord))
                 {
                     return BadRequest();
                 }
@@ -59,15 +51,17 @@ namespace MIS.Controllers
                     criminalRecord.CreatedOn = DateTime.Today;
                     criminalRecord.Status = Status.Active;
                     
-                    _efCriminalRecordRepository.Add(criminalRecord);
+                    _criminalRecordService.AddCriminalRecord(criminalRecord);
 
                     CriminalRecordPoliceman criminalRecordPoliceman = new CriminalRecordPoliceman();
                     criminalRecordPoliceman.CriminalRecord = criminalRecord;
 
-                    _efCriminalRecordPolicemanRepository.Add(criminalRecordPoliceman);
-                    _efCriminalRecordPolicemanRepository.Save();
+                    _criminalRecordService.AddCriminalRecordPoliceman(criminalRecordPoliceman);
 
-                    _efCriminalRecordRepository.Save();
+                    _criminalRecordService.SaveCriminalRecordPoliceman();
+
+                    _criminalRecordService.SaveCriminalRecord();
+
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -80,38 +74,31 @@ namespace MIS.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(Guid id) { 
+        public IActionResult Delete(Guid id)    {
 
-
-            List<CriminalRecordPoliceman> criminalRecordPolicemenList =
-                _efCriminalRecordPolicemanRepository.GetAll(x => x.CriminalRecord.Id == id)
-                .ToList();
+            List<CriminalRecordPoliceman> criminalRecordPolicemenList = 
+                (List<CriminalRecordPoliceman>)_criminalRecordService.GetCriminalRecordPolicemenById(id);
 
             for(int i=0;i<criminalRecordPolicemenList.Count;i++)
             {
-                _efCriminalRecordPolicemanRepository.Remove(criminalRecordPolicemenList[i].Id);
+                _criminalRecordService.RemoveCriminalRecordPoliceman(criminalRecordPolicemenList[i].Id);
             }
 
-            _efCriminalRecordPolicemanRepository.Save();
-            _efCriminalRecordRepository.Remove(id);
+            _criminalRecordService.SaveCriminalRecordPoliceman();
 
+            _criminalRecordService.RemoveCriminalRecord(id);
 
-            _efCriminalRecordRepository.Save();
+            _criminalRecordService.SaveCriminalRecord();
+
             return RedirectToAction(nameof(Index));
         
-        }
-
-        public IActionResult EditCriminalRecordById(Guid id)
-        {
-            var record = _efCriminalRecordRepository.Get(id);
-            return View(record);
         }
 
         [HttpPost]
         public IActionResult EditCriminalRecord(CriminalRecord criminalRecord)
         {
-            _efCriminalRecordRepository.Update(criminalRecord);
-            _efCriminalRecordRepository.Save();
+            _criminalRecordService.UpdateCriminalRecord(criminalRecord);
+            _criminalRecordService.SaveCriminalRecord();
             return RedirectToAction(nameof(Index));
         }
 
@@ -123,10 +110,10 @@ namespace MIS.Controllers
         [HttpGet]
         public IActionResult Details(Guid recordId)
         {
-            var criminalRecordDetails = _efCriminalRecordRepository.Get(recordId);
+            var criminalRecordDetails = _criminalRecordService.GetCriminalRecordById(recordId);
 
-            IEnumerable<CriminalRecordPoliceman> criminalRecordPolicemen = _efCriminalRecordPolicemanRepository
-                .GetAll(criminalRecordDetails);
+            IEnumerable<CriminalRecordPoliceman> criminalRecordPolicemen =
+                _criminalRecordService.GetAllCriminalRecordsPoliceman(criminalRecordDetails);
 
             return View(criminalRecordPolicemen); 
         }
@@ -134,33 +121,29 @@ namespace MIS.Controllers
         [HttpPost]
         public IActionResult AddPolicemanToACriminalRecord(string policemanEmail,Guid criminalRecordId )
             {
-                
-            Policeman policeman = _efPolicemanRepository.GetByEmail(policemanEmail);
-            CriminalRecord criminalRecord = _efCriminalRecordRepository.Get(criminalRecordId);
+
+            Policeman policeman = _criminalRecordService.GetPolicemanByEmail(policemanEmail);
+            CriminalRecord criminalRecord = _criminalRecordService.GetCriminalRecordById(criminalRecordId);
 
             if(ModelState.IsValid)
             {
-                _efCriminalRecordPolicemanRepository.AddPolicemanToCriminalRecord(policeman,criminalRecord);
-                _efCriminalRecordPolicemanRepository.Save();
-                return Redirect("https://localhost:44300/CriminalRecord");
+                _criminalRecordService.AddPolicemanToCriminalRecord(policeman,criminalRecord);
+                _criminalRecordService.SaveCriminalRecordPoliceman();
+                string redirectString = "https://localhost:44300/CriminalRecord/Details?recordId=" + criminalRecordId;
+                return Redirect(redirectString);
             }
             return RedirectToPage(nameof(Details));
             }
 
-        public JsonResult GetSearchData(string SearchBy,string SearchValue)
+        [HttpGet]
+        public JsonResult GetAll()
         {
-            List<CriminalRecord> criminalRecordsList = new List<CriminalRecord>();
-
-            if(SearchBy=="Name")
-            {
-                criminalRecordsList = _efCriminalRecordRepository
-                    .GetCriminalRecordsByName(SearchValue)
-                    .ToList();
-                return Json(criminalRecordsList);
-            }
-            return null;
+            List<CriminalRecord> criminalRecords = new List<CriminalRecord>();
+            criminalRecords = (List<CriminalRecord>)_criminalRecordService.GetAllCriminalRecords();
+            return Json(criminalRecords);
 
         }
+
 
     }
 }

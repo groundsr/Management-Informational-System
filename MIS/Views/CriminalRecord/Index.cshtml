@@ -1,5 +1,9 @@
 ﻿@using MSI.Model
 @model IEnumerable<MSI.Model.CriminalRecord>
+
+
+
+
 <script src="~/lib/jquery/dist/jquery.js"></script>
 @{
     ViewData["Title"] = "Index";
@@ -22,241 +26,216 @@
             </li>
         </ul>
     </div>
-
-
-
-
-
-    @*<label> Choose type search</label>
-    <select id="SearchBy" class="form-control">
-        <option value="Enable"> Enable</option>
-        <option value="Name"> Name </option>
-    </select>
-
-    <br />
-    <label> Entry Key</label>
-    <div style="display:flex;">
-        <input class="form-control" id="Search" />
-        <input class="btn btn-primary" type="submit" id="searchButton" value="Search" />
-    </div>
-
-    <br /><br />
-
-    <table class="table-bordered">
-        <thead>
-            <tbody id="dataSearching">
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @item.Name
-                        </td>
-
-                    </tr>
-                }
-
-            </tbody>
-
-
-        </thead>
-
-    </table>*@
-
-
-
-
-
-
-    <form asp-controller="CriminalRecord" asp-action="Index" method="get" id="searchForm">
-        <div class="search">
-            <input type="search" class="search-input" placeholder="Search..." name="Name">
-            <button type="submit" class="search-icon" value="Filter">
-                <i class="fa fa-search"></i>
-            </button>
-        </div>
-    </form>
-
-   
-
-
 </div>
 
 
 
-<div class="records-container">
 
-    @foreach (var record in Model)
-    {
-        <div class="record" >
-            <i class="fas fa-folder record-icon" onclick="next('@record.Id')"></i>
-            <span class="record-name"><i class="fas fa-signature"></i> name : <span>@record.Name</span></span>
-            <span class="record-date"><i class="far fa-clock"></i> date : <span> @record.CreatedOn</span></span>
-            <div class="record-options">
+@*<label> Choose type search</label>
+        <select id="SearchBy" class="form-control">
+            <option value="Enable"> Enable</option>
+            <option value="Name"> Name </option>
+        </select>
 
-                <a href="#editCriminalRecord" class="btn btn-record-edit" onclick="loadEditModal('@record.Id', '@record.Name', '@record.Description', '@record.Type')"><i class="far fa-edit" style="font-size : 12px;"></i> edit</a>
-                <form asp-action="Delete" asp-controller="CriminalRecord" asp-route-id="@record.Id">
-                    <button type="submit" class="btn btn-record-delete">
-                        <i class="fas fa-trash" style="font-size : 12px;">
-
-                        </i> delete
-                    </button>
-                </form>
-
-            </div>
+        <br />
+        <label> Entry Key</label>
+        <div style="display:flex;">
+            <input class="form-control" id="Search" />
+            <input class="btn btn-primary" type="submit" id="searchButton" value="Search" />
         </div>
-        @*<input type="text" name="Id" value="@record.Id" />*@
 
+        <br /><br />
+
+        <table class="table-bordered">
+            <thead>
+            <tbody id="dataSearching">
+
+
+            </tbody>
+
+
+            </thead>
+
+        </table>
+
+
+        <form asp-controller="CriminalRecord" asp-action="Index" method="get" id="searchForm">
+            <div class="search">
+                <input type="search" class="search-input" placeholder="Search..." name="Name">
+                <button type="submit" class="search-icon" value="Filter">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>*@
+
+
+<partial name="_Records" />
+
+
+<input type="text" id="testInput" value="@Model.Count()" />
+<button type="button" id="testButton" class="btn btn-primary" onclick="showList(10)">
+    Button
+</button>
+
+
+<div class="modal fade" id="editCriminalRecord" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form asp-controller="CriminalRecord" asp-action="EditCriminalRecord">
+                    <partial name="_EditAndBackToList" />
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form asp-controller="CriminalRecord" asp-action="Create">
+                    <div class="form-group">
+                        <label for="Name">Name</label>
+                        <input type="text" class="form-control" id="Name" placeholder="Name" name="Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="Type">Type</label>
+                        <input type="text" class="form-control" id="Type" placeholder="Type" name="Type">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Description">Description</label>
+                        <textarea class="form-control" id="Description" rows="3" placeholder="Description.." name="Description"></textarea>
+                    </div>
+                    <button class="btn btn-police btn-police-rounded">Submit</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function next(id) {
+        $.ajax(
+            {
+                url: "CriminalRecord/Details?recordId=" + id,
+                type: 'GET',
+                success: function (data) {
+                    window.location.href = "https://localhost:44300/CriminalRecord/Details?recordId=" + id;
+                }
+            })
     }
 
-    <div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <form asp-controller="CriminalRecord" asp-action="Create">
-                        <div class="form-group">
-                            <label for="Name">Name</label>
-                            <input type="text" class="form-control" id="Name" placeholder="Name" name="Name">
-                        </div>
-                        <div class="form-group">
-                            <label for="Type">Type</label>
-                            <input type="text" class="form-control" id="Type" placeholder="Type" name="Type">
-                        </div>
+    function loadEditModal(id, name, description, type) {
+        $("#editRecordId").val(id)
+        $("#editRecordName").val(name)
+        $("#editRecordDescription").val(description)
+        $("#editRecordType").val(type)
+    }   
 
-                        <div class="form-group">
-                            <label for="Description">Description</label>
-                            <textarea class="form-control" id="Description" rows="3" placeholder="Description.." name="Description"></textarea>
-                        </div>
-                        <button class="btn btn-police btn-police-rounded">Submit</button>
-                    </form>
-                </div>
+    function getRecordId() {
+        var id = document.getElementById('recordId').value;
+        return id;
+    }
 
-            </div>
-        </div>
-    </div>
-
-
-    <div class="modal fade" id="editCriminalRecord" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <form asp-controller="CriminalRecord" asp-action="EditCriminalRecord">
-                        <partial name="_EditAndBackToList" />
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
+    $(document).ready(function () {
+        $('.btn-record-edit').on('click', function () {
+            $('#editCriminalRecord').modal('show');
+        });
+    });
 
 
 
+    function showList(value) {
+        console.log(4);
+        $('#testInput').val(value);
+        var value = document.getElementById('testInput').value;
+        console.log(value);
+        if (value == 10) {
+            document.getElementById('testButton').style.backgroundColor = 'red';
+        }
+    }
 
 
 
+    $(document).ready($(function () {
+        $("ul.dropdown-menu [data-toggle='dropdown']").on("click", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
 
-    <script>
-        //function next(id) {
-        //    $.ajax(
-        //        {
-        //            url: "CriminalRecord/Details?recordId=" + id,
-        //            type: 'GET',
-        //            success: function (data) {
-        //                window.location.href = "https://localhost:44300/CriminalRecord/Details?recordId="+id;
-        //            }
-        //        })
-        //}
-
-        //function loadEditModal(id, name, description, type) {
-        //    $("#editRecordId").val(id)
-        //    $("#editRecordName").val(name)
-        //    $("#editRecordDescription").val(description)
-        //    $("#editRecordType").val(type)
-        //}
-
-        //function getRecordId() {
-        //    var id = document.getElementById('recordId').value;
-        //    return id;
-        //}
-
-        //$(document).ready(function () {
-        //    $('.btn-record-edit').on('click', function () {
-        //        $('#editCriminalRecord').modal('show');
-        //    });
-        //});
-
-        //$(document).ready(function () {
-        //    $('#Search').click(function () {
-        //        var searchBy = $('#SearchBy').val;
-        //        var searchValue = $('#Search').val;
-        //        var setData = $('DataSearching');
-
-        //        setData.html("");
-
-        //        $.ajax({
-        //            type: "POST";
-        //            url: "CriminalRecord/GetSearchData?SearchBy=" + searchBy + "&SearchValue" + searchValue,
-        //            contentType: "html",
-        //            success: function (result) {
-
-        //            }
-
-        //            })
+            $(this).siblings().toggleClass("show");
 
 
-        //        )
-        //})
+            if (!$(this).next().hasClass('show')) {
+                $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+            }
+            $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
+                $('.dropdown-submenu .show').removeClass("show");
+            });
 
-
-        //$(document).ready(function () {
-        //    $('#showRecord').click(function () {
-        //        console.log(getRecordId());
-        //        $.ajax(
-        //            {
-        //                url: "CriminalRecord/Details?recordId=" + getRecordId(),
-        //                type: 'GET',
-        //                success: function (data) {
-        //                    window.location.href = "https://localhost:44300/CriminalRecord/Details?recordId=" + getRecordId();
-        //                }
-        //            })
-        //    });
-        //});
-
-            //$(document).ready(function () {
-            //    $('#showRecord').click(function () {
-            //        $.ajax(
-            //            {
-            //                url: '/SeachCriminalRecord',
-            //                type: 'GET'
-            //                success: function (data) {
-            //                    window.location.href = "http://localhost:44300/CriminalRecord/SearchCriminalRecord";
-            //                }
-            //            })
-            //    })
-            //}
+        });
+    }))
 
 
 
-            $(document).ready($(function () {   
-                    // ------------------------------------------------------- //
-                    // Multi Level dropdowns
-                    // ------------------------------------------------------ //
-                    $("ul.dropdown-menu [data-toggle='dropdown']").on("click", function (event) {
-                event.preventDefault();
-                event.stopPropagation();
+    $(document).ready(function () {
+        $('#searchButton').click(function () {
+            var SearchBy = $('#SearchBy').val();
+            var SearchValue = $('#Search').val();
+            var setData = $('#dataSearching');
 
-                $(this).siblings().toggleClass("show");
+            setData.html("");
+
+            $.ajax({
+                type: "POST",
+                url: "CriminalRecord/GetSearchData?SearchBy=" + SearchBy + "&SearchValue=" + SearchValue,
+                contentType: "html",
+                success: function (result) {
+
+                    console.log(result);
+                    if (result.length == 0) {
+                        setData.append('<tr><td> No Result Found </td></tr>');
+                    }
+                    else {
+
+                        for (let i = 0; i < result.length; i++) {
 
 
-                if (!$(this).next().hasClass('show')) {
-                    $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+                            var Data2 = `
+                            <div class="record">
+                            <i class="fas fa-folder record-icon"></i>
+                            <span class="record-name"><i class="fas fa-signature"></i> name : <span> ${result[i].name} </span></span>
+                            <span class="record-date"><i class="far fa-clock"></i> date : <span> ${result[i].createdOn} </span></span>
+                            </div>`
+
+                            var Data =
+                                `<tr>
+
+
+                                        <td>  ${result[i].id}  </td>
+
+                                        <td>  ${result[i].name}  </td>
+
+                                    </tr>`
+                            console.log(Data2);
+                            setData.append(Data2);
+                        }
+                    }
                 }
-                $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
-                    $('.dropdown-submenu .show').removeClass("show");
-                });
+
 
             });
-                }))
-       
+        });
+    });
 
-    </script>
+
+
+
+
+</script>
 

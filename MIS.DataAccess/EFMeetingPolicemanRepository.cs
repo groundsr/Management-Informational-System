@@ -22,5 +22,6 @@ namespace MIS.DataAccess
         {
             return context.MeetingPolicemen.Where(x => x.Policeman == policeman);
         }
+
     }
 }

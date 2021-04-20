@@ -40,10 +40,11 @@ namespace MIS.DataAccess
             return query.ToList();
         }
 
+
         public void Remove(Guid id)
         {
             dbSet.Remove(Get(id));
-                _context.SaveChanges();
+            _context.SaveChanges();
         }
 
         public void Update(T entity)

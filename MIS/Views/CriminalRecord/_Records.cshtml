@@ -1,0 +1,27 @@
+﻿<div class="records-container">
+
+    @foreach (var record in Model)
+    {
+        <div class="record">
+            <i class="fas fa-folder record-icon" onclick="next('@record.Id')"></i>
+            <span class="record-name"><i class="fas fa-signature"></i> name : <span>@record.Name</span></span>
+            <span class="record-date"><i class="far fa-clock"></i> date : <span> @record.CreatedOn</span></span>
+            <div class="record-options">
+
+                <a href="#editCriminalRecord" class="btn btn-record-edit" onclick="loadEditModal('@record.Id', '@record.Name', '@record.Description', '@record.Type')"><i class="far fa-edit" style="font-size : 12px;"></i> edit</a>
+                <form asp-action="Delete" asp-controller="CriminalRecord" asp-route-id="@record.Id">
+                    <button type="submit" class="btn btn-record-delete">
+                        <i class="fas fa-trash" style="font-size : 12px;">
+
+                        </i> delete
+                    </button>
+                </form>
+
+            </div>
+        </div>
+        @*<input type="text" name="Id" value="@record.Id" />*@
+
+    }
+</div>
+
+    

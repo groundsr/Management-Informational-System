@@ -18,6 +18,7 @@ using MIS.DataAccess.Abstractions;
 using MIS.DataAccess;
 using MIS.BusinessLogic;
 using MIS.Model;
+using MSI.Model;
 
 namespace MIS
 {
@@ -34,8 +35,7 @@ namespace MIS
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<PoliceContext>(options =>
-          options.UseSqlServer(Configuration.GetConnectionString("Police")));
-
+            options.UseSqlServer(Configuration.GetConnectionString("Police")));
 
             services.AddScoped<IPoliceSectionRepository, EFPoliceSectionRepository>();
             services.AddScoped<IEFCriminalRecordRepository, EFCriminalRecordRepository>();
@@ -46,6 +46,7 @@ namespace MIS
             services.AddScoped<PoliceSectionService>();
             services.AddScoped<MeetingRequestService>();
             services.AddScoped<PolicemanService>();
+            services.AddScoped<CriminalRecordService>();
             services.AddScoped<IMeetingPolicemanRepository, EFMeetingPolicemanRepository>();
             services.AddScoped<IMeetingRepository, EFMeetingRepository>();
             services.AddScoped<MeetingService>();
