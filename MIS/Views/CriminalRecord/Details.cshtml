@@ -41,52 +41,55 @@
 </form>
 
 
+<button type="button" id="myButton" class="btn btn-info" onclick="DisplayBlock()"> Click Here.</button>
+<button type="button" id="myBackButton" style="display:none" class="btn btn-info" onclick="DisplayNone()"> Undo</button>
 
 
-@foreach (var item in Model)
-{
-<ul class="list-group">
-    @if (@item.Policeman == null)
+<div id="policemenList" style="display:none">
+    @foreach (var item in Model)
     {
-        break;
+        <ul class="list-group">
+            @if (@item.Policeman == null)
+            {
+                break;
+            }
+
+            else
+            {
+                <li class="list-group-item active">
+                    <span id="mySpan">Name : @item.Policeman.Name </span>
+                    <span id="mySpan">Email : @item.Policeman.Email</span>
+                    <span id="mySpan">Seniority : @item.Policeman.Seniority</span>
+                </li>
+            }
+        </ul>
     }
 
-    else
-    {
-        <li class="list-group-item active"> 
-        <span id="mySpan">Name : @item.Policeman.Name </span> 
-        <span id="mySpan">Email : @item.Policeman.Email</span> 
-        </li>
+</div>
 
-        
+<script>
+
+
+    function displayPoliceman(value) {
+        document.getElementById('policemenList').style.display = value;
+        console.log(value);
+    }
+
+    function DisplayBlock() {
+        displayPoliceman('block');
+        document.getElementById('myBackButton').style.display = 'block';
+        document.getElementById('myButton').style.display = 'none';
 
     }
-</ul>
-}
+
+    function DisplayNone() {
+        displayPoliceman('None');
+        document.getElementById('myButton').style.display = 'block';
+        document.getElementById('myBackButton').style.display = 'none';
+    }
 
 
-
-
-
-@*<script>
-        function next(recordId, policemanEmail) {
-            $.ajax(
-                {
-                    url: "CriminalRecord/Details/AddPolicemanToACriminalRecord?policemanEmail=" + policemanEmail + "&criminalRecordId=" + recordId,
-                    type: 'POST',
-                    success: function (data) {
-                        window.location.href = "https://localhost:44300/CriminalRecord/Details/AddPolicemanToACriminalRecord?policemanEmail="
-                            + policemanEmail + "&criminalRecordId=" + recordId;
-                    }
-                })
-        }
-
-        function getEmail() {
-            var email = document.getElementById('emailValue').value;
-            return email;
-        }
-
-    </script>*@
+</script>
 
 
 
