@@ -14,6 +14,17 @@
         }
 </style>
 
+<form asp-action="AddPolicemanToStation" asp-controller="PoliceSection">
+    <div class="input-group mb-4 mt-4 display-1">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <input type="text" class="form-control" placeholder="Policeman e-mail ..." name="email">
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">Add to section</button>
+        </div>
+    </div>
+</form>
+
+
 <div class="section">
 
     <div class="tf-tree tf-gap-lg">
@@ -50,9 +61,7 @@
 
 
 
-    @*<div class="col">
-            <input type="submit" class="btn btn-info w-100" value="Create" />
-        </div>*@
+   
 
 
     <div class="modal fade" id="policemanDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -124,15 +133,6 @@
 
 
 
-<form asp-action="AddPolicemanToStation" asp-controller="PoliceSection">
-    <div class="input-group mb-4 mt-4 display-1">
-        <input type="hidden" name="id" value="@Model.Id" />
-        <input type="text" class="form-control" placeholder="Policeman e-mail ..." name="email">
-        <div class="input-group-append">
-            <button class="btn btn-primary" type="submit">Add to section</button>
-        </div>
-    </div>
-</form>
 
 
 
