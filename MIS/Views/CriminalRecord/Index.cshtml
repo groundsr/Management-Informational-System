@@ -19,9 +19,11 @@
             <li class="dropdown-submenu">
                 <a id="dropdownMenu2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle" style="cursor:pointer">Status </a>
                 <ul aria-labelledby="dropdownMenu2" class="dropdown-menu border-0 shadow">
+                    <form>
+                        <li><a asp-controller="CriminalRecord" asp-action="Index" asp-route-filterValue="1" class="dropdown-item">Active</a></li>
+                        <li><a asp-controller="CriminalRecord" asp-action="Index" asp-route-filterValue="0" class="dropdown-item">Closed</a></li>
+                    </form>
 
-                    <li><a href="#" class="dropdown-item">Active</a></li>
-                    <li><a href="#" class="dropdown-item">Closed</a></li>
                 </ul>
             </li>
 
@@ -30,7 +32,7 @@
     <div class="d-inline-flex p-md-5">
         <form asp-controller="CriminalRecord" asp-action="Index" method="get" id="searchForm">
             <div class="search">
-                <input type="search" class="search-input" placeholder="Search..." name="Name">
+                <input type="search" class="search-input" placeholder="Search..." name="filterValue">
                 <button type="submit" class="search-icon" value="Filter">
                     <i class="fa fa-search"></i>
                 </button>
@@ -43,42 +45,54 @@
 
 
 @*<label> Choose type search</label>
-        <select id="SearchBy" class="form-control">
-            <option value="Enable"> Enable</option>
-            <option value="Name"> Name </option>
-        </select>
+    <select id="SearchBy" class="form-control">
+        <option value="Enable"> Enable</option>
+        <option value="Name"> Name </option>
+    </select>
 
-        <br />
-        <label> Entry Key</label>
-        <div style="display:flex;">
-            <input class="form-control" id="Search" />
-            <input class="btn btn-primary" type="submit" id="searchButton" value="Search" />
-        </div>
+    <br />
+    <label> Entry Key</label>
+    <div style="display:flex;">
+        <input class="form-control" id="Search" />
+        <input class="btn btn-primary" type="submit" id="searchButton" value="Search" />
+    </div>
 
-        <br /><br />
+    <br /><br />
 
-        <table class="table-bordered">
-            <thead>
-            <tbody id="dataSearching">
-
-
-            </tbody>
+    <table class="table-bordered">
+        <thead>
+        <tbody id="dataSearching">
 
 
-            </thead>
-
-        </table>*@
+        </tbody>
 
 
+        </thead>
+
+    </table>*@
 
 
 <partial name="_Records" />
 
+@*<div>
+    <h4>
+        Single File Upload
+    </h4>
+    <form asp-controller="CriminalRecord" asp-action="SingleFile" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <button type="submit"> Submit</button>
+    </form>
+</div>
+<div>
+    <h4>
+        Mukltiple File Upload
+    </h4>
+    <form asp-controller="CriminalRecord" asp-action="MultipleFiles" enctype="multipart/form-data">
+        <input type="file" multiple name="files" />
+        <button type="submit"> Submit</button>
+    </form>
+</div>*@
 
-<input type="text" id="testInput" value="@Model.Count()" />
-<button type="button" id="testButton" class="btn btn-primary" onclick="showList(10)">
-    Button
-</button>
 
 
 <div class="modal fade" id="editCriminalRecord" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -138,7 +152,7 @@
         $("#editRecordName").val(name)
         $("#editRecordDescription").val(description)
         $("#editRecordType").val(type)
-    }   
+    }
 
     function getRecordId() {
         var id = document.getElementById('recordId').value;

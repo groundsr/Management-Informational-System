@@ -14,29 +14,27 @@
 {
     <div class="row p-2" > 
         <div class="col-lg-3 col-md-2 col-sm-2 col-xs-5" style="text-align:center;">
-            <form asp-controller="CriminalRecord" asp-action="SetStatus">
+            @*<form asp-controller="CriminalRecord" asp-action="SetStatus">
                 <input type="hidden" value="1" name="enumValue" />
-                <input type="hidden" value="@item.CriminalRecord.Id"  name="criminalRecordId"/>
-                <button id="enableButton" type="submit" class="form-control btn-primary">Enable</button>
-            </form>
+                <input type="hidden" value="@item.CriminalRecord.Id"  name="criminalRecordId"/>*@
+                <button id="enableButton" type="submit" onclick="modifyStatusEnable()" class="form-control btn-primary">Enable</button>
+            @*</form>*@
         </div>
     
         <div class="col-lg-3 col-md-2 col-sm-2 col-xs-5" style="text-align:center;">
-            <form asp-controller="CriminalRecord" asp-action="SetStatus">
+            @*<form asp-controller="CriminalRecord" asp-action="SetStatus">
                 <input type="hidden" value="0" name="enumValue" />
-                <input type="hidden" value="@item.CriminalRecord.Id" name="criminalRecordId" />
-                <button id="disableButton" type="submit" class="form-control btn-primary">Disable</button>
-            </form>
+                <input type="hidden" value="@item.CriminalRecord.Id" name="criminalRecordId" />*@
+                <button id="disableButton" onclick="modifyStatusDisable()" type="submit" class="form-control btn-primary">Disable</button>
+            @*</form>*@
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-5" style="text-align:center;">
             <h3 id="recordStatus"> Record Status : @item.CriminalRecord.Status </h3>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-5" style="text-align:center;">
-            <h3 id="recordStatus"> Type : @item.CriminalRecord.Type </h3>
+            <h3 id="recordType" > Type : @item.CriminalRecord.Type </h3>
         </div>
     </div>
-
-
 
     <div class="ml-lg-5 mb-lg-5 col-lg-10 col-md-5 col-sm-5 border p-2 " id="descriptionArea">
         @item.CriminalRecord.Description
@@ -59,12 +57,14 @@
             <button type="button" id="myButton" class="btn btn-primary btn-sm col-2 " onclick="DisplayBlock()"> See list</button>
             <button type="button" id="myBackButton" style="display:none" class="btn btn-primary btn-sm col-2 " onclick="DisplayNone()"> Undo</button>
         </div>
-
     </div>
 
 </form>
 
-
+<form>
+    <input type="text" id="newValueType" value="@Model.ElementAt(0).CriminalRecord.Type" />
+    <button class="btn btn-submit" onclick="modifyType()"> Submit</button>
+</form>
 
 
 
@@ -110,6 +110,37 @@
                     document.getElementById('myButton').style.display = 'block';
                     document.getElementById('myBackButton').style.display = 'none';
                 }
+
+
+    function modifyType() {
+
+        var myValue = document.getElementById('newValueType').value;
+
+        $.ajax(
+            {
+
+                type: "POST",
+                url: "/CriminalRecord/ModifyType?newType=" + myValue + "&criminalRecordId=" + "@Model.ElementAt(0).CriminalRecord.Id",
+                success: function (response) {
+                    $("#recordType").html(response);
+                }
+            })
+    }
+
+    function modifyStatusEnable() {
+        $('#recordStatus').html("Status:Active");
+            $.ajax({
+                url: "/CriminalRecord/SetStatus?enumValue=1&criminalRecordId=" + "@Model.ElementAt(0).CriminalRecord.Id"
+        })
+    }
+    function modifyStatusDisable() {
+        $('#recordStatus').html("Status:Inactive");
+            $.ajax({
+                url: "/CriminalRecord/SetStatus?enumValue=0&criminalRecordId=" + "@Model.ElementAt(0).CriminalRecord.Id"
+        })
+    }
+
+
 
     //function setEnable(int id) {
     //                $('#enableButton')

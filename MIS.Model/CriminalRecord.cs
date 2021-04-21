@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MIS.Model;
+using System;
 using System.Collections.Generic;
 
 namespace MSI.Model
@@ -13,6 +14,9 @@ namespace MSI.Model
         public Status Status { get; set; }
         public virtual Policeman ModifiedBy { get; set; }
         public string Type { get; set; }
-       
+
+        public virtual List<Document> Documents { get; set; } = new List<Document>();
+
+
     }
 }

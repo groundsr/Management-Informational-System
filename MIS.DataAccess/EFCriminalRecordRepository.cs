@@ -16,6 +16,8 @@ namespace MIS.DataAccess
 
         }
 
+
+
         public IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name)
         {
 

@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MIS.BusinessLogic;
 using MIS.DataAccess.Abstractions;
 using MIS.Model;
 using MSI.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,18 +17,38 @@ namespace MIS.Controllers
     {
 
         private readonly CriminalRecordService _criminalRecordService;
-        public CriminalRecordController( CriminalRecordService criminalRecordService)
+        private readonly IHostingEnvironment _env;
+
+        public CriminalRecordController(CriminalRecordService criminalRecordService, IHostingEnvironment env)
         {
             _criminalRecordService = criminalRecordService;
+            _env = env;
         }
 
-        public IActionResult Index(string name)
+        public IActionResult Index(string filterValue)
         {
             IEnumerable<CriminalRecord> result;
 
-            if (name != null)
-            {
-                result = _criminalRecordService.GetCriminalRecordsByName(name);
+            int intResult=-1;
+            if (filterValue != null)
+            {   
+                try
+                {
+                     intResult = Int32.Parse(filterValue);             
+                }
+                catch(FormatException)
+                {
+
+                }
+
+                if (intResult == -1)
+                {
+                    result = _criminalRecordService.GetCriminalRecordsByName(filterValue);
+                }
+                else
+                {
+                    result = _criminalRecordService.FilterCriminalRecords(intResult);
+                }
                 return View(result);
             }
             else
@@ -43,7 +66,6 @@ namespace MIS.Controllers
         }
 
 
-        [HttpPost]
         public IActionResult SetStatus(int enumValue, Guid criminalRecordId)
         {
             CriminalRecord criminalRecord = _criminalRecordService.GetCriminalRecordById(criminalRecordId);
@@ -56,7 +78,7 @@ namespace MIS.Controllers
             {
                 _criminalRecordService.EnableStatus(enumValue, criminalRecordId);
             }
-            return RedirectToAction(nameof(Details));
+            return RedirectToAction("Details", new {recordId= criminalRecordId });
         }
 
         [HttpPost]
@@ -96,6 +118,7 @@ namespace MIS.Controllers
 
         }
 
+
         [HttpPost]
         public IActionResult Delete(Guid id)    {
 
@@ -112,7 +135,6 @@ namespace MIS.Controllers
             _criminalRecordService.RemoveCriminalRecord(id);
 
             _criminalRecordService.SaveCriminalRecord();
-
             return RedirectToAction(nameof(Index));
         
         }
@@ -128,6 +150,40 @@ namespace MIS.Controllers
         public IActionResult Details()
         {
             return View();
+        }
+
+        [HttpPost]
+        public JsonResult ModifyType(string newType,Guid criminalRecordId)
+        {
+            _criminalRecordService.ModifyType(newType,criminalRecordId);
+            return Json(newType);
+        }
+
+        [HttpPost]
+        public IActionResult SingleFile(IFormFile file)
+        {
+            var dir = _env.ContentRootPath;
+            using(var fileStream=new FileStream(Path.Combine(dir,"file.png"),FileMode.Create,FileAccess.Write))
+            {
+                file.CopyTo(fileStream);
+            }
+           return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult MultipleFiles(IEnumerable<IFormFile> files)
+        {
+            var dir = _env.ContentRootPath;
+            int i = 0;
+            foreach (var item in files)
+            {
+                using (var fileStream = new FileStream(Path.Combine(dir, $"file{i++}.png"), FileMode.Create, FileAccess.Write))
+                {
+                    item.CopyTo(fileStream);
+                }
+                return RedirectToAction(nameof(Index));
+            
+            }
         }
 
         [HttpGet]

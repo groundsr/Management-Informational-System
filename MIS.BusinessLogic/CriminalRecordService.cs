@@ -123,6 +123,42 @@ namespace MIS.BusinessLogic
             _criminalRecord.Remove(id);
         }
 
+        public void ModifyType(string newType,Guid CriminalRecordId)
+        {
+            CriminalRecord criminalRecord = _criminalRecord.Get(CriminalRecordId);
+
+            criminalRecord.Type = newType;
+            _criminalRecord.Save();
+        }
+
+        public IEnumerable<CriminalRecord> FilterCriminalRecords(int filterValue)
+        {
+            List<CriminalRecord> criminalRecords = (List<CriminalRecord>)GetAllCriminalRecords();
+            List<CriminalRecord> filteredRecords = new List<CriminalRecord>();
+
+            if (filterValue == 1)
+            {
+                foreach (var item in criminalRecords)
+                {
+                    if (item.Status == Status.Active)
+                    {
+                        filteredRecords.Add(item);
+                    }
+                }
+            }
+            else if(filterValue==0)
+            {
+                foreach(var item in criminalRecords)
+                {
+                    if(item.Status==Status.Closed)
+                    {
+                        filteredRecords.Add(item);
+                    }
+                }
+            }
+
+            return filteredRecords; 
+        }
         public void UpdateCriminalRecord(CriminalRecord criminalRecord)
         {
             _criminalRecord.Update(criminalRecord);
@@ -142,6 +178,7 @@ namespace MIS.BusinessLogic
         {
             CriminalRecord record=_criminalRecord.Get(criminalRecordId);
             record.Status = Status.Active;
+            _criminalRecord.Update(record);
             _criminalRecord.Save();
         }
 
@@ -150,6 +187,7 @@ namespace MIS.BusinessLogic
             CriminalRecord record = _criminalRecord.Get(criminalRecordId);
 
             record.Status = Status.Closed;
+            _criminalRecord.Update(record);
             _criminalRecord.Save();
         }
 

@@ -77,7 +77,6 @@ namespace MIS.DataAccess
             return criminalRecordPolicemen;
 
         }
-
         public IEnumerable<CriminalRecordPoliceman> GetAll(CriminalRecord criminalRecord)
         {
             IEnumerable<CriminalRecordPoliceman> criminalRecordList = (IEnumerable<CriminalRecordPoliceman>)
