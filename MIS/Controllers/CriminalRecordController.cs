@@ -170,21 +170,21 @@ namespace MIS.Controllers
            return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost]
-        public IActionResult MultipleFiles(IEnumerable<IFormFile> files)
-        {
-            var dir = _env.ContentRootPath;
-            int i = 0;
-            foreach (var item in files)
-            {
-                using (var fileStream = new FileStream(Path.Combine(dir, $"file{i++}.png"), FileMode.Create, FileAccess.Write))
-                {
-                    item.CopyTo(fileStream);
-                }
-                return RedirectToAction(nameof(Index));
+        //[HttpPost]
+        ////public IActionResult MultipleFiles(IEnumerable<IFormFile> files)
+        ////{
+        ////    var dir = _env.ContentRootPath;
+        ////    int i = 0;
+        ////    foreach (var item in files)
+        ////    {
+        ////        using (var fileStream = new FileStream(Path.Combine(dir, $"file{i++}.png"), FileMode.Create, FileAccess.Write))
+        ////        {
+        ////            item.CopyTo(fileStream);
+        ////        }
+        ////        return RedirectToAction(nameof(Index));
             
-            }
-        }
+        ////    }
+        ////}
 
         [HttpGet]
         public IActionResult Details(Guid recordId)
