@@ -84,8 +84,23 @@ namespace MIS.DataAccess
 
             List<Document> documents = criminalRecord.Documents;
             return documents;
-
-
         }
+
+        public IEnumerable<CriminalRecord> GetCriminalRecordsByName(IEnumerable<CriminalRecord> criminalRecords,string name)
+        {
+            List<CriminalRecord> filteredList = new List<CriminalRecord>();
+            foreach(var item in criminalRecords)
+            {
+                if(item.Name.Contains(name))
+                {
+                    filteredList.Add(item);
+                }
+            }
+
+            return filteredList;
+        }
+
+
+
     }
 }

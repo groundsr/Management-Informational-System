@@ -11,11 +11,13 @@ namespace MIS.BusinessLogic
     {
         private readonly IPoliceSectionRepository policeStationRepository;
         private readonly IPolicemanRepository policemanRepository;
+        private readonly CriminalRecordService _criminalRecordService;
 
-        public PoliceSectionService(IPoliceSectionRepository policeStationRepository, IPolicemanRepository policemanRepository)
+        public PoliceSectionService(IPoliceSectionRepository policeStationRepository, IPolicemanRepository policemanRepository, CriminalRecordService criminalRecordService)
         {
             this.policeStationRepository = policeStationRepository;
             this.policemanRepository = policemanRepository;
+            _criminalRecordService = criminalRecordService;
         }
 
         public void AddPoliceToSection(PoliceSection policeSection, string email)
@@ -40,6 +42,20 @@ namespace MIS.BusinessLogic
 
             policeStationRepository.Update(policeSection);
         }
+
+        public IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name)
+        {
+            return (_criminalRecordService.GetCriminalRecordsByName(name));
+        }
+
+        public IEnumerable<CriminalRecord> GetCriminalRecordsByNameBySection(Guid id, string name)
+        {
+            IEnumerable<CriminalRecord> allCriminalRecords = _criminalRecordService.GetCriminalRecordBySection(id);
+            IEnumerable<CriminalRecord> filteredCriminalRecords = _criminalRecordService.GetCriminalRecordsByNameBySection(id, name);
+            return filteredCriminalRecords;
+
+        }
+
 
         public PoliceSection Get(Guid id)
         {

@@ -11,16 +11,18 @@ namespace MIS.Controllers
 {
     public class PoliceSectionController : Controller
     {
-        public PoliceSectionService policeSectionService;
+        public PoliceSectionService _policeSectionService;
+        private readonly CriminalRecordService _criminalRecordService;
 
-        public PoliceSectionController(PoliceSectionService policeStationService)
+        public PoliceSectionController(PoliceSectionService policeStationService, CriminalRecordService criminalRecordService)
         {
-            this.policeSectionService = policeStationService;
+            this._policeSectionService = policeStationService;
+            _criminalRecordService = criminalRecordService;
         }
 
         public IActionResult Index(string searchString)
         {
-            var model = policeSectionService.GetAll();
+            var model = _policeSectionService.GetAll();
             if (!String.IsNullOrEmpty(searchString))
             {
                 model = model.Where(s => s.Name.Contains(searchString));
@@ -30,19 +32,31 @@ namespace MIS.Controllers
             //return View(model);
         }
 
+
+
         public IActionResult AddPolicemanToStation(Guid id, string email)
         {
-            var policeSection = policeSectionService.Get(id);
-
-            policeSectionService.AddPoliceToSection(policeSection, email);
-
+            var policeSection = _policeSectionService.Get(id);
+            _policeSectionService.AddPoliceToSection(policeSection, email);
             return RedirectToAction("Index");
 
         }
 
-        public IActionResult Hierarchy(Guid id)
+        public IActionResult Hierarchy(Guid id, string? searchedRecord)
         {
-            return View(policeSectionService.Get(id));
+            PoliceSection policeSection = _policeSectionService.Get(id);
+            IEnumerable<CriminalRecord> criminalRecords = _criminalRecordService.GetCriminalRecordBySection(id);
+
+            if (searchedRecord != null)
+            {
+                IEnumerable<CriminalRecord> filteredCriminalRecords = _criminalRecordService.GetCriminalRecordsByNameBySection(id,searchedRecord);
+                ViewData["criminalRecords"] =filteredCriminalRecords;
+            }
+            else
+            {
+                ViewData["criminalRecords"] = criminalRecords;
+            }
+            return View(_policeSectionService.Get(id));
         }
 
         public IActionResult Create()
@@ -56,7 +70,7 @@ namespace MIS.Controllers
         {
             if (ModelState.IsValid)
             {
-                policeSectionService.Add(policeSection);
+                _policeSectionService.Add(policeSection);
                 return RedirectToAction("Index");
 
             }
@@ -67,7 +81,7 @@ namespace MIS.Controllers
         {
 
 
-            PoliceSection policeSection = policeSectionService.Get(id);
+            PoliceSection policeSection = _policeSectionService.Get(id);
 
             if (policeSection == null)
             {
@@ -85,7 +99,7 @@ namespace MIS.Controllers
 
             if (ModelState.IsValid)
             {
-                policeSectionService.Update(policeSection);
+                _policeSectionService.Update(policeSection);
                 return RedirectToAction("Index");
 
             }
@@ -96,7 +110,7 @@ namespace MIS.Controllers
         {
 
 
-            PoliceSection policeSection = policeSectionService.Get(id);
+            PoliceSection policeSection = _policeSectionService.Get(id);
 
             if (policeSection == null)
             {
@@ -111,7 +125,7 @@ namespace MIS.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(Guid id)
         {
-            policeSectionService.Delete(id);
+            _policeSectionService.Delete(id);
             return RedirectToAction("Index");
         }
 
@@ -120,9 +134,9 @@ namespace MIS.Controllers
         //that specific key
         public List<List<Policeman>> PolicemenHierarchy(Guid sectionId)
         {
-            var dictionaryHierarch = policeSectionService.PolicemenHierarchy(sectionId);
+            var dictionaryHierarch = _policeSectionService.PolicemenHierarchy(sectionId);
             List<List<Policeman>> leveledHierarchy = new List<List<Policeman>>();
-            foreach(var key in dictionaryHierarch.Keys)
+            foreach (var key in dictionaryHierarch.Keys)
             {
                 List<Policeman> current = new List<Policeman>();
                 current.Add(key);
@@ -131,6 +145,9 @@ namespace MIS.Controllers
             }
             return leveledHierarchy;
         }
+
+
+
 
     }
 }

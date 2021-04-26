@@ -20,10 +20,11 @@ namespace MIS.BusinessLogic
         private readonly IPoliceSectionRepository _policeSectionRepository;
         private readonly IDocumentRepository _documentRepository;
         private readonly IHostingEnvironment _env;
+        private readonly CriminalRecordService _criminalRecordService;
 
         public CriminalRecordService(ICriminalRecordRepository criminalRecord
             , ICriminalRecordPolicemanRepository criminalRecordPoliceman
-            , IPolicemanRepository policemanRepository, IHostingEnvironment env, IDocumentRepository documentRepository, IPoliceSectionRepository policeSectionRepository)
+            , IPolicemanRepository policemanRepository, IHostingEnvironment env, IDocumentRepository documentRepository, IPoliceSectionRepository policeSectionRepository, CriminalRecordService criminalRecordService)
         {
             _criminalRecord = criminalRecord;
             _criminalRecordPoliceman = criminalRecordPoliceman;
@@ -31,6 +32,7 @@ namespace MIS.BusinessLogic
             _documentRepository = documentRepository;
             _env = env;
             _policeSectionRepository = policeSectionRepository;
+            _criminalRecordService = criminalRecordService;
         }
 
         public int IdWrapper { get; set; }
@@ -74,21 +76,9 @@ namespace MIS.BusinessLogic
             _criminalRecordPoliceman.Save();
         }
 
-        public IEnumerable<CriminalRecord> GetCriminalRecordBySection(int filterValue)
+        public IEnumerable<CriminalRecord> GetCriminalRecordBySection(Guid policeSectionId)
         {
-            List<PoliceSection> policeSections = (List<PoliceSection>)_policeSectionRepository.GetAll();
-            PoliceSection policeSection=null;
-
-
-            foreach(var item in policeSections)
-            {
-                int addingValue = _policeSectionRepository.GetPoliceSectionNumber(item.Name);
-                if(addingValue==filterValue)
-                {
-                    policeSection = _policeSectionRepository.GetPoliceSectionByName(item.Name);
-                }
-            }
-
+            PoliceSection policeSection = _policeSectionRepository.Get(policeSectionId);
             List<Policeman> policemen = policeSection.Policemen;
             List<CriminalRecordPoliceman> criminalRecordPolicemen = new List<CriminalRecordPoliceman>();
 
@@ -155,6 +145,14 @@ namespace MIS.BusinessLogic
         public IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name)
         {
             return( _criminalRecord.GetCriminalRecordsByName(name));
+        }
+
+        public IEnumerable<CriminalRecord> GetCriminalRecordsByNameBySection(Guid id,string name)
+        {
+            IEnumerable<CriminalRecord> allCriminalRecords = _criminalRecordService.GetCriminalRecordBySection(id);
+            IEnumerable<CriminalRecord> filteredCriminalRecords = _criminalRecord.GetCriminalRecordsByName(allCriminalRecords, name);
+            return filteredCriminalRecords;
+
         }
 
         public IEnumerable<CriminalRecord> GetCriminalRecordByPolicemanName(string policemanName)

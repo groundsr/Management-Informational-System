@@ -13,5 +13,7 @@ namespace MIS.DataAccess.Abstractions
         int GetStatus(CriminalRecord criminalRecord);
         void AddDocument(Document document, Guid criminalRecordId);
          IEnumerable<Document> GetDocuments(Guid criminalRecordId);
+        IEnumerable<CriminalRecord> GetCriminalRecordsByName(IEnumerable<CriminalRecord> criminalRecords, string name);
+
     }
 }

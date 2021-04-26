@@ -27,6 +27,8 @@ namespace MIS.Controllers
         }
 
         public IActionResult Index(string filterValue,int searchFlag)
+        
+        
         {
             IEnumerable<CriminalRecord> result = null ;
 
@@ -56,15 +58,7 @@ namespace MIS.Controllers
                 }
                 else
                 {
-                    if (searchFlag == 2)
-                    {
-                        int filteredValue = Int32.Parse(filterValue);
-                        result = _criminalRecordService.GetCriminalRecordBySection(filteredValue);
-                    }
-                    else
-                    {
                         result = _criminalRecordService.FilterCriminalRecords(intResult);
-                    }
                 }
 
                 return View(result);
