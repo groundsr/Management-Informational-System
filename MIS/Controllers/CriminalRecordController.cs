@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MIS.BusinessLogic;
 using MIS.DataAccess.Abstractions;
+using MIS.DTOs.BusinessLogic;
 using MIS.Model;
 using MSI.Model;
 using System;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MIS.Controllers
 {
-    public class CriminalRecordController:Controller
+    public class CriminalRecordController : Controller
     {
 
         private readonly CriminalRecordService _criminalRecordService;
@@ -25,30 +26,47 @@ namespace MIS.Controllers
             _env = env;
         }
 
-        public IActionResult Index(string filterValue)
+        public IActionResult Index(string filterValue,int searchFlag)
         {
-            IEnumerable<CriminalRecord> result;
+            IEnumerable<CriminalRecord> result = null ;
 
-            int intResult=-1;
+            int intResult = -1;
             if (filterValue != null)
-            {   
+            {
                 try
                 {
-                     intResult = Int32.Parse(filterValue);             
+                    intResult = Int32.Parse(filterValue);
                 }
-                catch(FormatException)
+                catch (FormatException)
                 {
 
                 }
 
                 if (intResult == -1)
                 {
-                    result = _criminalRecordService.GetCriminalRecordsByName(filterValue);
+                    if (searchFlag == 0)
+                    {
+                        result = _criminalRecordService.GetCriminalRecordsByName(filterValue);
+                    }
+                    else if (searchFlag == 1)
+                    {
+                        result = _criminalRecordService.GetCriminalRecordByPolicemanName(filterValue);
+                    }
+
                 }
                 else
                 {
-                    result = _criminalRecordService.FilterCriminalRecords(intResult);
+                    if (searchFlag == 2)
+                    {
+                        int filteredValue = Int32.Parse(filterValue);
+                        result = _criminalRecordService.GetCriminalRecordBySection(filteredValue);
+                    }
+                    else
+                    {
+                        result = _criminalRecordService.FilterCriminalRecords(intResult);
+                    }
                 }
+
                 return View(result);
             }
             else
@@ -59,10 +77,11 @@ namespace MIS.Controllers
         }
 
 
+
         public int GetCriminalRecordStatus(Guid criminalRecordId)
         {
             CriminalRecord criminalRecord = _criminalRecordService.GetCriminalRecordById(criminalRecordId);
-           return( _criminalRecordService.GetStatus(criminalRecord));
+            return (_criminalRecordService.GetStatus(criminalRecord));
         }
 
 
@@ -70,15 +89,15 @@ namespace MIS.Controllers
         {
             CriminalRecord criminalRecord = _criminalRecordService.GetCriminalRecordById(criminalRecordId);
 
-            if(enumValue==0)
+            if (enumValue == 0)
             {
-                _criminalRecordService.DisableStatus(enumValue,criminalRecordId);
+                _criminalRecordService.DisableStatus(enumValue, criminalRecordId);
             }
-            else if(enumValue==1)
+            else if (enumValue == 1)
             {
                 _criminalRecordService.EnableStatus(enumValue, criminalRecordId);
             }
-            return RedirectToAction("Details", new {recordId= criminalRecordId });
+            return RedirectToAction("Details", new { recordId = criminalRecordId });
         }
 
         [HttpPost]
@@ -93,9 +112,9 @@ namespace MIS.Controllers
                 }
                 else
                 {
-                    criminalRecord.CreatedOn = DateTime.Today;
+                    criminalRecord.CreatedOn = DateTime.Now;
                     criminalRecord.Status = Status.Active;
-                    
+
                     _criminalRecordService.AddCriminalRecord(criminalRecord);
 
                     CriminalRecordPoliceman criminalRecordPoliceman = new CriminalRecordPoliceman();
@@ -120,12 +139,13 @@ namespace MIS.Controllers
 
 
         [HttpPost]
-        public IActionResult Delete(Guid id)    {
+        public IActionResult Delete(Guid id)
+        {
 
-            List<CriminalRecordPoliceman> criminalRecordPolicemenList = 
+            List<CriminalRecordPoliceman> criminalRecordPolicemenList =
                 (List<CriminalRecordPoliceman>)_criminalRecordService.GetCriminalRecordPolicemenById(id);
 
-            for(int i=0;i<criminalRecordPolicemenList.Count;i++)
+            for (int i = 0; i < criminalRecordPolicemenList.Count; i++)
             {
                 _criminalRecordService.RemoveCriminalRecordPoliceman(criminalRecordPolicemenList[i].Id);
             }
@@ -136,7 +156,7 @@ namespace MIS.Controllers
 
             _criminalRecordService.SaveCriminalRecord();
             return RedirectToAction(nameof(Index));
-        
+
         }
 
         [HttpPost]
@@ -147,44 +167,33 @@ namespace MIS.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details()
-        {
-            return View();
-        }
-
+   
         [HttpPost]
-        public JsonResult ModifyType(string newType,Guid criminalRecordId)
+        public JsonResult ModifyType(string newType, Guid criminalRecordId)
         {
-            _criminalRecordService.ModifyType(newType,criminalRecordId);
+            _criminalRecordService.ModifyType(newType, criminalRecordId);
             return Json(newType);
         }
 
-        [HttpPost]
-        public IActionResult SingleFile(IFormFile file)
+        public IActionResult DeleteDocument(Guid criminalRecordId,Guid documentId)
         {
-            var dir = _env.ContentRootPath;
-            using(var fileStream=new FileStream(Path.Combine(dir,"file.png"),FileMode.Create,FileAccess.Write))
+
+
+
+            if (documentId!=null)
             {
-                file.CopyTo(fileStream);
+                _criminalRecordService.DeleteDocument(documentId);
             }
+
            return RedirectToAction(nameof(Index));
         }
 
-        //[HttpPost]
-        ////public IActionResult MultipleFiles(IEnumerable<IFormFile> files)
-        ////{
-        ////    var dir = _env.ContentRootPath;
-        ////    int i = 0;
-        ////    foreach (var item in files)
-        ////    {
-        ////        using (var fileStream = new FileStream(Path.Combine(dir, $"file{i++}.png"), FileMode.Create, FileAccess.Write))
-        ////        {
-        ////            item.CopyTo(fileStream);
-        ////        }
-        ////        return RedirectToAction(nameof(Index));
-            
-        ////    }
-        ////}
+        [HttpPost]
+        public IActionResult FileInModel(Guid criminalRecordId, DocumentDTO documentDTO)
+        {
+            _criminalRecordService.UploadFile(criminalRecordId, documentDTO);
+            return RedirectToAction("Index");
+        }
 
         [HttpGet]
         public IActionResult Details(Guid recordId)
@@ -194,25 +203,27 @@ namespace MIS.Controllers
             IEnumerable<CriminalRecordPoliceman> criminalRecordPolicemen =
                 _criminalRecordService.GetAllCriminalRecordsPolicemanForARecord(criminalRecordDetails);
 
-            return View(criminalRecordPolicemen); 
+            ViewData["documents"] = _criminalRecordService.GetDocuments(recordId);
+
+            return View(criminalRecordPolicemen);
         }
 
         [HttpPost]
-        public IActionResult AddPolicemanToACriminalRecord(string policemanEmail,Guid criminalRecordId )
-            {
+        public IActionResult AddPolicemanToACriminalRecord(string policemanEmail, Guid criminalRecordId)
+        {
 
             Policeman policeman = _criminalRecordService.GetPolicemanByEmail(policemanEmail);
             CriminalRecord criminalRecord = _criminalRecordService.GetCriminalRecordById(criminalRecordId);
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                _criminalRecordService.AddPolicemanToCriminalRecord(policeman,criminalRecord);
+                _criminalRecordService.AddPolicemanToCriminalRecord(policeman, criminalRecord);
                 _criminalRecordService.SaveCriminalRecordPoliceman();
                 string redirectString = "https://localhost:44300/CriminalRecord/Details?recordId=" + criminalRecordId;
                 return Redirect(redirectString);
             }
             return RedirectToPage(nameof(Details));
-            }
+        }
 
         [HttpGet]
         public JsonResult GetAll()

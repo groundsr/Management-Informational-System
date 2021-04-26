@@ -28,6 +28,9 @@ namespace MIS.DataAccess.Migrations
                     b.Property<Guid?>("CriminalRecordId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("DateWhenWasAdded")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid?>("PolicemanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -53,6 +56,9 @@ namespace MIS.DataAccess.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

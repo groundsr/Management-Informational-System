@@ -9,10 +9,10 @@ using System.Text;
 
 namespace MIS.DataAccess
 {
-    public class EFCriminalRecordPolicemanRepository : EFRepository<CriminalRecordPoliceman>, IEFCriminalRecordPolicemanRepository
+    public class EFCriminalRecordPolicemanRepository : EFRepository<CriminalRecordPoliceman>, ICriminalRecordPolicemanRepository
     {
 
-        public EFCriminalRecordPolicemanRepository( PoliceContext policeContext):base(policeContext)
+        public EFCriminalRecordPolicemanRepository(PoliceContext policeContext) : base(policeContext)
         {
         }
 
@@ -24,7 +24,7 @@ namespace MIS.DataAccess
                 (x.Policeman.Id == criminalRecordPoliceman.Policeman.Id))
                 .FirstOrDefault();
 
-            if(criminalRecordPolicemenCheck==null)
+            if (criminalRecordPolicemenCheck == null)
             {
                 return false;
             }
@@ -68,8 +68,30 @@ namespace MIS.DataAccess
             return criminalRecordPolicemen;
         }
 
+        public List<CriminalRecord> GetCriminalRecordsByPolicemanName(string policemanName)
+        {
+            List<CriminalRecordPoliceman> criminalRecordPolicemen;
+
+            criminalRecordPolicemen = _context.CriminalRecordPolicemen
+                            .Where(x => x.Policeman.Name.Contains(policemanName))
+                            .ToList();
+
+            List<CriminalRecord> criminalRecords = new List<CriminalRecord>();
+
+
+            foreach (var item in criminalRecordPolicemen)
+            {
+                criminalRecords.Add(item.CriminalRecord);
+            }
+
+            return criminalRecords;
+
+        }
+
         public IEnumerable<CriminalRecordPoliceman> GetAllCriminalRecordsPolicemanForARecord(CriminalRecord criminalRecord)
         {
+
+
             IEnumerable<CriminalRecordPoliceman> criminalRecordPolicemen = _context.CriminalRecordPolicemen
                                 .Where(x => x.CriminalRecord.Id == criminalRecord.Id)
                                 .ToList();
@@ -77,6 +99,14 @@ namespace MIS.DataAccess
             return criminalRecordPolicemen;
 
         }
+
+        public IEnumerable<CriminalRecordPoliceman> GetAllCriminalRecordPoliceman(Policeman item)
+        {
+            return (_context.CriminalRecordPolicemen
+                .Where(x => x.Policeman.Id == item.Id)
+                .ToList());
+        }
+
         public IEnumerable<CriminalRecordPoliceman> GetAll(CriminalRecord criminalRecord)
         {
             IEnumerable<CriminalRecordPoliceman> criminalRecordList = (IEnumerable<CriminalRecordPoliceman>)
@@ -86,5 +116,12 @@ namespace MIS.DataAccess
 
             return criminalRecordList;
         }
+
+        public IEnumerable<CriminalRecord> GetCriminalRecordBySection(int filterValue)
+        {
+            throw new NotImplementedException();
+        }
+
+
     }
 }

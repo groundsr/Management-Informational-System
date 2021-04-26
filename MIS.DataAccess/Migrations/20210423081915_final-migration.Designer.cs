@@ -10,15 +10,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MIS.DataAccess.Migrations
 {
     [DbContext(typeof(PoliceContext))]
-    [Migration("20210414085837_meetingpoliceman")]
-    partial class meetingpoliceman
+    [Migration("20210423081915_final-migration")]
+    partial class finalmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.5")
+                .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("MIS.Model.CriminalRecordPoliceman", b =>
@@ -29,6 +29,9 @@ namespace MIS.DataAccess.Migrations
 
                     b.Property<Guid?>("CriminalRecordId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateWhenWasAdded")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("PolicemanId")
                         .HasColumnType("uniqueidentifier");
@@ -51,10 +54,18 @@ namespace MIS.DataAccess.Migrations
                     b.Property<DateTime>("AddedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("CriminalRecordId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CriminalRecordId");
 
                     b.ToTable("Documents");
                 });
@@ -209,9 +220,14 @@ namespace MIS.DataAccess.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("RootPolicemanId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
+
+                    b.HasIndex("RootPolicemanId");
 
                     b.ToTable("PoliceSections");
                 });
@@ -288,6 +304,13 @@ namespace MIS.DataAccess.Migrations
                     b.Navigation("Policeman");
                 });
 
+            modelBuilder.Entity("MIS.Model.Document", b =>
+                {
+                    b.HasOne("MSI.Model.CriminalRecord", null)
+                        .WithMany("Documents")
+                        .HasForeignKey("CriminalRecordId");
+                });
+
             modelBuilder.Entity("MIS.Model.MeetingPoliceman", b =>
                 {
                     b.HasOne("MSI.Model.Meeting", "Meeting")
@@ -342,7 +365,13 @@ namespace MIS.DataAccess.Migrations
                         .WithMany()
                         .HasForeignKey("AddressId");
 
+                    b.HasOne("MSI.Model.Policeman", "RootPoliceman")
+                        .WithMany()
+                        .HasForeignKey("RootPolicemanId");
+
                     b.Navigation("Address");
+
+                    b.Navigation("RootPoliceman");
                 });
 
             modelBuilder.Entity("MSI.Model.Policeman", b =>
@@ -369,6 +398,11 @@ namespace MIS.DataAccess.Migrations
                     b.Navigation("Meeting");
 
                     b.Navigation("Policeman");
+                });
+
+            modelBuilder.Entity("MSI.Model.CriminalRecord", b =>
+                {
+                    b.Navigation("Documents");
                 });
 
             modelBuilder.Entity("MSI.Model.PoliceSection", b =>

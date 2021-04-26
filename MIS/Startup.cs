@@ -19,7 +19,6 @@ using MIS.DataAccess;
 using MIS.BusinessLogic;
 using MIS.Model;
 using MSI.Model;
-
 namespace MIS
 {
     public class Startup
@@ -38,17 +37,18 @@ namespace MIS
             options.UseSqlServer(Configuration.GetConnectionString("Police")));
 
             services.AddScoped<IPoliceSectionRepository, EFPoliceSectionRepository>();
-            services.AddScoped<IEFCriminalRecordRepository, EFCriminalRecordRepository>();
+            services.AddScoped<ICriminalRecordRepository, EFCriminalRecordRepository>();
             services.AddScoped<IMeetingRequestRepository, EFMeetingRequestRepository>();
-            services.AddScoped<IEFCriminalRecordPolicemanRepository, EFCriminalRecordPolicemanRepository>();
+            services.AddScoped<ICriminalRecordPolicemanRepository, EFCriminalRecordPolicemanRepository>();
             services.AddScoped<IMeetingRequestPolicemanRepository, EFMeetingRequestPolicemanRepository>();
             services.AddScoped<IPolicemanRepository, EFPolicemanRepository>();
+            services.AddScoped<IMeetingPolicemanRepository, EFMeetingPolicemanRepository>();
+            services.AddScoped<IMeetingRepository, EFMeetingRepository>();
+            services.AddScoped<IDocumentRepository, EFDocumentRepository>();
             services.AddScoped<PoliceSectionService>();
             services.AddScoped<MeetingRequestService>();
             services.AddScoped<PolicemanService>();
             services.AddScoped<CriminalRecordService>();
-            services.AddScoped<IMeetingPolicemanRepository, EFMeetingPolicemanRepository>();
-            services.AddScoped<IMeetingRepository, EFMeetingRepository>();
             services.AddScoped<MeetingService>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

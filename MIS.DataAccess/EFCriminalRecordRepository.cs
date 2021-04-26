@@ -1,4 +1,5 @@
 ﻿using MIS.DataAccess.Abstractions;
+using MIS.Model;
 using MSI.DataAccess;
 using MSI.Model;
 using System;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace MIS.DataAccess
 {
-    public class EFCriminalRecordRepository:EFRepository<CriminalRecord>,IEFCriminalRecordRepository
+    public class EFCriminalRecordRepository:EFRepository<CriminalRecord>,ICriminalRecordRepository
     {
 
         public EFCriminalRecordRepository(PoliceContext policeContext):base(policeContext)
@@ -34,6 +35,15 @@ namespace MIS.DataAccess
 
         }
          
+        public void AddDocument(Document document,Guid criminalRecordId)
+        {
+            CriminalRecord criminalRecord = _context.CriminalRecords
+                                           .Where(x => x.Id == criminalRecordId)
+                                           .FirstOrDefault();
+
+            criminalRecord.Documents.Add(document);
+            _context.SaveChanges();
+        }
 
         public bool CheckIfRecordExists(CriminalRecord criminalRecord)
         {
@@ -46,6 +56,7 @@ namespace MIS.DataAccess
                 return true;
             }
         }
+
 
         public int GetStatus(CriminalRecord criminalRecord)
         {
@@ -63,6 +74,18 @@ namespace MIS.DataAccess
             }
 
             return 1;
+        }
+
+        public IEnumerable<Document> GetDocuments(Guid criminalRecordId)
+        {
+            CriminalRecord criminalRecord = _context.CriminalRecords
+                .Where(x => x.Id == criminalRecordId)
+                .FirstOrDefault();
+
+            List<Document> documents = criminalRecord.Documents;
+            return documents;
+
+
         }
     }
 }

@@ -13,15 +13,19 @@
     <div class="btn-police dropdown">
         <a id="dropdownMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-button dropdown-toggle">Records</a>
         <ul aria-labelledby="dropdownMenu1" class="dropdown-menu border-0 shadow">
-            <li><a href="#" class="dropdown-item" data-toggle="modal" data-target="#addRecord">Add </a></li>
-            <li class="dropdown-divider"></li>
+                <li><a href="#" class="dropdown-item" data-toggle="modal" data-target="#addRecord">Add </a></li>
+                <li><a href="#" class="dropdown-item" onclick="activateSearchForAll()" > Search by Criminal Record </a></li>
+                <li><a href="#" class="dropdown-item" onclick="activateSearchForAdmin()"> Search by Policeman </a></li>
+                <li><a href="#" class="dropdown-item" onclick="activateSearchSection()"> Search Section </a></li>
+                <li><a href="#" class="dropdown-item" >Add </a></li>
+                 <li class="dropdown-divider"></li>
 
             <li class="dropdown-submenu">
                 <a id="dropdownMenu2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle" style="cursor:pointer">Status </a>
                 <ul aria-labelledby="dropdownMenu2" class="dropdown-menu border-0 shadow">
                     <form>
-                        <li><a asp-controller="CriminalRecord" asp-action="Index" asp-route-filterValue="1" class="dropdown-item">Active</a></li>
-                        <li><a asp-controller="CriminalRecord" asp-action="Index" asp-route-filterValue="0" class="dropdown-item">Closed</a></li>
+                        <li><a asp-controller="CriminalRecord" asp-action="Index" asp-route-filterValue="1" asp-route-searchFlag="-1" class="dropdown-item">Active</a></li>
+                        <li><a asp-controller="CriminalRecord" asp-action="Index" asp-route-filterValue="0" asp-route-searchFlag="-1" class="dropdown-item">Closed</a></li>
                     </form>
 
                 </ul>
@@ -30,68 +34,45 @@
         </ul>
     </div>
     <div class="d-inline-flex p-md-5">
-        <form asp-controller="CriminalRecord" asp-action="Index" method="get" id="searchForm">
+        <form asp-controller="CriminalRecord" asp-action="Index" method="get" id="searchForm" style="display:none">
             <div class="search">
                 <input type="search" class="search-input" placeholder="Search..." name="filterValue">
+                <input type="hidden" class="search-input" placeholder="Policeman..." name="searchFlag" value="0">
                 <button type="submit" class="search-icon" value="Filter">
-                    <i class="fa fa-search"></i>
+                    <i class="fa fa-search"> </i>
+                </button>
+            </div>
+        </form>
+    </div>  
+
+    <div class="d-inline-flex p-md-5">
+        <form asp-controller="CriminalRecord" asp-action="Index" method="get" id="searchFormAdmin"  style="display:none">
+            <div class="search">
+                <input type="search" class="search-input" placeholder="Policeman..." name="filterValue">
+                <input type="hidden" class="search-input" placeholder="Policeman..." name="searchFlag" value="1">
+                <button type="submit" class="search-icon" value="Filter">
+                    <i class="fa fa-search"> </i>
+                </button>
+            </div>
+        </form>
+    </div>   
+    <div class="d-inline-flex p-md-5">
+        <form asp-controller="CriminalRecord" asp-action="Index" method="get" id="searchFormSection"  style="display:none">
+            <div class="search">
+                <input type="search" class="search-input" placeholder="Policeman..." name="filterValue">
+                <input type="hidden" class="search-input" placeholder="Policeman..." name="searchFlag" value="2">
+                <button type="submit" class="search-icon" value="Filter">
+                    <i class="fa fa-search"> </i>
                 </button>
             </div>
         </form>
     </div>
 </div>
 
-
-
-
-@*<label> Choose type search</label>
-    <select id="SearchBy" class="form-control">
-        <option value="Enable"> Enable</option>
-        <option value="Name"> Name </option>
-    </select>
-
-    <br />
-    <label> Entry Key</label>
-    <div style="display:flex;">
-        <input class="form-control" id="Search" />
-        <input class="btn btn-primary" type="submit" id="searchButton" value="Search" />
-    </div>
-
-    <br /><br />
-
-    <table class="table-bordered">
-        <thead>
-        <tbody id="dataSearching">
-
-
-        </tbody>
-
-
-        </thead>
-
-    </table>*@
-
-
 <partial name="_Records" />
 
-@*<div>
-    <h4>
-        Single File Upload
-    </h4>
-    <form asp-controller="CriminalRecord" asp-action="SingleFile" enctype="multipart/form-data">
-        <input type="file" name="file" />
-        <button type="submit"> Submit</button>
-    </form>
-</div>
-<div>
-    <h4>
-        Mukltiple File Upload
-    </h4>
-    <form asp-controller="CriminalRecord" asp-action="MultipleFiles" enctype="multipart/form-data">
-        <input type="file" multiple name="files" />
-        <button type="submit"> Submit</button>
-    </form>
-</div>*@
+
+
 
 
 
@@ -103,7 +84,6 @@
                     <partial name="_EditAndBackToList" />
                 </form>
             </div>
-
         </div>
     </div>
 </div>
@@ -130,13 +110,26 @@
                     <button class="btn btn-police btn-police-rounded">Submit</button>
                 </form>
             </div>
-
         </div>
     </div>
 </div>
-
 <script>
-    function next(id) {
+
+
+    var UploadFiles = function (e) {
+        var files = e.target.files;
+        var formData = new FormData();
+
+
+        for (var i = 0; i < files.length; i++) {
+            formData.append("file", files[i]);
+        }
+        axios.post("/CriminalRecord/MultipleFiles", formData);
+    }
+
+
+
+function next(id) {
         $.ajax(
             {
                 url: "CriminalRecord/Details?recordId=" + id,
@@ -147,14 +140,24 @@
             })
     }
 
-    function loadEditModal(id, name, description, type) {
+    function activateSearchForAll() {
+        document.getElementById('searchForm').style.display = 'block';
+    }
+       function activateSearchForAdmin() {
+           document.getElementById('searchFormAdmin').style.display = 'block';
+    }
+    function activateSearchSection() {
+        document.getElementById('searchFormSection').style.display = 'block';
+    }
+
+function loadEditModal(id, name, description, type) {
         $("#editRecordId").val(id)
         $("#editRecordName").val(name)
         $("#editRecordDescription").val(description)
         $("#editRecordType").val(type)
     }
 
-    function getRecordId() {
+function getRecordId() {
         var id = document.getElementById('recordId').value;
         return id;
     }
@@ -167,7 +170,7 @@
 
 
 
-    function showList(value) {
+function showList(value) {
         console.log(4);
         $('#testInput').val(value);
         var value = document.getElementById('testInput').value;
@@ -198,60 +201,83 @@
     }))
 
 
-
-    $(document).ready(function () {
-        $('#searchButton').click(function () {
-            var SearchBy = $('#SearchBy').val();
-            var SearchValue = $('#Search').val();
-            var setData = $('#dataSearching');
-
-            setData.html("");
-
-            $.ajax({
-                type: "POST",
-                url: "CriminalRecord/GetSearchData?SearchBy=" + SearchBy + "&SearchValue=" + SearchValue,
-                contentType: "html",
-                success: function (result) {
-
-                    console.log(result);
-                    if (result.length == 0) {
-                        setData.append('<tr><td> No Result Found </td></tr>');
-                    }
-                    else {
-
-                        for (let i = 0; i < result.length; i++) {
-
-
-                            var Data2 = `
-                            <div class="record">
-                            <i class="fas fa-folder record-icon"></i>
-                            <span class="record-name"><i class="fas fa-signature"></i> name : <span> ${result[i].name} </span></span>
-                            <span class="record-date"><i class="far fa-clock"></i> date : <span> ${result[i].createdOn} </span></span>
-                            </div>`
-
-                            var Data =
-                                `<tr>
-
-
-                                        <td>  ${result[i].id}  </td>
-
-                                        <td>  ${result[i].name}  </td>
-
-                                    </tr>`
-                            console.log(Data2);
-                            setData.append(Data2);
-                        }
-                    }
-                }
-
-
-            });
-        });
-    });
-
-
-
-
-
 </script>
 
+
+
+@*<label> Choose type search</label>
+    <select id="SearchBy" class="form-control">
+        <option value="Enable"> Enable</option>
+        <option value="Name"> Name </option>
+    </select>
+
+    <br />
+    <label> Entry Key</label>
+    <div style="display:flex;">
+        <input class="form-control" id="Search" />
+        <input class="btn btn-primary" type="submit" id="searchButton" value="Search" />
+    </div>
+
+    <br /><br />
+
+    <table class="table-bordered">
+        <thead>
+        <tbody id="dataSearching">
+
+
+        </tbody>
+
+
+        </thead>
+
+    </table>*@
+
+    @*//$(document).ready(function () {
+    //    $('#searchButton').click(function () {
+    //        var SearchBy = $('#SearchBy').val();
+    //        var SearchValue = $('#Search').val();
+    //        var setData = $('#dataSearching');
+
+    //        setData.html("");
+
+    //        $.ajax({
+    //            type: "POST",
+    //            url: "CriminalRecord/GetSearchData?SearchBy=" + SearchBy + "&SearchValue=" + SearchValue,
+    //            contentType: "html",
+    //            success: function (result) {
+
+    //                console.log(result);
+    //                if (result.length == 0) {
+    //                    setData.append('<tr><td> No Result Found </td></tr>');
+    //                }
+    //                else {
+
+    //                    for (let i = 0; i < result.length; i++) {
+
+
+    //                        var Data2 = `
+    //                        <div class="record">
+    //                        <i class="fas fa-folder record-icon"></i>
+    //                        <span class="record-name"><i class="fas fa-signature"></i> name : <span> ${result[i].name} </span></span>
+    //                        <span class="record-date"><i class="far fa-clock"></i> date : <span> ${result[i].createdOn} </span></span>
+    //                        </div>`
+
+    //                        var Data =
+    //                            `<tr>
+
+
+    //                                    <td>  ${result[i].id}  </td>
+
+    //                                    <td>  ${result[i].name}  </td>
+
+    //                                </tr>`
+    //                        console.log(Data2);
+    //                        setData.append(Data2);
+    //                    }
+    //                }
+    //            }
+
+
+    //        });
+    //    });
+    //});*@

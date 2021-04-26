@@ -1,27 +1,40 @@
-﻿using MIS.DataAccess.Abstractions;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using MIS.DataAccess.Abstractions;
 using MIS.Model;
 using MSI.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using MIS;
+using MIS.DTOs.BusinessLogic;
 
 namespace MIS.BusinessLogic
 {
     public class CriminalRecordService
     {
-        private readonly IEFCriminalRecordRepository _criminalRecord;
-        private readonly IEFCriminalRecordPolicemanRepository _criminalRecordPoliceman;
+        private readonly ICriminalRecordRepository _criminalRecord;
+        private readonly ICriminalRecordPolicemanRepository _criminalRecordPoliceman;
         private readonly IPolicemanRepository _policemanRepository;
+        private readonly IPoliceSectionRepository _policeSectionRepository;
+        private readonly IDocumentRepository _documentRepository;
+        private readonly IHostingEnvironment _env;
 
-        public CriminalRecordService(IEFCriminalRecordRepository criminalRecord
-            , IEFCriminalRecordPolicemanRepository criminalRecordPoliceman
-            , IPolicemanRepository policemanRepository)
+        public CriminalRecordService(ICriminalRecordRepository criminalRecord
+            , ICriminalRecordPolicemanRepository criminalRecordPoliceman
+            , IPolicemanRepository policemanRepository, IHostingEnvironment env, IDocumentRepository documentRepository, IPoliceSectionRepository policeSectionRepository)
         {
             _criminalRecord = criminalRecord;
             _criminalRecordPoliceman = criminalRecordPoliceman;
             _policemanRepository = policemanRepository;
+            _documentRepository = documentRepository;
+            _env = env;
+            _policeSectionRepository = policeSectionRepository;
         }
-        
+
+        public int IdWrapper { get; set; }
+
         public IEnumerable<CriminalRecord> GetAllCriminalRecords()
         {
             return _criminalRecord.GetAll();
@@ -61,6 +74,43 @@ namespace MIS.BusinessLogic
             _criminalRecordPoliceman.Save();
         }
 
+        public IEnumerable<CriminalRecord> GetCriminalRecordBySection(int filterValue)
+        {
+            List<PoliceSection> policeSections = (List<PoliceSection>)_policeSectionRepository.GetAll();
+            PoliceSection policeSection=null;
+
+
+            foreach(var item in policeSections)
+            {
+                int addingValue = _policeSectionRepository.GetPoliceSectionNumber(item.Name);
+                if(addingValue==filterValue)
+                {
+                    policeSection = _policeSectionRepository.GetPoliceSectionByName(item.Name);
+                }
+            }
+
+            List<Policeman> policemen = policeSection.Policemen;
+            List<CriminalRecordPoliceman> criminalRecordPolicemen = new List<CriminalRecordPoliceman>();
+
+            List<CriminalRecord> criminalRecords = new List<CriminalRecord>();
+            foreach (var item in policemen)
+            {
+                List<CriminalRecordPoliceman> criminalRecordPolicemenTemp = 
+                (List<CriminalRecordPoliceman>)_criminalRecordPoliceman.GetAllCriminalRecordPoliceman(item);
+                
+                foreach (var iterator in criminalRecordPolicemenTemp)
+                {
+                    criminalRecordPolicemen.Add(iterator);
+                    criminalRecords.Add(iterator.CriminalRecord);
+                    break;
+                }
+            }
+
+            return criminalRecords;
+
+
+        }
+
         public void AddCriminalRecord(CriminalRecord criminalRecord)
         {
             _criminalRecord.Add(criminalRecord);
@@ -92,6 +142,10 @@ namespace MIS.BusinessLogic
             _policemanRepository.Save();
         }
 
+        public IEnumerable<Document> GetDocuments(Guid criminalRecordId)
+        {
+            return _criminalRecord.GetDocuments(criminalRecordId);
+        }
 
         public void AddCriminalRecordPoliceman(CriminalRecordPoliceman criminalRecordPoliceman)
         {
@@ -101,6 +155,11 @@ namespace MIS.BusinessLogic
         public IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name)
         {
             return( _criminalRecord.GetCriminalRecordsByName(name));
+        }
+
+        public IEnumerable<CriminalRecord> GetCriminalRecordByPolicemanName(string policemanName)
+        {
+            return (_criminalRecordPoliceman.GetCriminalRecordsByPolicemanName(policemanName));
         }
 
         public IEnumerable<CriminalRecordPoliceman> GetAllCriminalRecordsPolicemanForARecord(CriminalRecord criminalRecordDetails)
@@ -195,6 +254,52 @@ namespace MIS.BusinessLogic
         {
            return  _criminalRecord.GetStatus(criminalRecord);
         }
+
+        public void UploadFile(Guid criminalRecordId,DocumentDTO documentDTO)
+        {
+            var dir = _env.ContentRootPath;
+            
+            var webRootParg = _env.WebRootPath;
+
+            string path = Path.Combine(webRootParg,"Images");
+                        string documentPath="~/Images/"+ $"{documentDTO.Name}.png";
+
+
+
+            var fileStream = new FileStream(Path.Combine(path, $"{documentDTO.Name}.png"),
+                             FileMode.Create,
+                             FileAccess.Write);
+            
+            documentDTO.File.CopyTo(fileStream);
+                 documentDTO.Path =Path.Combine(path,documentDTO.Name);
+            documentDTO.Path = documentPath;
+                CreateDocument(criminalRecordId,documentDTO);
+            
+        }
+
+        public void DeleteDocument(Guid documentId)
+        {   
+            _documentRepository.Remove(documentId);
+            _documentRepository.Save();
+        }
+
+
+        public void CreateDocument(Guid criminalRecordId,DocumentDTO documentDTO)
+        {
+            Document document = new Document();
+
+            document.Name = documentDTO.Name;
+            document.AddedDate = DateTime.Now;
+            document.Path = documentDTO.Path;
+
+            _documentRepository.Add(document);
+            _documentRepository.Save();
+
+            _criminalRecord.AddDocument(document,criminalRecordId);
+            _criminalRecord.Save();
+
+        }
+
 
     }
 }
