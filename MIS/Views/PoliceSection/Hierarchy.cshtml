@@ -129,8 +129,15 @@
 
     <script>
 
-        function activate
-
+        function next(id) {
+            $.ajax(
+                {
+                    type: 'GET',
+                    success: function (data) {
+                        window.location.href = "https://localhost:44300/CriminalRecord/Details?recordId=" + id;
+                    }
+                })
+        }
         function closePolicemanModal() {
             $('#policemanDetails .close').click();
     }

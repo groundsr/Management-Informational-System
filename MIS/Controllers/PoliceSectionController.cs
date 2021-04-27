@@ -42,14 +42,19 @@ namespace MIS.Controllers
 
         }
 
+        public IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name)
+        {
+            return (_criminalRecordService.GetCriminalRecordsByName(name));
+        }
+
         public IActionResult Hierarchy(Guid id, string? searchedRecord)
         {
             PoliceSection policeSection = _policeSectionService.Get(id);
-            IEnumerable<CriminalRecord> criminalRecords = _criminalRecordService.GetCriminalRecordBySection(id);
+            IEnumerable<CriminalRecord> criminalRecords = _policeSectionService.GetCriminalRecordBySection(id);
 
             if (searchedRecord != null)
             {
-                IEnumerable<CriminalRecord> filteredCriminalRecords = _criminalRecordService.GetCriminalRecordsByNameBySection(id,searchedRecord);
+                IEnumerable<CriminalRecord> filteredCriminalRecords = _policeSectionService.GetCriminalRecordsByNameBySection(id,searchedRecord);
                 ViewData["criminalRecords"] =filteredCriminalRecords;
             }
             else

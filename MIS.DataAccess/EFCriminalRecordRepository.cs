@@ -89,9 +89,11 @@ namespace MIS.DataAccess
         public IEnumerable<CriminalRecord> GetCriminalRecordsByName(IEnumerable<CriminalRecord> criminalRecords,string name)
         {
             List<CriminalRecord> filteredList = new List<CriminalRecord>();
+            name = name.ToLower();
             foreach(var item in criminalRecords)
             {
-                if(item.Name.Contains(name))
+                var itemName = item.Name.ToLower();
+                if(itemName.Contains(name))
                 {
                     filteredList.Add(item);
                 }
@@ -99,7 +101,6 @@ namespace MIS.DataAccess
 
             return filteredList;
         }
-
 
 
     }

@@ -1,9 +1,6 @@
 ﻿@using MSI.Model
 @model IEnumerable<MSI.Model.CriminalRecord>
 
-
-
-
 <script src="~/lib/jquery/dist/jquery.js"></script>
 @{
     ViewData["Title"] = "Index";
@@ -16,7 +13,6 @@
                 <li><a href="#" class="dropdown-item" data-toggle="modal" data-target="#addRecord">Add </a></li>
                 <li><a href="#" class="dropdown-item" onclick="activateSearchForAll()" > Search by Criminal Record </a></li>
                 <li><a href="#" class="dropdown-item" onclick="activateSearchForAdmin()"> Search by Policeman </a></li>
-                <li><a href="#" class="dropdown-item" onclick="activateSearchSection()"> Search Section </a></li>
                 <li><a href="#" class="dropdown-item" >Add </a></li>
                  <li class="dropdown-divider"></li>
 

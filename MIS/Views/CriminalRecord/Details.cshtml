@@ -12,15 +12,24 @@
 
 @foreach (var item in Model)
 {
-    <div class="row p-5">
+<div class="row p-2 bg-info">
 
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-5" style="text-align:center;">
-            <h3 id="recordStatus"> Record Status : @item.CriminalRecord.Status </h3>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-5" style="text-align:center;">
-            <h3 id="recordType"> Type : @item.CriminalRecord.Type </h3>
-        </div>
+    <div class="col-lg-4 col-md-2 col-sm-2 col-xs-4 bg-dark" style="text-align:center;border-radius:25px;">
+        <h5 id="recordStatus"> Record Status : @item.CriminalRecord.Status </h5>
     </div>
+    <div class="col-lg-1 col-md-3 col-sm-3 col-xs-5" style="text-align:center;">
+        <button id="enableButton" type="submit" onclick="modifyStatusEnable()" class="form-control btn-primary">Enable</button>
+    </div>
+    <div class="col-lg-1 col-md-3 col-sm-3 col-xs-5">
+        <button id="disableButton" onclick="modifyStatusDisable()" type="submit" class="form-control btn-primary">Disable</button>
+    </div>
+
+</div>
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-5" style="text-align:center;">
+        <h3 id="recordType"> Type : @item.CriminalRecord.Type </h3>
+    </div>
+
+
 
     <div class="ml-lg-5 mb-lg-5 col-lg-10 col-md-5 col-sm-5 border p-2 " id="descriptionArea">
         @item.CriminalRecord.Description
@@ -38,7 +47,6 @@
             <button type="submit" class="btn btn-submit btn-sm btn-primary col-2">
                 Add policeman
             </button>
-            <button type="button" id="myButton" class="btn btn-primary btn-sm col-2 " onclick="DisplayBlock()"> See list</button>
             <button type="button" id="myBackButton" style="display:none" class="btn btn-primary btn-sm col-2 " onclick="DisplayNone()"> Undo</button>
         </div>
     </div>
@@ -48,7 +56,7 @@
 <input type="text" id="newValueType" value="@Model.ElementAt(0).CriminalRecord.Type" />
 <button class="btn btn-submit" onclick="modifyType()"> Submit</button>
 
-<a href="#editDetails"  data-toggle="modal" data-target="#editDetails">Edit Details </a>
+<a href="#editDetails" data-toggle="modal" data-target="#editDetails">Edit Details </a>
 
 
 
@@ -99,17 +107,20 @@
 
 </div>
 
-<div>
-    <h4>
-        Multiple File Upload
-    </h4>
-    <form asp-controller="CriminalRecord" asp-action="FileInModel" enctype="multipart/form-data">
-
-        <input type="hidden" name="criminalRecordId" value="@criminalRecord.Id" />
-        <input type="text" name="DocumentDTO.Name" />
-        <input type="file" name="DocumentDTO.File" />
-        <button type="submit"> Submit </button>
-    </form>
+<div class="mb-5 mt-4 row mr-2 bg-info p-2 " style="border-radius:35px;">
+    <div class="ml-lg-5 col-4 p-2">
+        <h4>
+            Upload photo to Criminal Record
+        </h4>
+    </div>
+    <div class="col-6 p-2">
+        <form asp-controller="CriminalRecord" asp-action="FileInModel" enctype="multipart/form-data">
+            <input type="hidden" name="criminalRecordId" value="@criminalRecord.Id" />
+            <input class="form-group mx-sm-3 mb-2" placeholder="Name.." type="text" name="DocumentDTO.Name" />
+            <input class="btn btn-dark btn-sm" type="file" name="DocumentDTO.File" />
+            <button class="btn btn-success" type="submit"> Submit </button>
+        </form>
+    </div>
 </div>
 
 
@@ -118,30 +129,55 @@
         <div class="modal-content">
             <div class="modal-body">
                 <form>
-                    <div class="btn btn-sm">
-                        <button id="enableButton" type="submit" onclick="modifyStatusEnable()" class="form-control btn-primary">Enable</button>
-                    </div>
-
-                    <div class="btn btn-sm">
-                        <button id="disableButton" onclick="modifyStatusDisable()" type="submit" class="form-control btn-primary">Disable</button>
-                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-
-<div>
-
-            @foreach (var item in ViewData["documents"] as IList<Document>)
-            {
-                <div>
-                    <img src="@item.Path" width="200" height="200" asp-append-version="true"/>
-                    <a asp-controller="CriminalRecord" asp-action="DeleteDocument" asp-route-documentId="@item.Id" asp-route-criminalRecordId="@criminalRecord.Id"> Delete </a>
-                </div>
+<div class="carouss">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="6000">
+        <ol class="carousel-indicators">
+            @{
+                for (int i = 0; i < 20; i++)
+                {
+                    <li data-target="#carouselExampleIndicators" data-slide-to="@(i.ToString())" @(i == 1 ? "class='active'" : "")></li>
+                }
             }
+        </ol>
+        <div class="carousel-inner w-100 h-100">
+            @{ int counter = 0;
+                @foreach (var item in ViewData["documents"] as IList<Document>)
+                {
+                    <div class="carousel-@(counter++ == 1 ? "item active" : "item")">
+                        <img width="100%" height="600px" src="@item.Path" alt="title" asp-append-version="true">
+                        <div class="carousel-caption row">
+                            <div class="col-2">
+                                <a href="/CriminalRecord/DeleteDocument?criminalRecordId=@criminalRecord.Id&documentId=@item.Id" target="_blank"><button type="button" class="btn btn-dark" style="background-color:red;">Delete</button></a>
+                            </div>
+                            <div class="col">
+                                <h2 style="color:lightgreen">Name : @item.Name</h2>
+                            </div>
+                            <div class="col">
+                                <h2 style="color:lightgreen"> @item.AddedDate</h2>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
     </div>
+
+</div>
+
 
 
 <script>
@@ -182,13 +218,13 @@
     }
 
     function modifyStatusEnable() {
-        $('#recordStatus').html("Status:Active");
+        $('#recordStatus').html("Record Status : Active");
             $.ajax({
                 url: "/CriminalRecord/SetStatus?enumValue=1&criminalRecordId=" + "@Model.ElementAt(0).CriminalRecord.Id"
         })
     }
     function modifyStatusDisable() {
-        $('#recordStatus').html("Status:Inactive");
+        $('#recordStatus').html("Record Status : Closed");
             $.ajax({
                 url: "/CriminalRecord/SetStatus?enumValue=0&criminalRecordId=" + "@Model.ElementAt(0).CriminalRecord.Id"
         })

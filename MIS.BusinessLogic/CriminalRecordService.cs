@@ -20,11 +20,10 @@ namespace MIS.BusinessLogic
         private readonly IPoliceSectionRepository _policeSectionRepository;
         private readonly IDocumentRepository _documentRepository;
         private readonly IHostingEnvironment _env;
-        private readonly CriminalRecordService _criminalRecordService;
 
         public CriminalRecordService(ICriminalRecordRepository criminalRecord
             , ICriminalRecordPolicemanRepository criminalRecordPoliceman
-            , IPolicemanRepository policemanRepository, IHostingEnvironment env, IDocumentRepository documentRepository, IPoliceSectionRepository policeSectionRepository, CriminalRecordService criminalRecordService)
+            , IPolicemanRepository policemanRepository, IHostingEnvironment env, IDocumentRepository documentRepository, IPoliceSectionRepository policeSectionRepository)
         {
             _criminalRecord = criminalRecord;
             _criminalRecordPoliceman = criminalRecordPoliceman;
@@ -32,7 +31,6 @@ namespace MIS.BusinessLogic
             _documentRepository = documentRepository;
             _env = env;
             _policeSectionRepository = policeSectionRepository;
-            _criminalRecordService = criminalRecordService;
         }
 
         public int IdWrapper { get; set; }
@@ -76,30 +74,7 @@ namespace MIS.BusinessLogic
             _criminalRecordPoliceman.Save();
         }
 
-        public IEnumerable<CriminalRecord> GetCriminalRecordBySection(Guid policeSectionId)
-        {
-            PoliceSection policeSection = _policeSectionRepository.Get(policeSectionId);
-            List<Policeman> policemen = policeSection.Policemen;
-            List<CriminalRecordPoliceman> criminalRecordPolicemen = new List<CriminalRecordPoliceman>();
 
-            List<CriminalRecord> criminalRecords = new List<CriminalRecord>();
-            foreach (var item in policemen)
-            {
-                List<CriminalRecordPoliceman> criminalRecordPolicemenTemp = 
-                (List<CriminalRecordPoliceman>)_criminalRecordPoliceman.GetAllCriminalRecordPoliceman(item);
-                
-                foreach (var iterator in criminalRecordPolicemenTemp)
-                {
-                    criminalRecordPolicemen.Add(iterator);
-                    criminalRecords.Add(iterator.CriminalRecord);
-                    break;
-                }
-            }
-
-            return criminalRecords;
-
-
-        }
 
         public void AddCriminalRecord(CriminalRecord criminalRecord)
         {
@@ -142,18 +117,7 @@ namespace MIS.BusinessLogic
             _criminalRecordPoliceman.Add(criminalRecordPoliceman);
         }
 
-        public IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name)
-        {
-            return( _criminalRecord.GetCriminalRecordsByName(name));
-        }
 
-        public IEnumerable<CriminalRecord> GetCriminalRecordsByNameBySection(Guid id,string name)
-        {
-            IEnumerable<CriminalRecord> allCriminalRecords = _criminalRecordService.GetCriminalRecordBySection(id);
-            IEnumerable<CriminalRecord> filteredCriminalRecords = _criminalRecord.GetCriminalRecordsByName(allCriminalRecords, name);
-            return filteredCriminalRecords;
-
-        }
 
         public IEnumerable<CriminalRecord> GetCriminalRecordByPolicemanName(string policemanName)
         {
@@ -273,6 +237,11 @@ namespace MIS.BusinessLogic
             documentDTO.Path = documentPath;
                 CreateDocument(criminalRecordId,documentDTO);
             
+        }
+
+        public IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name)
+        {
+           return( _criminalRecord.GetCriminalRecordsByName(name));
         }
 
         public void DeleteDocument(Guid documentId)

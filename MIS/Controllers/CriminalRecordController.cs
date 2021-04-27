@@ -172,8 +172,6 @@ namespace MIS.Controllers
         public IActionResult DeleteDocument(Guid criminalRecordId,Guid documentId)
         {
 
-
-
             if (documentId!=null)
             {
                 _criminalRecordService.DeleteDocument(documentId);
