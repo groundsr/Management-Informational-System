@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIS.DataAccess", "MIS.DataA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIS.Model", "MIS.Model\MIS.Model.csproj", "{C8B8B50B-C382-4243-9100-64F8DB02A169}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIS.SignalR", "MIS.SignalR\MIS.SignalR.csproj", "{F1D48021-C66D-498C-8EC3-9DB9C1D3F8A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIS.SignalR", "MIS.SignalR\MIS.SignalR.csproj", "{F1D48021-C66D-498C-8EC3-9DB9C1D3F8A1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIS.Tests", "MIS.ApplicationLogic.Tests\MIS.Tests.csproj", "{31894A1C-C1F2-4769-9510-9CACF8CEBDC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{F1D48021-C66D-498C-8EC3-9DB9C1D3F8A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1D48021-C66D-498C-8EC3-9DB9C1D3F8A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1D48021-C66D-498C-8EC3-9DB9C1D3F8A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31894A1C-C1F2-4769-9510-9CACF8CEBDC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31894A1C-C1F2-4769-9510-9CACF8CEBDC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31894A1C-C1F2-4769-9510-9CACF8CEBDC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31894A1C-C1F2-4769-9510-9CACF8CEBDC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

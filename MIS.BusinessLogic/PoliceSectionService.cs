@@ -76,7 +76,19 @@ namespace MIS.BusinessLogic
             }
             return hierarchy;
         }
-
+        public bool BelongToTheSameStation(Policeman policeman , Policeman subordinate , Guid sectionId)
+        {
+            var section = Get(sectionId);
+            int found = 0;
+            foreach(var it in section.Policemen)
+            {
+                if(it == policeman || it == subordinate)
+                {
+                    found++;
+                }
+            }
+            return found == 2;
+        }
 
 
     }

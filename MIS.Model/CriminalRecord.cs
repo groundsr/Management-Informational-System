@@ -15,7 +15,7 @@ namespace MSI.Model
         public virtual Policeman ModifiedBy { get; set; }
         public string Type { get; set; }
 
-        public virtual List<Document> Documents { get; set; } = new List<Document>();
+        public virtual List<Document> Documents { get; set; }  = new List<Document>();
 
 
     }
