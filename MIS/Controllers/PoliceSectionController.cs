@@ -40,10 +40,14 @@ namespace MIS.Controllers
 
         }
 
+        
+
         public IActionResult Hierarchy(Guid id)
         {
             return View(policeSectionService.Get(id));
         }
+
+        
 
         public IActionResult Create()
         {
@@ -52,15 +56,23 @@ namespace MIS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PoliceSection policeSection)
+        public IActionResult Create(PoliceSection policeSection, Guid Id, string email)
         {
             if (ModelState.IsValid)
             {
+
                 policeSectionService.Add(policeSection);
+                //Guid guid = policeSectionService.GetPoliceSectionId(policeSection);
+                AddPolicemanToStation(policeSection.Id, email);
                 return RedirectToAction("Index");
 
             }
             return View(policeSection);
+        }
+
+        public List<Address> GetSectionsAddress()
+        {
+            return policeSectionService.GetSectionsAddress();
         }
 
         public IActionResult Update(Guid id)

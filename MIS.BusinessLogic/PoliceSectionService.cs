@@ -22,6 +22,10 @@ namespace MIS.BusinessLogic
         {
             var policeman = policemanRepository.GetByEmail(email);
             policeSection.Policemen.Add(policeman);
+            if(policeSection.RootPoliceman==null)
+            {
+                policeSection.RootPoliceman = policeman;
+            }
             policeStationRepository.Update(policeSection);
         }
 
@@ -32,7 +36,9 @@ namespace MIS.BusinessLogic
 
         public void Add(PoliceSection policeSection)
         {
+            
             policeStationRepository.Add(policeSection);
+            
         }
 
         public void Update(PoliceSection policeSection)
@@ -44,6 +50,11 @@ namespace MIS.BusinessLogic
         public PoliceSection Get(Guid id)
         {
             return policeStationRepository.Get(id);
+        }
+
+        public Guid GetPoliceSectionId(PoliceSection policeSection)
+        {
+            return policeSection.Id;
         }
 
         public void Delete(Guid id)
@@ -77,7 +88,9 @@ namespace MIS.BusinessLogic
             return hierarchy;
         }
 
-
-
+        public List<Address> GetSectionsAddress()
+        {
+            return policeStationRepository.GetAll().Select(x => x.Address).ToList();
+        }
     }
 }

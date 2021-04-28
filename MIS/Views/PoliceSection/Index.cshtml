@@ -1,13 +1,18 @@
 ﻿@using MSI.Model
 
 @model IEnumerable<PoliceSection>
-
 @*<div class="input-group  mb-4 mt-4">
         <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="button">Search</button>
         </div>
     </div>*@
+<style>
+    #map {
+        width: 100%;
+        height: 400px;
+    }
+</style>
 
 <div class="container mt-4 mb-5">
     <div class="row text-center">
@@ -19,12 +24,12 @@
         <div class="col col-8 text-center" style="width:400px; margin-left:auto">
             <form asp-controller="PoliceSection" asp-action="Index" id="textsearch" method="get">
                 <div class="search border">
-            <input type="text" class="search-input" id="textsearch"
-                   placeholder="Search..." name="searchString"> <a href="#" class="search-icon">
-                <i class="fa fa-search"></i>
-            </a>
-        </div>
-                
+                    <input type="text" class="search-input" id="textsearch"
+                           placeholder="Search..." name="searchString"> <a href="#" class="search-icon">
+                        <i class="fa fa-search"></i>
+                    </a>
+                </div>
+
             </form>
         </div>
     </div>
@@ -86,27 +91,91 @@
     </div>
 </div>
 
+<div id="map">
+    <script>
+        @*const model = @Model;
+            console.log(model);*@
+        var addresses = [];
+        var geocoder = new google.maps.Geocoder();
+
+        $.ajax({
+            url: "/PoliceSection/GetSectionsAddress", 
+            success: function (data) {
+                addresses = data;
+                console.log(addresses);
+            }
+
+        })
+        function initMap() {
+            // The location of Craiova
+            const craiova = { lat: 44.292790, lng: 23.85548 };
+
+            for (var i = 0; i < addresses.length; i++) {
+                //geocoder.geocode({ 'address': addresses[i] },
+                //    function (results, status) {
+                //        if (status == 'OK') {
+                //            map.setCenter(results[0].geometry.location);
+                //            var marker = new google.maps.Marker({
+                //                map: map,
+                //                position: results[0].geometry.location
+                //            });
+                //        } else {
+                //            alert('Geocode was not successful for the following reason: ' + status);
+                //        }
+                //    })
+                $.ajax({
+
+                    url: "https://maps.googleapis.com/maps/api/geocode/json?address=" + addresses[i].number + "+" + addresses[i].street + ",+" + addresses[i].city + ",+RO&key=AIzaSyBBoMY_7eHfch0A4ZJMQwIaxflMamkJpto",
+                    function(data) {
+                        console.log(data);
+                    }
+                })
+            }
+                
+            
+
+            // The map, centered at Craiova
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 4,
+                center: craiova,
+            });
+            // The marker, positioned at Uluru
+            const marker = new google.maps.Marker({
+                position: craiova,
+                map: map,
+            });
+            const marker2 = new google.maps.Marker({
+                position: { lat: 42.2343, lng: 21.85548 },
+                map: map,
+            });
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBBoMY_7eHfch0A4ZJMQwIaxflMamkJpto&callback=initMap"
+            type="text/javascript"></script>
+</div>
+
+@*https://maps.googleapis.com/maps/api/geocode/json?address=10+Strada+Campului,+Craiova,+RO&key=AIzaSyBBoMY_7eHfch0A4ZJMQwIaxflMamkJpto*@
 
 
 
 @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-    $("textsearch").on("keyup",function() {
-        var textenter = $(this).val();
-        $("card cr").each(function (results) {
-            if (results != 0) {
-                var id = $(this).find("h5:nth-child(1)").text();
-                if (id.indexOf(textcenter) != 0 && id.toLowerCase().indexOf(textenter.toLowerCase()) < 0) {
-                    $(this).hide();
+    <script>
+        $("textsearch").on("keyup",function() {
+            var textenter = $(this).val();
+            $("card cr").each(function (results) {
+                if (results != 0) {
+                    var id = $(this).find("h5:nth-child(1)").text();
+                    if (id.indexOf(textcenter) != 0 && id.toLowerCase().indexOf(textenter.toLowerCase()) < 0) {
+                        $(this).hide();
+                    }
+                    else {
+                        $(this).show();
+                    }
                 }
-                else {
-                    $(this).show();
-                }
-            }
-        });
-    }
-    )
-</script>*@
+            });
+        }
+        )
+    </script>*@
 
 
 
