@@ -112,16 +112,6 @@
 <script>
 
 
-    var UploadFiles = function (e) {
-        var files = e.target.files;
-        var formData = new FormData();
-
-
-        for (var i = 0; i < files.length; i++) {
-            formData.append("file", files[i]);
-        }
-        axios.post("/CriminalRecord/MultipleFiles", formData);
-    }
 
 
 
@@ -139,8 +129,8 @@ function next(id) {
     function activateSearchForAll() {
         document.getElementById('searchForm').style.display = 'block';
     }
-       function activateSearchForAdmin() {
-           document.getElementById('searchFormAdmin').style.display = 'block';
+    function activateSearchForAdmin() {
+        document.getElementById('searchFormAdmin').style.display = 'block';
     }
     function activateSearchSection() {
         document.getElementById('searchFormSection').style.display = 'block';
@@ -170,6 +160,7 @@ function showList(value) {
         console.log(4);
         $('#testInput').val(value);
         var value = document.getElementById('testInput').value;
+
         console.log(value);
         if (value == 10) {
             document.getElementById('testButton').style.backgroundColor = 'red';

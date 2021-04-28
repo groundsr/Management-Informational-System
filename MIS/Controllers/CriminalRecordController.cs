@@ -164,7 +164,7 @@ namespace MIS.Controllers
    
         [HttpPost]
         public JsonResult ModifyType(string newType, Guid criminalRecordId)
-        {
+         {
             _criminalRecordService.ModifyType(newType, criminalRecordId);
             return Json(newType);
         }

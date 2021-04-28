@@ -12,26 +12,31 @@
 
 @foreach (var item in Model)
 {
-<div class="row p-2 bg-info">
+    <div class="row p-1 " style="border-radius:25px;background-color:cadetblue">
 
-    <div class="col-lg-4 col-md-2 col-sm-2 col-xs-4 bg-dark" style="text-align:center;border-radius:25px;">
-        <h5 id="recordStatus"> Record Status : @item.CriminalRecord.Status </h5>
+        <div class="col-lg-3 col-md-2 col-sm-2 col-xs-4 ml-4" style="text-align:center;border-radius:25px;background-color:cadetblue">
+            <h5 id="recordStatus" class="mt-1"> Record Status : @item.CriminalRecord.Status </h5>
+        </div>
+        <div class="col-lg-1 col-md-3 col-sm-3 col-xs-5" style="text-align:center;">
+            <button id="enableButton" type="submit" onclick="modifyStatusEnable()" class="form-control btn-primary">Enable</button>
+        </div>
+        <div class="col-lg-1 col-md-3 col-sm-3 col-xs-5 mr-lg-5">
+            <button id="disableButton" onclick="modifyStatusDisable()" type="submit" class="form-control btn-danger">Disable</button>
+        </div>
+        <div class="col-lg-3 col-md-2 col-sm-2 col-xs-4 " style="text-align:center;border-radius:25px;background-color:cadetblue">
+            <h5 id="recordStatus" class="mt-1"> Type : @item.CriminalRecord.Type </h5>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-5">
+            <input type="text" id="newValueType" value="@Model.ElementAt(0).CriminalRecord.Type" />
+            <button class="btn btn-submit btn-secondary" onclick="modifyType()"> Submit</button>
+        </div>
+
+
+
     </div>
-    <div class="col-lg-1 col-md-3 col-sm-3 col-xs-5" style="text-align:center;">
-        <button id="enableButton" type="submit" onclick="modifyStatusEnable()" class="form-control btn-primary">Enable</button>
-    </div>
-    <div class="col-lg-1 col-md-3 col-sm-3 col-xs-5">
-        <button id="disableButton" onclick="modifyStatusDisable()" type="submit" class="form-control btn-primary">Disable</button>
-    </div>
-
-</div>
-    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-5" style="text-align:center;">
-        <h3 id="recordType"> Type : @item.CriminalRecord.Type </h3>
-    </div>
 
 
-
-    <div class="ml-lg-5 mb-lg-5 col-lg-10 col-md-5 col-sm-5 border p-2 " id="descriptionArea">
+    <div class="d-flex justify-content-center ml-lg-4 mr-lg-4 mb-lg-5 " id="descriptionArea">
         @item.CriminalRecord.Description
     </div>
 
@@ -39,32 +44,35 @@
     break;
 }
 
-<form asp-controller="CriminalRecord" asp-action="AddPolicemanToACriminalRecord">
-    <div class="row">
-        <div class="col-lg-10 col-md-5 col-sm-3 col-xs-5">
-            <input type="hidden" name="criminalRecordId" value="@criminalRecord.Id" />
-            <input type="text" class=" form-control-sm" name="policemanEmail" placeholder="Email.." id="emailValue" />
-            <button type="submit" class="btn btn-submit btn-sm btn-primary col-2">
-                Add policeman
-            </button>
-            <button type="button" id="myBackButton" style="display:none" class="btn btn-primary btn-sm col-2 " onclick="DisplayNone()"> Undo</button>
+<div class="ml-lg-5" style="">
+    <form asp-controller="CriminalRecord" asp-action="AddPolicemanToACriminalRecord">
+        <div class="row">
+            <div class="row">
+                <div class="col-10">
+                    <input type="hidden" name="criminalRecordId" value="@criminalRecord.Id" />
+                    <input type="text" class=" form-control" name="policemanEmail" placeholder="Email.." id="emailValue" />
+                </div>
+                <div class="col-2" style="margin-left:-24px;">
+                    <button type="submit" class="btn btn-submit btn-primary ">
+                        Add policeman
+                    </button>
+                </div>
+
+                <button type="button" id="myBackButton" style="display:none" class="btn btn-primary btn-sm col-2 " onclick="DisplayNone()"> Undo</button>
+            </div>
         </div>
-    </div>
 
-</form>
+    </form>
+</div>
 
-<input type="text" id="newValueType" value="@Model.ElementAt(0).CriminalRecord.Type" />
-<button class="btn btn-submit" onclick="modifyType()"> Submit</button>
-
-<a href="#editDetails" data-toggle="modal" data-target="#editDetails">Edit Details </a>
 
 
 
 @if (Model.ElementAt(0).Policeman != null)
 {
-    <table class="table table-striped">
+    <table class="table table-striped mr-5">
         <thead>
-            <tr>
+            <tr style="background-color:cadetblue;border-radius:30px 30px;">
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Seniority</th>
@@ -85,7 +93,7 @@
 
 }
 
-<div id="policemenList" style="display:none">
+<div id="policemenList" class="mb-lg-5" style="display:none">
     @foreach (var item in Model)
     {
         <ul class="list-group">
@@ -100,6 +108,7 @@
                     <a id="detailsA"> <span id="mySpan">Name : @item.Policeman.Name </span></a>
                     <a><span id="mySpan">Email : @item.Policeman.Email</span></a>
                     <a><span id="mySpan">Seniority : @item.Policeman.Seniority</span></a>
+                    <a><span id="mySpan">Seniority : @item.Policeman.Rank</span></a>
                 </li>
             }
         </ul>
@@ -107,18 +116,19 @@
 
 </div>
 
-<div class="mb-5 mt-4 row mr-2 bg-info p-2 " style="border-radius:35px;">
-    <div class="ml-lg-5 col-4 p-2">
+<div class="d-flex justify-content-center align-items-center mt-lg-5  mr-lg-5" style="border-radius:35px;background-color:cadetblue;margin-left:80px;    font-style:oblique;
+">
+    <div class="col-2">
         <h4>
-            Upload photo to Criminal Record
+            Upload photo:
         </h4>
     </div>
-    <div class="col-6 p-2">
-        <form asp-controller="CriminalRecord" asp-action="FileInModel" enctype="multipart/form-data">
+    <div class="col-8 ">
+        <form asp-controller="CriminalRecord" asp-action="FileInModel" enctype="multipart/form-data" class=" mt-2 mr-4" style="margin:auto">
             <input type="hidden" name="criminalRecordId" value="@criminalRecord.Id" />
-            <input class="form-group mx-sm-3 mb-2" placeholder="Name.." type="text" name="DocumentDTO.Name" />
+            <input class="form-group mx-sm-3 " placeholder="Name.." type="text" name="DocumentDTO.Name" />
             <input class="btn btn-dark btn-sm" type="file" name="DocumentDTO.File" />
-            <button class="btn btn-success" type="submit"> Submit </button>
+            <button class="btn btn-success col-2" type="submit"> Submit </button>
         </form>
     </div>
 </div>
@@ -135,13 +145,13 @@
     </div>
 </div>
 
-<div class="carouss">
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="6000">
+<div class="h-100 w-75 mt-lg-2 row align-items-center p-lg-2" style="margin-left:150px;background-color:whitesmoke;border-radius:20px">
+    <div id="carouselExampleIndicators" class="carousel slide  p-4" data-ride="carousel" data-interval="3000"style="border-radius:10px">
         <ol class="carousel-indicators">
-            @{
-                for (int i = 0; i < 20; i++)
+            @{int counter2 = 0;
+                @foreach (var item in ViewData["documents"] as IList<Document>)
                 {
-                    <li data-target="#carouselExampleIndicators" data-slide-to="@(i.ToString())" @(i == 1 ? "class='active'" : "")></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="@(counter2.ToString())" @(counter2++ == 1 ? "class='active'" : "")></li>
                 }
             }
         </ol>
@@ -159,7 +169,7 @@
                                 <h2 style="color:lightgreen">Name : @item.Name</h2>
                             </div>
                             <div class="col">
-                                <h2 style="color:lightgreen"> @item.AddedDate</h2>
+                                <h2 style="color:lightgreen"> @item.AddedDate.ToShortDateString()</h2>
                             </div>
                         </div>
                     </div>
@@ -177,6 +187,7 @@
     </div>
 
 </div>
+
 
 
 
@@ -205,14 +216,12 @@
     function modifyType() {
 
         var myValue = document.getElementById('newValueType').value;
-
         $.ajax(
             {
-
                 type: "POST",
                 url: "/CriminalRecord/ModifyType?newType=" + myValue + "&criminalRecordId=" + "@Model.ElementAt(0).CriminalRecord.Id",
                 success: function (response) {
-                    $("#recordType").html(response);
+                    $("#newValueType").html(response);
                 }
             })
     }

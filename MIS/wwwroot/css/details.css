@@ -1,6 +1,6 @@
 ﻿
 #recordStatus {
-    color: darkblue ;
+    color:black ;
     padding: 2px 2px 2px 2px;
     font-style:oblique;
 }
@@ -65,5 +65,5 @@
 {
     padding:10px 10px 10px 10px;
     box-shadow:2px 2px 2px 2px;
-    margin-top:200px;
+    margin-top:12px;
 }
