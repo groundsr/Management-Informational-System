@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MIS.BusinessLogic;
+using MIS.BusinessLogic.Filtering;
 using MIS.DataAccess.Abstractions;
 using MIS.DTOs.BusinessLogic;
 using MIS.Model;
@@ -26,48 +27,10 @@ namespace MIS.Controllers
             _env = env;
         }
 
-        public IActionResult Index(string filterValue,int searchFlag)
-        
+        public IActionResult Index(SearchFilter searchEngine)
         
         {
-            IEnumerable<CriminalRecord> result = null ;
-
-            int intResult = -1;
-            if (filterValue != null)
-            {
-                try
-                {
-                    intResult = Int32.Parse(filterValue);
-                }
-                catch (FormatException)
-                {
-
-                }
-
-                if (intResult == -1)
-                {
-                    if (searchFlag == 0)
-                    {
-                        result = _criminalRecordService.GetCriminalRecordsByName(filterValue);
-                    }
-                    else if (searchFlag == 1)
-                    {
-                        result = _criminalRecordService.GetCriminalRecordByPolicemanName(filterValue);
-                    }
-
-                }
-                else
-                {
-                        result = _criminalRecordService.FilterCriminalRecords(intResult);
-                }
-
-                return View(result);
-            }
-            else
-            {
-                result = _criminalRecordService.GetAllCriminalRecords().ToList();
-            }
-            return View(result);
+            return View(_criminalRecordService.SearchUsingEngine(searchEngine));
         }
 
 

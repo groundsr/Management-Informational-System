@@ -19,6 +19,8 @@ using MIS.DataAccess;
 using MIS.BusinessLogic;
 using MIS.Model;
 using MSI.Model;
+using MIS.BusinessLogic.Filtering;
+
 namespace MIS
 {
     public class Startup
@@ -45,11 +47,16 @@ namespace MIS
             services.AddScoped<IMeetingPolicemanRepository, EFMeetingPolicemanRepository>();
             services.AddScoped<IMeetingRepository, EFMeetingRepository>();
             services.AddScoped<IDocumentRepository, EFDocumentRepository>();
+            
+            //services.AddScoped<ISearchEngine, SearchEngine>();
+            //services.AddScoped<ISearchFilter, SearchFilter>();
+
             services.AddScoped<PoliceSectionService>();
             services.AddScoped<MeetingRequestService>();
             services.AddScoped<PolicemanService>();
             services.AddScoped<CriminalRecordService>();
             services.AddScoped<MeetingService>();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("IdentityConnection")));

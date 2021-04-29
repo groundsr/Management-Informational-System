@@ -9,6 +9,8 @@ using System.IO;
 using System.Text;
 using MIS;
 using MIS.DTOs.BusinessLogic;
+using MIS.BusinessLogic.Filtering;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MIS.BusinessLogic
 {
@@ -20,10 +22,13 @@ namespace MIS.BusinessLogic
         private readonly IPoliceSectionRepository _policeSectionRepository;
         private readonly IDocumentRepository _documentRepository;
         private readonly IHostingEnvironment _env;
+        private  SearchEngine _searchEngine;
 
         public CriminalRecordService(ICriminalRecordRepository criminalRecord
             , ICriminalRecordPolicemanRepository criminalRecordPoliceman
-            , IPolicemanRepository policemanRepository, IHostingEnvironment env, IDocumentRepository documentRepository, IPoliceSectionRepository policeSectionRepository)
+            , IPolicemanRepository policemanRepository
+            , IHostingEnvironment env, IDocumentRepository documentRepository
+            , IPoliceSectionRepository policeSectionRepository)
         {
             _criminalRecord = criminalRecord;
             _criminalRecordPoliceman = criminalRecordPoliceman;
@@ -31,6 +36,7 @@ namespace MIS.BusinessLogic
             _documentRepository = documentRepository;
             _env = env;
             _policeSectionRepository = policeSectionRepository;
+
         }
 
         public int IdWrapper { get; set; }
@@ -117,8 +123,6 @@ namespace MIS.BusinessLogic
             _criminalRecordPoliceman.Add(criminalRecordPoliceman);
         }
 
-
-
         public IEnumerable<CriminalRecord> GetCriminalRecordByPolicemanName(string policemanName)
         {
             return (_criminalRecordPoliceman.GetCriminalRecordsByPolicemanName(policemanName));
@@ -132,6 +136,13 @@ namespace MIS.BusinessLogic
         public bool CheckIfRecordExists(CriminalRecord criminalRecord)
         {
             return (_criminalRecord.CheckIfRecordExists(criminalRecord));
+        }
+
+        public IEnumerable<CriminalRecord> SearchUsingEngine(SearchFilter searchFilter)
+        {
+            List<CriminalRecord> criminalRecords = (List<CriminalRecord>)_criminalRecord.GetAll();
+            _searchEngine = new SearchEngine(criminalRecords, _criminalRecord, _criminalRecordPoliceman);
+           return( _searchEngine.Search(searchFilter));
         }
 
         public void RemoveCriminalRecordPoliceman(Guid id)
