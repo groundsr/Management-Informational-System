@@ -76,8 +76,8 @@ namespace MIS.Controllers
 
                 // policeSectionService.Add(policeSection);
                 //Guid guid = policeSectionService.GetPoliceSectionId(policeSection);
-                AddPolicemanToStation(policeSection.Id, email);
                 _policeSectionService.Add(policeSection);
+                AddPolicemanToStation(policeSection.Id, email);
                 return RedirectToAction("Index");
 
             }
