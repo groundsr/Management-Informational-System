@@ -110,7 +110,7 @@ namespace MIS.BusinessLogic
 
         public List<Address> GetSectionsAddress()
         {
-            return policeStationRepository.GetAll().Select(x => x.Address).ToList();
+            return _policeSectionRepository.GetAll().Select(x => x.Address).ToList();
         }
         public bool BelongToTheSameStation(Policeman policeman , Policeman subordinate , Guid sectionId)
         {

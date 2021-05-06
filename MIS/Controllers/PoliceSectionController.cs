@@ -86,7 +86,7 @@ namespace MIS.Controllers
 
         public List<Address> GetSectionsAddress()
         {
-            return policeSectionService.GetSectionsAddress();
+            return _policeSectionService.GetSectionsAddress();
         }
 
         public IActionResult Update(Guid id)
