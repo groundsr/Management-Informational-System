@@ -12,6 +12,7 @@
     }
 
     span {
+    #normalSpan {
         border: 2px solid #fff !important;
         border-radius: 4px;
         cursor: pointer;
@@ -21,25 +22,42 @@
         span:hover + ul span {
             border: 2px solid #3367d6 !important;
         }
+
+    .input-group .form-control {
+        margin: 0px !important;
+    }
 </style>
 
-<form asp-action="AddPolicemanToStation" asp-controller="PoliceSection">
-    <div class="input-group mb-4 mt-4 display-1">
-        <input type="hidden" name="id" value="@Model.Id" />
-        <input type="text" class="form-control" placeholder="Policeman e-mail ..." name="email">
-        <div class="input-group-append">
-            <button class="btn btn-primary" type="submit">Add to section</button>
+<form>
+    <div class="row">
+        <div class="input-group col">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <input type="text" class="form-control" placeholder="Policeman e-mail ..." name="email">
+            <div class="input-group-append">
+                <button class="btn btn-primary form-control" type="submit">Add to section</button>
+            </div>
+        </div>
+        <div class="col-4">
+            <form asp-controller="PoliceSection" asp-action="Hierarchy" method="get" id="searchForm">
+                <div class="search">
+                    <input type="search" class="search-input" placeholder="Search criminal record..." name="searchedRecord.Term">
+                    <input type="hidden" class="search-input" name="searchedRecord.Name" value="criminalRecordsUsingId">
+                    <input type="hidden" class="search-input" placeholder="Policeman..." name="id" value="@Model.Id">
+                    <button type="submit" class="search-icon" value="Filter">
+                        <i class="fa fa-search"> </i>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </form>
-
 
 <div class="section">
 
     <div class="tf-tree tf-gap-lg">
         <ul>
             <li id="@Model.RootPoliceman.Id">
-                <span class="tf-nc" data-toggle="modal" data-target="#policemanDetails"
+                <span id="normalSpan" class="tf-nc" data-toggle="modal" data-target="#policemanDetails"
                       onclick="loadPoliceman('@Model.RootPoliceman.Id' , '@Model.RootPoliceman.Name', '@Model.RootPoliceman.Age' , '@Model.RootPoliceman.Seniority')">@Model.RootPoliceman.Name</span>
                     @*<ul>
                         <li>
@@ -78,7 +96,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span id="normalSpan" aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -103,14 +121,33 @@
     </div>
 
     
+    <div class="records-container">
 
+        @foreach (var record in ViewData["criminalRecords"] as IEnumerable<CriminalRecord>)
+        {
+            <div class="record">
+                <i class="fas fa-folder record-icon" onclick="next('@record.Id')"></i>
+                <span class="record-name"><i class="fas fa-signature"></i> name : <span>@record.Name</span></span>
+                <span class="record-date"><i class="far fa-clock"></i> date : <span> @record.CreatedOn</span></span>
+                <div class="record-options">
 
-    
-    
+                </div>
+            </div>
 
-    
+        }
+    </div>
 
     <script>
+
+        function next(id) {
+            $.ajax(
+                {
+                    type: 'GET',
+                    success: function (data) {
+                        window.location.href = "https://localhost:44300/CriminalRecord/Details?recordId=" + id;
+                    }
+                })
+        }
         function closePolicemanModal() {
             $('#policemanDetails .close').click();
     }

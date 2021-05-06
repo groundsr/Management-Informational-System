@@ -1,9 +1,7 @@
 ﻿
 #recordStatus {
-    color: darkblue ;
+    color:black ;
     padding: 2px 2px 2px 2px;
-    border:solid;
-    border-color:aliceblue;
     font-style:oblique;
 }
 
@@ -44,4 +42,28 @@
 #detailsA
 {
     cursor:pointer;
+}
+
+.carusel-item
+{
+    height:200rem;
+    background:#777;
+    color:white;
+    position:relative;
+}
+
+#myContainer
+{
+    position:absolute;
+    button:0;
+    left:0;
+    right:0;
+    padding-bottom:50px;
+}
+
+.carouss
+{
+    padding:10px 10px 10px 10px;
+    box-shadow:2px 2px 2px 2px;
+    margin-top:12px;
 }

@@ -1,4 +1,6 @@
-﻿using MIS.DataAccess.Abstractions;
+﻿using MIS.BusinessLogic.Filtering;
+using MIS.DataAccess.Abstractions;
+using MIS.Model;
 using MSI.Model;
 using System;
 using System.Collections.Generic;
@@ -9,13 +11,17 @@ namespace MIS.BusinessLogic
 {
     public class PoliceSectionService
     {
-        private readonly IPoliceSectionRepository policeStationRepository;
+        private readonly IPoliceSectionRepository _policeSectionRepository;
         private readonly IPolicemanRepository policemanRepository;
+        private readonly ICriminalRecordRepository _criminalRecordRepository;
+        private readonly ICriminalRecordPolicemanRepository _criminalRecordPoliceman;
 
-        public PoliceSectionService(IPoliceSectionRepository policeStationRepository, IPolicemanRepository policemanRepository)
+        public PoliceSectionService(IPoliceSectionRepository policeStationRepository, IPolicemanRepository policemanRepository, ICriminalRecordRepository criminalRecordService, ICriminalRecordPolicemanRepository criminalRecordPolicemanRepository)
         {
-            this.policeStationRepository = policeStationRepository;
+            this._policeSectionRepository = policeStationRepository;
             this.policemanRepository = policemanRepository;
+            _criminalRecordRepository = criminalRecordService;
+            _criminalRecordPoliceman = criminalRecordPolicemanRepository;
         }
 
         public void AddPoliceToSection(PoliceSection policeSection, string email)
@@ -26,30 +32,44 @@ namespace MIS.BusinessLogic
             {
                 policeSection.RootPoliceman = policeman;
             }
-            policeStationRepository.Update(policeSection);
+            // policeStationRepository.Update(policeSection);
+            _policeSectionRepository.Update(policeSection);
         }
 
         public IEnumerable<PoliceSection> GetAll()
         {
-            return policeStationRepository.GetAll();
+            return _policeSectionRepository.GetAll();
         }
 
         public void Add(PoliceSection policeSection)
         {
             
-            policeStationRepository.Add(policeSection);
+            // policeStationRepository.Add(policeSection);
             
+            _policeSectionRepository.Add(policeSection);
         }
 
-        public void Update(PoliceSection policeSection)
+        public IEnumerable<CriminalRecord> GetCriminalRecordsBySection(Guid id)
         {
-
-            policeStationRepository.Update(policeSection);
+            return _criminalRecordRepository.GetCriminalRecordBySection(id);
         }
+
+        public IEnumerable<CriminalRecord> GetCriminalRecordsByNameBySection(Guid id, SearchFilter searchedRecord)
+        {
+            IEnumerable<CriminalRecord> criminalRecords = _criminalRecordRepository.GetAll();
+            CriminalRecordSearchEngine criminalRecordSearchEngine = new CriminalRecordSearchEngine(criminalRecords, _criminalRecordRepository, _criminalRecordPoliceman);
+           return (criminalRecordSearchEngine.Search(searchedRecord,id));
+        }
+
+        public IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name)
+        {
+            return (_criminalRecordRepository.GetCriminalRecordsByName(name));
+        }
+
 
         public PoliceSection Get(Guid id)
         {
-            return policeStationRepository.Get(id);
+            return _policeSectionRepository.Get(id);
         }
 
         public Guid GetPoliceSectionId(PoliceSection policeSection)
@@ -59,11 +79,11 @@ namespace MIS.BusinessLogic
 
         public void Delete(Guid id)
         {
-            var policeStation = policeStationRepository.Get(id);
+            var policeStation = _policeSectionRepository.Get(id);
             policeStation.Policemen.Clear();
-            Update(policeStation);
+           _policeSectionRepository.Update(policeStation);
 
-            policeStationRepository.Remove(id);
+            _policeSectionRepository.Remove(id);
         }
 
         public Dictionary<Policeman, List<Policeman>> PolicemenHierarchy(Guid sectionId)
@@ -105,6 +125,19 @@ namespace MIS.BusinessLogic
             }
             return found == 2;
         }
+        public IEnumerable<PoliceSection> GetPoliceSectionsByName(SearchFilter searchFilter)
+        {
+            IEnumerable<PoliceSection> policeSections = (IEnumerable<PoliceSection>)_policeSectionRepository.GetAll();
+            PoliceSectionSearchEngine searchEngine = new PoliceSectionSearchEngine(policeSections, _policeSectionRepository);
+            return (IEnumerable<PoliceSection>)searchEngine.Search(searchFilter);
+        }
+
+        public void Update(PoliceSection policeSection)
+        {
+            _policeSectionRepository.Update(policeSection);
+            _policeSectionRepository.Save();
+        }
+
 
 
     }

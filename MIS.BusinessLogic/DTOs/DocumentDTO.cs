@@ -6,7 +6,6 @@ namespace MIS.DTOs.BusinessLogic
     {
         public string Name { get;  set; }
         public IFormFile File { get;  set; }
-
         public string Path { get; set; }
     }
 }

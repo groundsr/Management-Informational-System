@@ -9,6 +9,8 @@ using System.IO;
 using System.Text;
 using MIS;
 using MIS.DTOs.BusinessLogic;
+using MIS.BusinessLogic.Filtering;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MIS.BusinessLogic
 {
@@ -20,10 +22,13 @@ namespace MIS.BusinessLogic
         private readonly IPoliceSectionRepository _policeSectionRepository;
         private readonly IDocumentRepository _documentRepository;
         private readonly IHostingEnvironment _env;
+        private  CriminalRecordSearchEngine _searchEngine;
 
         public CriminalRecordService(ICriminalRecordRepository criminalRecord
             , ICriminalRecordPolicemanRepository criminalRecordPoliceman
-            , IPolicemanRepository policemanRepository, IHostingEnvironment env, IDocumentRepository documentRepository, IPoliceSectionRepository policeSectionRepository)
+            , IPolicemanRepository policemanRepository
+            , IHostingEnvironment env, IDocumentRepository documentRepository
+            , IPoliceSectionRepository policeSectionRepository)
         {
             _criminalRecord = criminalRecord;
             _criminalRecordPoliceman = criminalRecordPoliceman;
@@ -31,6 +36,7 @@ namespace MIS.BusinessLogic
             _documentRepository = documentRepository;
             _env = env;
             _policeSectionRepository = policeSectionRepository;
+
         }
 
         public int IdWrapper { get; set; }
@@ -74,42 +80,7 @@ namespace MIS.BusinessLogic
             _criminalRecordPoliceman.Save();
         }
 
-        public IEnumerable<CriminalRecord> GetCriminalRecordBySection(int filterValue)
-        {
-            List<PoliceSection> policeSections = (List<PoliceSection>)_policeSectionRepository.GetAll();
-            PoliceSection policeSection=null;
 
-
-            foreach(var item in policeSections)
-            {
-                int addingValue = _policeSectionRepository.GetPoliceSectionNumber(item.Name);
-                if(addingValue==filterValue)
-                {
-                    policeSection = _policeSectionRepository.GetPoliceSectionByName(item.Name);
-                }
-            }
-
-            List<Policeman> policemen = policeSection.Policemen;
-            List<CriminalRecordPoliceman> criminalRecordPolicemen = new List<CriminalRecordPoliceman>();
-
-            List<CriminalRecord> criminalRecords = new List<CriminalRecord>();
-            foreach (var item in policemen)
-            {
-                List<CriminalRecordPoliceman> criminalRecordPolicemenTemp = 
-                (List<CriminalRecordPoliceman>)_criminalRecordPoliceman.GetAllCriminalRecordPoliceman(item);
-                
-                foreach (var iterator in criminalRecordPolicemenTemp)
-                {
-                    criminalRecordPolicemen.Add(iterator);
-                    criminalRecords.Add(iterator.CriminalRecord);
-                    break;
-                }
-            }
-
-            return criminalRecords;
-
-
-        }
 
         public void AddCriminalRecord(CriminalRecord criminalRecord)
         {
@@ -152,11 +123,6 @@ namespace MIS.BusinessLogic
             _criminalRecordPoliceman.Add(criminalRecordPoliceman);
         }
 
-        public IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name)
-        {
-            return( _criminalRecord.GetCriminalRecordsByName(name));
-        }
-
         public IEnumerable<CriminalRecord> GetCriminalRecordByPolicemanName(string policemanName)
         {
             return (_criminalRecordPoliceman.GetCriminalRecordsByPolicemanName(policemanName));
@@ -170,6 +136,13 @@ namespace MIS.BusinessLogic
         public bool CheckIfRecordExists(CriminalRecord criminalRecord)
         {
             return (_criminalRecord.CheckIfRecordExists(criminalRecord));
+        }
+
+        public IEnumerable<CriminalRecord> SearchUsingEngine(SearchFilter searchFilter)
+        {
+            List<CriminalRecord> criminalRecords = (List<CriminalRecord>)_criminalRecord.GetAll();
+            _searchEngine = new CriminalRecordSearchEngine(criminalRecords, _criminalRecord, _criminalRecordPoliceman);
+            return( _searchEngine.Search(searchFilter));
         }
 
         public void RemoveCriminalRecordPoliceman(Guid id)
@@ -271,10 +244,15 @@ namespace MIS.BusinessLogic
                              FileAccess.Write);
             
             documentDTO.File.CopyTo(fileStream);
-                 documentDTO.Path =Path.Combine(path,documentDTO.Name);
+            documentDTO.Path =Path.Combine(path,documentDTO.Name);
             documentDTO.Path = documentPath;
-                CreateDocument(criminalRecordId,documentDTO);
+            CreateDocument(criminalRecordId,documentDTO);
             
+        }
+
+        public IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name)
+        {
+           return( _criminalRecord.GetCriminalRecordsByName(name));
         }
 
         public void DeleteDocument(Guid documentId)

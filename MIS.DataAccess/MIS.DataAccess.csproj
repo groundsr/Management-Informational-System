@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MIS.BusinessLogic\MIS.BusinessLogic.csproj" />
     <ProjectReference Include="..\MIS.DataAccess.Abstractions\MIS.DataAccess.Abstractions.csproj" />
     <ProjectReference Include="..\MIS.Model\MIS.Model.csproj" />
   </ItemGroup>

@@ -18,7 +18,31 @@ namespace MIS.DataAccess
         }
 
 
+        public IEnumerable<CriminalRecord> GetCriminalRecordBySection(Guid policeSectionId)
+        {
+            PoliceSection policeSection = _context.PoliceSections.Find(policeSectionId);
+            List<Policeman> policemen = policeSection.Policemen;
+            List<CriminalRecordPoliceman> criminalRecordPolicemen = new List<CriminalRecordPoliceman>();
 
+            List<CriminalRecord> criminalRecords = new List<CriminalRecord>();
+            foreach (var item in policemen)
+            {
+                List<CriminalRecordPoliceman> criminalRecordPolicemenTemp =
+                (List<CriminalRecordPoliceman>)_context.CriminalRecordPolicemen
+                .Where(x => x.Policeman.Id == item.Id)
+                .ToList();
+
+
+
+                foreach (var iterator in criminalRecordPolicemenTemp)
+                {
+                    criminalRecordPolicemen.Add(iterator);
+                    criminalRecords.Add(iterator.CriminalRecord);
+                }
+            }
+
+            return criminalRecords;
+        }
         public IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name)
         {
 
@@ -84,8 +108,30 @@ namespace MIS.DataAccess
 
             List<Document> documents = criminalRecord.Documents;
             return documents;
+        }
 
+        public IEnumerable<CriminalRecord> GetCriminalRecordsByName(IEnumerable<CriminalRecord> criminalRecords,string name)
+        {
+            List<CriminalRecord> filteredList = new List<CriminalRecord>();
+            name = name.ToLower();
 
+            foreach(var item in criminalRecords)
+            {
+                var itemName = item.Name.ToLower();
+                if(itemName.Contains(name))
+                {
+                    filteredList.Add(item);
+                }
+            }
+
+            return filteredList;
+        }
+
+        public IEnumerable<CriminalRecord> GetCriminalRecordsByNameBySection(Guid id, string name)
+        {
+            IEnumerable<CriminalRecord> allCriminalRecords = _context.CriminalRecords.ToList();
+            IEnumerable<CriminalRecord> filteredCriminalRecords = this.GetCriminalRecordsByName(allCriminalRecords, name);
+            return filteredCriminalRecords;
         }
     }
 }

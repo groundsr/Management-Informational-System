@@ -24,12 +24,13 @@
         <div class="col col-8 text-center" style="width:400px; margin-left:auto">
             <form asp-controller="PoliceSection" asp-action="Index" id="textsearch" method="get">
                 <div class="search border">
-                    <input type="text" class="search-input" id="textsearch"
-                           placeholder="Search..." name="searchString"> <a href="#" class="search-icon">
-                        <i class="fa fa-search"></i>
-                    </a>
+                    <input type="text" class="search-input" id="textsearch" placeholder="Search..." name="SearchFilter.Term" />
+                    <input type="hidden" class="search-input" id="textsearch" name="SearchFilter.Name" value="searchByName" />
+                    <button type="submit" class="search-icon" >
+                        <i class="fa fa-search"> </i>
+                    </button>
                 </div>
-
+                
             </form>
         </div>
     </div>

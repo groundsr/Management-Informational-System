@@ -14,7 +14,6 @@ namespace MIS.DataAccess.Abstractions
         IEnumerable<CriminalRecordPoliceman> GetAllById(Guid id);
         IEnumerable<CriminalRecordPoliceman> GetCriminalRecordPolicemenByRecordId(Guid id);
         IEnumerable<CriminalRecordPoliceman> GetAllCriminalRecordsPolicemanForARecord(CriminalRecord criminalRecord);
-
         List<CriminalRecord> GetCriminalRecordsByPolicemanName(string policemanName);
         IEnumerable<CriminalRecord> GetCriminalRecordBySection(int filterValue);
         IEnumerable<CriminalRecordPoliceman> GetAllCriminalRecordPoliceman(Policeman item);
