@@ -7,6 +7,7 @@
             <button class="btn btn-outline-secondary" type="button">Search</button>
         </div>
     </div>*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 <style>
     #map {
         width: 100%;
@@ -94,64 +95,56 @@
 
 <div id="map">
     <script>
-        @*const model = @Model;
-            console.log(model);*@
         var addresses = [];
-        var geocoder = new google.maps.Geocoder();
+        var geocoder;
 
+        function initMap() {
+            
+            //centrul romaniei
+            const sibiu = { lat: 45.7958, lng: 24.1522 };
+
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 6.2,
+                center: sibiu,
+            });
+
+            geocoder = new google.maps.Geocoder()
         $.ajax({
-            url: "/PoliceSection/GetSectionsAddress", 
+            url: "/PoliceSection/GetSectionsAddress",
             success: function (data) {
                 addresses = data;
-                console.log(addresses);
+                for (var i = 0; i < addresses.length; i++) {
+                    var address = addresses[i].number + addresses[i].street + addresses[i].city;
+                    geocoder.geocode({ 'address': address },
+                        function (results, status) {
+                            if (status == 'OK') {
+                                var marker3 = new google.maps.Marker({
+                                    map: map,
+                                    position: {
+                                        lat: results[0].geometry.location.lat(),
+                                        lng: results[0].geometry.location.lng()
+                                    }
+                                });
+                                //console.log(results[0].geometry.location.lng())
+                            } else {
+                                alert('Geocode was not successful for the following reason: ' + status);
+                            }
+                        })
+
+                //     $.ajax({
+                //    url: "https://maps.googleapis.com/maps/api/geocode/json?address=" + addresses[i].number + "+" + addresses[i].street + ",+" + addresses[i].city + ",+RO&key=AIzaSyBBoMY_7eHfch0A4ZJMQwIaxflMamkJpto",
+                //    function(data) {
+                //        console.log(url);
+                //        console.log(data);
+                //    }
+                //})
+                }
             }
 
         })
-        function initMap() {
-            // The location of Craiova
-            const craiova = { lat: 44.292790, lng: 23.85548 };
-
-            for (var i = 0; i < addresses.length; i++) {
-                //geocoder.geocode({ 'address': addresses[i] },
-                //    function (results, status) {
-                //        if (status == 'OK') {
-                //            map.setCenter(results[0].geometry.location);
-                //            var marker = new google.maps.Marker({
-                //                map: map,
-                //                position: results[0].geometry.location
-                //            });
-                //        } else {
-                //            alert('Geocode was not successful for the following reason: ' + status);
-                //        }
-                //    })
-                $.ajax({
-
-                    url: "https://maps.googleapis.com/maps/api/geocode/json?address=" + addresses[i].number + "+" + addresses[i].street + ",+" + addresses[i].city + ",+RO&key=AIzaSyBBoMY_7eHfch0A4ZJMQwIaxflMamkJpto",
-                    function(data) {
-                        console.log(data);
-                    }
-                })
-            }
-                
-            
-
-            // The map, centered at Craiova
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 4,
-                center: craiova,
-            });
-            // The marker, positioned at Uluru
-            const marker = new google.maps.Marker({
-                position: craiova,
-                map: map,
-            });
-            const marker2 = new google.maps.Marker({
-                position: { lat: 42.2343, lng: 21.85548 },
-                map: map,
-            });
         }
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?sensor=false&key=AIzaSyBBoMY_7eHfch0A4ZJMQwIaxflMamkJpto&callback=initMap"
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBoMY_7eHfch0A4ZJMQwIaxflMamkJpto&callback=initMap"
             type="text/javascript"></script>
 </div>
 
