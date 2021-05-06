@@ -88,6 +88,7 @@
                     <form asp-controller="Policeman" asp-action="AddSubordinate" class="new-subordinate" data-ajax="true" data-ajax-complete="loadHierarchy()">
                         <h5 class="new-subordinate-header">Add Subordinate</h5>
                         <input type="hidden" id="policemanId" name="policemanId" />
+                        <input type="hidden" name="sectionId" value="@Model.Id" />
                         <div class="form-group">
                             <label>Email</label>
                             <input class="form-control" name="email" />

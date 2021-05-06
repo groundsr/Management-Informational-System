@@ -1,4 +1,4 @@
-﻿    using MIS.DataAccess.Abstractions;
+﻿using MIS.DataAccess.Abstractions;
 using MSI.Model;
 using System;
 
@@ -24,6 +24,16 @@ namespace MIS.BusinessLogic
             var subordinate = policemanRepository.GetByEmail(email);
             policeman.Subordinates.Add(subordinate);
             policemanRepository.Update(policeman);
+        }
+
+        public Policeman Get(Guid policemanId)
+        {
+            return policemanRepository.Get(policemanId);
+        }
+
+        public Policeman GetByEmail(string email)
+        {
+            return policemanRepository.GetByEmail(email);
         }
     }
 }
