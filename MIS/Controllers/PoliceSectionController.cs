@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MIS.BusinessLogic;
+using MIS.BusinessLogic.Filtering;
 using MSI.Model;
 using Newtonsoft.Json;
 using System;
@@ -20,19 +21,11 @@ namespace MIS.Controllers
             _criminalRecordService = criminalRecordService;
         }
 
-        public IActionResult Index(string searchString)
+        public IActionResult Index(SearchFilter searchFilter)
+        
         {
-            var model = _policeSectionService.GetAll();
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                model = model.Where(s => s.Name.Contains(searchString));
-            }
-            return View(model);
-            //var model = policeSectionService.GetAll();
-            //return View(model);
+            return View(_policeSectionService.GetPoliceSectionsByName(searchFilter));
         }
-
-
 
         public IActionResult AddPolicemanToStation(Guid id, string email)
         {
@@ -47,14 +40,14 @@ namespace MIS.Controllers
             return (_criminalRecordService.GetCriminalRecordsByName(name));
         }
 
-        public IActionResult Hierarchy(Guid id, string? searchedRecord)
+        public IActionResult Hierarchy(Guid id,SearchFilter searchedRecord)
         {
             PoliceSection policeSection = _policeSectionService.Get(id);
-            IEnumerable<CriminalRecord> criminalRecords = _policeSectionService.GetCriminalRecordBySection(id);
+            IEnumerable<CriminalRecord> criminalRecords = _policeSectionService.GetCriminalRecordsBySection(id);
 
-            if (searchedRecord != null)
+            if (searchedRecord.Term != null)
             {
-                IEnumerable<CriminalRecord> filteredCriminalRecords = _policeSectionService.GetCriminalRecordsByNameBySection(id,searchedRecord);
+                IEnumerable<CriminalRecord> filteredCriminalRecords = _policeSectionService.GetCriminalRecordsByNameBySection(id, searchedRecord);
                 ViewData["criminalRecords"] =filteredCriminalRecords;
             }
             else

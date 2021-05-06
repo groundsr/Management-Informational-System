@@ -10,9 +10,9 @@ namespace MIS.BusinessLogic.Filtering.Filters
     {
 
         private readonly ICriminalRecordRepository _criminalRecordRepository;
-        private readonly ICollection<CriminalRecord> _criminalRecords;
+        private readonly IEnumerable<CriminalRecord> _criminalRecords;
 
-        public SearchCriminalRecordByName(ICriminalRecordRepository criminalRecordRepository, ICollection<CriminalRecord> criminalRecords)
+        public SearchCriminalRecordByName(ICriminalRecordRepository criminalRecordRepository, IEnumerable<CriminalRecord> criminalRecords)
         {
             _criminalRecordRepository = criminalRecordRepository;
             this._criminalRecords = criminalRecords;

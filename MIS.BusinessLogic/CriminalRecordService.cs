@@ -22,7 +22,7 @@ namespace MIS.BusinessLogic
         private readonly IPoliceSectionRepository _policeSectionRepository;
         private readonly IDocumentRepository _documentRepository;
         private readonly IHostingEnvironment _env;
-        private  SearchEngine _searchEngine;
+        private  CriminalRecordSearchEngine _searchEngine;
 
         public CriminalRecordService(ICriminalRecordRepository criminalRecord
             , ICriminalRecordPolicemanRepository criminalRecordPoliceman
@@ -141,8 +141,8 @@ namespace MIS.BusinessLogic
         public IEnumerable<CriminalRecord> SearchUsingEngine(SearchFilter searchFilter)
         {
             List<CriminalRecord> criminalRecords = (List<CriminalRecord>)_criminalRecord.GetAll();
-            _searchEngine = new SearchEngine(criminalRecords, _criminalRecord, _criminalRecordPoliceman);
-           return( _searchEngine.Search(searchFilter));
+            _searchEngine = new CriminalRecordSearchEngine(criminalRecords, _criminalRecord, _criminalRecordPoliceman);
+            return( _searchEngine.Search(searchFilter));
         }
 
         public void RemoveCriminalRecordPoliceman(Guid id)
@@ -244,9 +244,9 @@ namespace MIS.BusinessLogic
                              FileAccess.Write);
             
             documentDTO.File.CopyTo(fileStream);
-                 documentDTO.Path =Path.Combine(path,documentDTO.Name);
+            documentDTO.Path =Path.Combine(path,documentDTO.Name);
             documentDTO.Path = documentPath;
-                CreateDocument(criminalRecordId,documentDTO);
+            CreateDocument(criminalRecordId,documentDTO);
             
         }
 

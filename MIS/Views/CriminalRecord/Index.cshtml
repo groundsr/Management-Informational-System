@@ -42,11 +42,11 @@
         </form>
     </div>  
 
-    @*<div class="d-inline-flex p-md-5">
+    <div class="d-inline-flex p-md-5">
         <form asp-controller="CriminalRecord" asp-action="Index" method="get" id="searchFormAdmin"  style="display:none">
             <div class="search">
-                <input type="search" class="search-input" placeholder="Policeman..." name="filterValue">
-                <input type="hidden" class="search-input" placeholder="Policeman..." name="searchFlag" value="1">
+                <input type="search" class="search-input" placeholder="Policeman..." name="Term">
+                <input type="hidden" class="search-input" placeholder="Policeman..." name="Name" value="policemanName">
                 <button type="submit" class="search-icon" value="Filter">
                     <i class="fa fa-search"> </i>
                 </button>
@@ -54,17 +54,6 @@
         </form>
     </div> 
     
-    <div class="d-inline-flex p-md-5">
-        <form asp-controller="CriminalRecord" asp-action="Index" method="get" id="searchFormSection"  style="display:none">
-            <div class="search">
-                <input type="search" class="search-input" placeholder="Policeman..." name="filterValue">
-                <input type="hidden" class="search-input" placeholder="Policeman..." name="searchFlag" value="2">
-                <button type="submit" class="search-icon" value="Filter">
-                    <i class="fa fa-search"> </i>
-                </button>
-            </div>
-        </form>
-    </div>*@
 </div>
 
 <partial name="_Records" />

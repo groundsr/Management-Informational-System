@@ -1,4 +1,5 @@
-﻿using MIS.DataAccess.Abstractions;
+﻿using MIS.BusinessLogic.Filtering;
+using MIS.DataAccess.Abstractions;
 using MIS.Model;
 using MSI.Model;
 using System;
@@ -40,24 +41,21 @@ namespace MIS.BusinessLogic
             _policeSectionRepository.Add(policeSection);
         }
 
-        public void Update(PoliceSection policeSection)
+        public IEnumerable<CriminalRecord> GetCriminalRecordsBySection(Guid id)
         {
-
-            _policeSectionRepository.Update(policeSection);
+            return _criminalRecordRepository.GetCriminalRecordBySection(id);
         }
 
+        public IEnumerable<CriminalRecord> GetCriminalRecordsByNameBySection(Guid id, SearchFilter searchedRecord)
+        {
+            IEnumerable<CriminalRecord> criminalRecords = _criminalRecordRepository.GetAll();
+            CriminalRecordSearchEngine criminalRecordSearchEngine = new CriminalRecordSearchEngine(criminalRecords, _criminalRecordRepository, _criminalRecordPoliceman);
+           return (criminalRecordSearchEngine.Search(searchedRecord,id));
+        }
 
         public IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name)
         {
             return (_criminalRecordRepository.GetCriminalRecordsByName(name));
-        }
-
-        public IEnumerable<CriminalRecord> GetCriminalRecordsByNameBySection(Guid id, string name)
-        {
-            IEnumerable<CriminalRecord> allCriminalRecords = this.GetCriminalRecordBySection(id);
-            IEnumerable<CriminalRecord> filteredCriminalRecords = _criminalRecordRepository.GetCriminalRecordsByName(allCriminalRecords, name);
-            return filteredCriminalRecords;
-
         }
 
 
@@ -70,7 +68,7 @@ namespace MIS.BusinessLogic
         {
             var policeStation = _policeSectionRepository.Get(id);
             policeStation.Policemen.Clear();
-            Update(policeStation);
+           _policeSectionRepository.Update(policeStation);
 
             _policeSectionRepository.Remove(id);
         }
@@ -97,29 +95,17 @@ namespace MIS.BusinessLogic
             return hierarchy;
         }
 
-        public IEnumerable<CriminalRecord> GetCriminalRecordBySection(Guid policeSectionId)
+        public IEnumerable<PoliceSection> GetPoliceSectionsByName(SearchFilter searchFilter)
         {
-            PoliceSection policeSection = _policeSectionRepository.Get(policeSectionId);
-            List<Policeman> policemen = policeSection.Policemen;
-            List<CriminalRecordPoliceman> criminalRecordPolicemen = new List<CriminalRecordPoliceman>();
+            IEnumerable<PoliceSection> policeSections = (IEnumerable<PoliceSection>)_policeSectionRepository.GetAll();
+            PoliceSectionSearchEngine searchEngine = new PoliceSectionSearchEngine(policeSections, _policeSectionRepository);
+            return (IEnumerable<PoliceSection>)searchEngine.Search(searchFilter);
+        }
 
-            List<CriminalRecord> criminalRecords = new List<CriminalRecord>();
-            foreach (var item in policemen)
-            {
-                List<CriminalRecordPoliceman> criminalRecordPolicemenTemp =
-                (List<CriminalRecordPoliceman>)_criminalRecordPoliceman.GetAllCriminalRecordPoliceman(item);
-
-                foreach (var iterator in criminalRecordPolicemenTemp)
-                {
-                    criminalRecordPolicemen.Add(iterator);
-                    criminalRecords.Add(iterator.CriminalRecord);
-                    break;
-                }
-            }
-
-            return criminalRecords;
-
-
+        public void Update(PoliceSection policeSection)
+        {
+            _policeSectionRepository.Update(policeSection);
+            _policeSectionRepository.Save();
         }
 
 

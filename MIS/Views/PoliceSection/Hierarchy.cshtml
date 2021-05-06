@@ -30,7 +30,8 @@
         <div class="col-4">
             <form asp-controller="PoliceSection" asp-action="Hierarchy" method="get" id="searchForm">
                 <div class="search">
-                    <input type="search" class="search-input" placeholder="Search criminal record..." name="searchedRecord">
+                    <input type="search" class="search-input" placeholder="Search criminal record..." name="searchedRecord.Term">
+                    <input type="hidden" class="search-input" name="searchedRecord.Name" value="criminalRecordsUsingId">
                     <input type="hidden" class="search-input" placeholder="Policeman..." name="id" value="@Model.Id">
                     <button type="submit" class="search-icon" value="Filter">
                         <i class="fa fa-search"> </i>
