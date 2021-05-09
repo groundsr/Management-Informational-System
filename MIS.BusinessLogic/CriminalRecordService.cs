@@ -100,6 +100,11 @@ namespace MIS.BusinessLogic
             return criminalRecordPolicemen;
         }
 
+        public void RemoveDocuments(Guid id)
+        {
+           
+        }
+
         public void SaveCriminalRecord()
         {
             _criminalRecord.Save();
@@ -151,7 +156,7 @@ namespace MIS.BusinessLogic
         }
 
         public void RemoveCriminalRecord(Guid id)
-        {
+        {   
             _criminalRecord.Remove(id);
         }
 

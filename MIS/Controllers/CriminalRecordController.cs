@@ -99,9 +99,16 @@ namespace MIS.Controllers
             List<CriminalRecordPoliceman> criminalRecordPolicemenList =
                 (List<CriminalRecordPoliceman>)_criminalRecordService.GetCriminalRecordPolicemenById(id);
 
+            List<Document> documents = (List<Document>)_criminalRecordService.GetDocuments(id);
+
             for (int i = 0; i < criminalRecordPolicemenList.Count; i++)
             {
                 _criminalRecordService.RemoveCriminalRecordPoliceman(criminalRecordPolicemenList[i].Id);
+            }         
+            
+            for (int i = 0; i < documents.Count; i++)
+            {
+                _criminalRecordService.DeleteDocument(id);
             }
 
             _criminalRecordService.SaveCriminalRecordPoliceman();
