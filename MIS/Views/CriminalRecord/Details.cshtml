@@ -6,187 +6,142 @@
 @using MIS.Model
 @using MSI.Model
 @model List<MIS.Model.CriminalRecordPoliceman>
+<link href="~/css/recordDetails.css" rel="stylesheet" />
+@{CriminalRecord criminalRecord = Model.ElementAt(0).CriminalRecord; }
 
-@{CriminalRecord criminalRecord = null; }
-
-
-@foreach (var item in Model)
-{
-    <div class="row p-1 " style="border-radius:25px;background-color:cadetblue">
-
-        <div class="col-lg-3 col-md-2 col-sm-2 col-xs-4 ml-4" style="text-align:center;border-radius:25px;background-color:cadetblue">
-            <h5 id="recordStatus" class="mt-1"> Record Status : @item.CriminalRecord.Status </h5>
+<div class="record-content">
+    <div class="record-details">
+        <div class="record-details-description">
+            <span style="color : #3367d6">></span> Description : @criminalRecord.Description
         </div>
-        <div class="col-lg-1 col-md-3 col-sm-3 col-xs-5" style="text-align:center;">
-            <button id="enableButton" type="submit" onclick="modifyStatusEnable()" class="form-control btn-primary">Enable</button>
-        </div>
-        <div class="col-lg-1 col-md-3 col-sm-3 col-xs-5 mr-lg-5">
-            <button id="disableButton" onclick="modifyStatusDisable()" type="submit" class="form-control btn-danger">Disable</button>
-        </div>
-        <div class="col-lg-3 col-md-2 col-sm-2 col-xs-4 " style="text-align:center;border-radius:25px;background-color:cadetblue">
-            <h5 id="recordStatus" class="mt-1"> Type : @item.CriminalRecord.Type </h5>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-5">
-            <input type="text" id="newValueType" value="@Model.ElementAt(0).CriminalRecord.Type" />
-            <button class="btn btn-submit btn-secondary" onclick="modifyType()"> Submit</button>
-        </div>
-
-
-
-    </div>
-
-
-    <div class="d-flex justify-content-center ml-lg-4 mr-lg-4 mb-lg-5 " id="descriptionArea">
-        @item.CriminalRecord.Description
-    </div>
-
-    criminalRecord = @item.CriminalRecord;
-    break;
-}
-
-<div class="ml-lg-5" style="">
-    <form asp-controller="CriminalRecord" asp-action="AddPolicemanToACriminalRecord">
-        <div class="row">
-            <div class="row">
-                <div class="col-10">
-                    <input type="hidden" name="criminalRecordId" value="@criminalRecord.Id" />
-                    <input type="text" class=" form-control" name="policemanEmail" placeholder="Email.." id="emailValue" />
-                </div>
-                <div class="col-2" style="margin-left:-24px;">
-                    <button type="submit" class="btn btn-submit btn-primary ">
-                        Add policeman
-                    </button>
-                </div>
-
-                <button type="button" id="myBackButton" style="display:none" class="btn btn-primary btn-sm col-2 " onclick="DisplayNone()"> Undo</button>
+        <div class="record-details-type">
+            <span style="color : #3367d6">></span> <span id="type">Type : @criminalRecord.Type </span><i class="far fa-edit type-icon" onclick="toggleTypeInput()"></i>
+            <div class="form-group modify-type">
+                <input type="text" id="newValueType" value="@Model.ElementAt(0).CriminalRecord.Type" class="form-control" onkeypress="modifyType(event)" />
             </div>
         </div>
+        <div class="record-details-status">
+            <div style="margin-bottom : 3px">
+                <span style="color : #3367d6">></span> <span id="status">Status : @criminalRecord.Status</span>
+            </div>
+            <button class="record-status-enable" onclick="modifyStatusEnable()">Active</button>
+            <button class="record-status-close" onclick="modifyStatusDisable()">Closed</button>
+        </div>
+        <div class="record-details-name">
+            <span style="color : #3367d6">></span> Name : @criminalRecord.Name
+        </div>
+        <div class="record-details-created-date">
+            <span style="color : #3367d6">></span> Created : @criminalRecord.CreatedOn.ToShortDateString()
+        </div>
+    </div>
+    <div class="record-documents">
+        <div class="record-documents-header">
+            <div class="record-documents-text">Documents</div>
+            <div class="record-documents-add" data-target="#documentModal" data-toggle="modal">Add Document</div>
+        </div>
+        @foreach (var item in ViewData["documents"] as IList<Document>)
+        {
+            <div class="record-document">
+                <img class="record-document-photo" src="@item.Path" alt="title" asp-append-version="true">
+                <div class="record-document-info">
+                    <div class="record-document-name">@item.Name</div>
+                    <div class="record-document-date"> @item.AddedDate.ToShortDateString()</div>
+                    <a class="record-document-delete" href="/CriminalRecord/DeleteDocument?criminalRecordId=@criminalRecord.Id&documentId=@item.Id" target="_blank">Delete</a>
+                </div>
+            </div>
+        }
 
-    </form>
+    </div>
 </div>
+<table class="table table-striped" style="margin-top : 50px">
+    <thead>
+        <tr>
 
-
-
-
-@if (Model.ElementAt(0).Policeman != null)
-{
-    <table class="table table-striped mr-5">
-        <thead>
-            <tr style="background-color:cadetblue;border-radius:30px 30px;">
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">Seniority</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Added</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var agent in Model)
+        {
+            <tr>
+                <td>
+                    @agent.Policeman.Name
+                </td>
+                <td c>
+                    @agent.Policeman.Email
+                </td>
+                <td>
+                    @agent.DateWhenWasAdded.ToShortDateString()
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+        }
+    </tbody>
+</table>
 
-                <tr>
-                    <td>@item.Policeman.Name</td>
-                    <td>@item.Policeman.Email</td>
-                    <td>@item.Policeman.Seniority</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-}
-
-<div id="policemenList" class="mb-lg-5" style="display:none">
-    @foreach (var item in Model)
-    {
-        <ul class="list-group">
-            @if (@item.Policeman == null)
-            {
-                break;
-            }
-
-            else
-            {
-                <li class="list-group-item ml-lg-5 mr-5 p-2 " style="cursor:pointer">
-                    <a id="detailsA"> <span id="mySpan">Name : @item.Policeman.Name </span></a>
-                    <a><span id="mySpan">Email : @item.Policeman.Email</span></a>
-                    <a><span id="mySpan">Seniority : @item.Policeman.Seniority</span></a>
-                    <a><span id="mySpan">Seniority : @item.Policeman.Rank</span></a>
-                </li>
-            }
-        </ul>
-    }
-
-</div>
-
-<div class="d-flex justify-content-center align-items-center mt-lg-5  mr-lg-5" style="border-radius:35px;background-color:cadetblue;margin-left:80px;    font-style:oblique;
-">
-    <div class="col-2">
-        <h4>
-            Upload photo:
-        </h4>
-    </div>
-    <div class="col-8 ">
-        <form asp-controller="CriminalRecord" asp-action="FileInModel" enctype="multipart/form-data" class=" mt-2 mr-4" style="margin:auto">
-            <input type="hidden" name="criminalRecordId" value="@criminalRecord.Id" />
-            <input class="form-group mx-sm-3 " placeholder="Name.." type="text" name="DocumentDTO.Name" />
-            <input class="btn btn-dark btn-sm" type="file" name="DocumentDTO.File" />
-            <button class="btn btn-success col-2" type="submit"> Submit </button>
-        </form>
-    </div>
-</div>
-
-
-<div class="modal fade" id="editDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Document</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <div class="modal-body">
-                <form>
+                <form asp-controller="CriminalRecord" asp-action="FileInModel" enctype="multipart/form-data" class=" mt-2 mr-4" style="margin:auto">
+                    <input type="hidden" name="criminalRecordId" value="@criminalRecord.Id" />
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Name.." type="text" name="DocumentDTO.Name" />
+                    </div>
+                    <div class="form-group">
+                        <label class="record-status-enable" for="fileInput"><i class="fas fa-upload"></i> Choose File</label>
+                        <input type="file" name="DocumentDTO.File" id="fileInput" style="display:none" />
+                    </div>
+                    <button class="record-status-enable" type="submit"> Submit </button>
                 </form>
             </div>
+
         </div>
     </div>
 </div>
 
-<div class="h-100 w-75 mt-lg-2 row align-items-center p-lg-2" style="margin-left:150px;background-color:whitesmoke;border-radius:20px">
-    <div id="carouselExampleIndicators" class="carousel slide  p-4" data-ride="carousel" data-interval="3000"style="border-radius:10px">
-        <ol class="carousel-indicators">
-            @{int counter2 = 0;
-                @foreach (var item in ViewData["documents"] as IList<Document>)
-                {
-                    <li data-target="#carouselExampleIndicators" data-slide-to="@(counter2.ToString())" @(counter2++ == 1 ? "class='active'" : "")></li>
-                }
-            }
-        </ol>
-        <div class="carousel-inner w-100 h-100">
-            @{ int counter = 0;
-                @foreach (var item in ViewData["documents"] as IList<Document>)
-                {
-                    <div class="carousel-@(counter++ == 1 ? "item active" : "item")">
-                        <img width="100%" height="600px" src="@item.Path" alt="title" asp-append-version="true">
-                        <div class="carousel-caption row">
-                            <div class="col-2">
-                                <a href="/CriminalRecord/DeleteDocument?criminalRecordId=@criminalRecord.Id&documentId=@item.Id" target="_blank"><button type="button" class="btn btn-dark" style="background-color:red;">Delete</button></a>
-                            </div>
-                            <div class="col">
-                                <h2 style="color:lightgreen">Name : @item.Name</h2>
-                            </div>
-                            <div class="col">
-                                <h2 style="color:lightgreen"> @item.AddedDate.ToShortDateString()</h2>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-        </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
+
+<form asp-controller="CriminalRecord" asp-action="AddPolicemanToACriminalRecord">
+    <input type="hidden" name="criminalRecordId" value="@criminalRecord.Id" />
+    <div class="add-policeman" style="display : flex;align-items:center">
+        <input type="text" class=" form-control" name="policemanEmail" placeholder="Email.." id="emailValue" style="width : 90%" />
+
+        <button type="submit" class="record-status-enable" style="margin-left : auto">
+            Add policeman
+        </button>
     </div>
 
-</div>
+    <button type="button" id="myBackButton" style="display:none" class="btn btn-primary btn-sm col-2 " onclick="DisplayNone()"> Undo</button>
+
+</form>
+
+
+
+
+
+
+
+
+
+
+@*<div class="modal fade" id="editDetails" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
 
 
 
@@ -196,7 +151,6 @@
 
     function displayPoliceman(value) {
                 document.getElementById('policemenList').style.display = value;
-                console.log(value);
             }
 
     function DisplayBlock() {
@@ -213,27 +167,39 @@
                 }
 
 
-    function modifyType() {
+    function modifyType(e) {
+        if (e.keyCode == 13) {
+            var myValue = document.getElementById('newValueType').value;
+            $.ajax(
+                {
+                    type: "POST",
+                    url: "/CriminalRecord/ModifyType?newType=" + myValue + "&criminalRecordId=" + "@Model.ElementAt(0).CriminalRecord.Id",
+                    success: function (response) {
+                        $("#type").html('Type : ' + response + ' ');
+                        toggleTypeInput();
+                    }
+                })
+        }
+    }
 
-        var myValue = document.getElementById('newValueType').value;
-        $.ajax(
-            {
-                type: "POST",
-                url: "/CriminalRecord/ModifyType?newType=" + myValue + "&criminalRecordId=" + "@Model.ElementAt(0).CriminalRecord.Id",
-                success: function (response) {
-                    $("#newValueType").html(response);
-                }
-            })  
+    function toggleTypeInput() {
+        var input = $('#newValueType');
+        if (input.css('display') != 'none') {
+            input.css('display', 'none')
+        }
+        else {
+            input.css('display' , 'block')
+        }
     }
 
     function modifyStatusEnable() {
-        $('#recordStatus').html("Record Status : Active");
+        $('#status').html("Status : Active");
             $.ajax({
                 url: "/CriminalRecord/SetStatus?enumValue=1&criminalRecordId=" + "@Model.ElementAt(0).CriminalRecord.Id"
         })
     }
     function modifyStatusDisable() {
-        $('#recordStatus').html("Record Status : Closed");
+        $('#status').html("Status : Closed");
             $.ajax({
                 url: "/CriminalRecord/SetStatus?enumValue=0&criminalRecordId=" + "@Model.ElementAt(0).CriminalRecord.Id"
         })

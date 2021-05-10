@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MIS.BusinessLogic;
@@ -20,11 +21,14 @@ namespace MIS.Controllers
 
         private readonly CriminalRecordService _criminalRecordService;
         private readonly IHostingEnvironment _env;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public CriminalRecordController(CriminalRecordService criminalRecordService, IHostingEnvironment env)
+        public CriminalRecordController(CriminalRecordService criminalRecordService, IHostingEnvironment env,
+            UserManager<IdentityUser> userManager)
         {
             _criminalRecordService = criminalRecordService;
             _env = env;
+            this._userManager = userManager;
         }
 
         public IActionResult Index(SearchFilter searchEngine)
@@ -73,7 +77,8 @@ namespace MIS.Controllers
 
                     CriminalRecordPoliceman criminalRecordPoliceman = new CriminalRecordPoliceman();
                     criminalRecordPoliceman.CriminalRecord = criminalRecord;
-
+                    var user = _userManager.GetUserAsync(User).GetAwaiter().GetResult();
+                    criminalRecordPoliceman.Policeman = _criminalRecordService.GetPolicemanByEmail(user.Email);
                     _criminalRecordService.AddCriminalRecordPoliceman(criminalRecordPoliceman);
 
                     _criminalRecordService.SaveCriminalRecordPoliceman();

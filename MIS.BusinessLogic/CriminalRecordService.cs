@@ -69,6 +69,7 @@ namespace MIS.BusinessLogic
                 var newRecordPoliceman = new CriminalRecordPoliceman();
                 newRecordPoliceman.CriminalRecord = criminalRecord;
                 newRecordPoliceman.Policeman = policeman;
+                newRecordPoliceman.DateWhenWasAdded = DateTime.Now;
 
 
                 if (!(_criminalRecordPoliceman.CheckIfPolicemanWasAdded(newRecordPoliceman)))
