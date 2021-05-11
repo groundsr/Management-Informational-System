@@ -71,7 +71,7 @@
                                 </p>
                                 <div class="row text-center mb-4">
                                     <div class="col col-6">
-                                        <a class="btn btn-primary" asp-route-Id="@obj.Id" asp-controller="policesection" asp-action="Update">
+                                        <a class="btn btn-primary" data-toggle="modal" data-target="#editModal" onclick="loadEditModal('@obj.Id' , '@obj.Name' , '@obj.Address.Street' , '@obj.Address.City' , '@obj.Address.Number')">
                                             Update
                                         </a>
                                     </div>
@@ -93,8 +93,66 @@
     </div>
 </div>
 
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Station</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="Update">
+                    <input id="stationId" name="Id" hidden />
+                    <div class="border p-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label >Name</label>
+                                    </div>
+                                    <div class="col-8 text-center align-items-center justify-content-center">
+                                        <input id="stationName" name="Name" class="form-control" />
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label>Address</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <input id="stationCity" name="Address.City" class="form-control" />
+                                    </div>
+                                    <div class="col-3">
+                                        <input id="stationStreet" name="Address.Street" class="form-control" />
+                                    </div>
+                                    <div class="col-2">
+                                        <input id="stationNumber" name="Address.Number" class="form-control" />
+                                    </div>
+                                </div>
+                                   <button class="btn btn-record-edit" >Update</button>
+                                </div>
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div id="map">
     <script>
+        function loadEditModal(id, name, street , city , number) {
+            $('#stationId').val(id);
+            $('#stationName').val(name);
+            $('#stationStreet').val(street);
+            $('#stationCity').val(city);
+            $('#stationNumber').val(number);
+        }
+
+
         var addresses = [];
         var geocoder;
 
