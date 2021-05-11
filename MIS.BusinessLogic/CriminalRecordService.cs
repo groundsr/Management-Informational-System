@@ -155,9 +155,10 @@ namespace MIS.BusinessLogic
             return (_criminalRecord.CheckIfRecordExists(criminalRecord));
         }
 
-        public IEnumerable<CriminalRecord> SearchUsingEngine(SearchFilter searchFilter)
+        public IEnumerable<CriminalRecord> SearchUsingEngine(SearchFilter searchFilter, Policeman policeman)
         {
-            List<CriminalRecord> criminalRecords = (List<CriminalRecord>)_criminalRecord.GetAll();
+            List<CriminalRecord> criminalRecords = _criminalRecordPoliceman.GetAll().
+                Where(x => x.Policeman == policeman).Select(x => x.CriminalRecord).ToList();
             _searchEngine = new CriminalRecordSearchEngine(criminalRecords, _criminalRecord, _criminalRecordPoliceman);
             return( _searchEngine.Search(searchFilter));
         }

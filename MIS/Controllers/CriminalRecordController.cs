@@ -22,18 +22,22 @@ namespace MIS.Controllers
         private readonly CriminalRecordService _criminalRecordService;
         private readonly IHostingEnvironment _env;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly PolicemanService policemanService;
 
         public CriminalRecordController(CriminalRecordService criminalRecordService, IHostingEnvironment env,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager , PolicemanService policemanService)
         {
             _criminalRecordService = criminalRecordService;
             _env = env;
             this._userManager = userManager;
+            this.policemanService = policemanService;
         }
 
         public IActionResult Index(SearchFilter searchEngine)
         {
-            return View(_criminalRecordService.SearchUsingEngine(searchEngine));
+            var user = _userManager.GetUserAsync(User).GetAwaiter().GetResult();
+            var policeman = policemanService.Get(Guid.Parse(user.Id));
+            return View(_criminalRecordService.SearchUsingEngine(searchEngine , policeman));
         }
 
         public int GetCriminalRecordStatus(Guid criminalRecordId)

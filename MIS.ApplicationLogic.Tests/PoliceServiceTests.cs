@@ -14,10 +14,13 @@ namespace MIS.ApplicationLogic.Tests
     {
         PolicemanService policemanService;
         Mock<IPolicemanRepository> policemanRepository;
+        Mock<IPoliceSectionRepository> policeStationRepository;
+
         public PoliceServiceTests()
         {
             policemanRepository = new Mock<IPolicemanRepository>();
-            policemanService = new PolicemanService(policemanRepository.Object);
+            policeStationRepository = new Mock<IPoliceSectionRepository>();
+            policemanService = new PolicemanService(policemanRepository.Object , policeStationRepository.Object);
         }
 
         [TestMethod]
