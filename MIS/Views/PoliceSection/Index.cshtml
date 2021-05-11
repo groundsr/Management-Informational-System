@@ -164,7 +164,7 @@
                                     <span>@obj.Address.Number</span>
                                 </p>
                                 <div class="row text-center mb-4">
-                                    <div class="col col-6">
+                                    <div class="col col-4">
                                         <a class="btn btn-primary" data-toggle="modal" data-target="#editModal" onclick="loadEditModal('@obj.Id' , '@obj.Name' , '@obj.Address.Street' , '@obj.Address.City' , '@obj.Address.Number')">
                                             Update
                                         </a>
@@ -174,7 +174,7 @@
             Update
         </a>*@
                                     </div>
-                                    <div class="col col-4">
+                                    <div class="col col-8">
                                         <form asp-action="DeletePost" asp-controller="PoliceSection" asp-route-id="@obj.Id">
                                             <button type="submit" class="btn btn-record-ddelete">
                                                 <i class="fas fa-trash" style="font-size : 12px;">
@@ -298,16 +298,7 @@
         })
         }
 
-
-        function loadEditModal(id, name, address, policemen) {
-            $("#editSectionId").val(id)
-            $("#editSectionName").val(name)
-            $("#editSectionAddress").val(address)
-            $("#editPolicemanCount").val(policemen)
-            $('#editPoliceSection').modal('show');
-
-        }
-
+      
         function getPoliceSectionId() {
             var id = document.getElementById('policeSectionId').value;
             return id;
