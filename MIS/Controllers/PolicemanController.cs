@@ -18,6 +18,47 @@ namespace MIS.Controllers
             this.policemanService = policemanService;
             this.policeSectionService = policeSectionService;
         }
+
+        public IActionResult Index(Policeman policeman)
+        {
+            var policemen = policemanService.GetAll();
+            return View(policemen);
+        }
+
+        //public IActionResult GetPolicemen()
+        //{
+        //    var policemen = policemanService.GetAll();
+        //    return View(policemen);
+        //}
+
+        [HttpPost]
+        public IActionResult Create(Policeman policeman)
+        {
+            if (ModelState.IsValid)
+            {
+                policemanService.Add(policeman);
+                return RedirectToAction("Index");
+            }
+            return View(policeman);
+        }
+        [HttpPost]
+        public IActionResult Update(Policeman policeman)
+        {
+            if(ModelState.IsValid)
+            {
+                policemanService.Update(policeman);
+                
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(Guid id)
+        {
+            
+            policemanService.Delete(id);
+            return RedirectToAction("Index");
+        }
+
         public IActionResult AddSubordinate(Guid policemanId, string email, Guid sectionId)
         {
             Policeman policeman = policemanService.Get(policemanId);
