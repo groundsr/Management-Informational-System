@@ -58,7 +58,7 @@ namespace MIS.Tests
             Assert.ThrowsException<Exception>(
                      () =>
                      {
-                         _criminalRecordService.AddPolicemanToCriminalRecord(policeman, criminalRecord);
+                         _criminalRecordService.AddPolicemanToCriminalRecord(null, criminalRecord);
                      });
         }
 
@@ -99,29 +99,13 @@ namespace MIS.Tests
         }
 
         [TestMethod]
-        public void DeleteDocument()
-        {
-            Document document = new Document { Id = Guid.NewGuid(), Name = "TestDocument", AddedDate = DateTime.Now, Path = "TestPath" };
-            CriminalRecord criminalRecord = new CriminalRecord { Id = Guid.NewGuid(), Name = "TestCriminalRecord", };
-
-            criminalRecord.Documents.Add(document);
-        
-            _documentRepository.Setup(x => x.Save());
-
-            _documentRepository.Verify(r => r.Remove(document.Id));
-        }
-
-        [TestMethod]
         public void DeleteCriminalRecord()
         {
             CriminalRecord criminalRecord = new CriminalRecord { Id = Guid.NewGuid(), Name = "TestCriminalRecord", };
-            CriminalRecord criminalRecord2 = new CriminalRecord { Id = Guid.NewGuid(), Name = "TestCriminalRecord1", };
             Guid myGuid = criminalRecord.Id;
-            Guid myGuid2 = criminalRecord2.Id;
-            _criminalRecordsRepository.Setup(x => x.Remove(It.IsAny<Guid>())).Callback<Guid>((myGuid)
-                => _criminalRecordService.RemoveCriminalRecord(myGuid));
 
-                                                    
+            _criminalRecordsRepository.Setup(x => x.Remove(It.IsAny<Guid>())).Callback<Guid>((myGuid)
+                => _criminalRecordService.RemoveCriminalRecord(myGuid));                                       
         }
 
     }

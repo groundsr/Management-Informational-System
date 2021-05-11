@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MIS.BusinessLogic;
+using MIS.BusinessLogic.Filtering;
 using MSI.Model;
 using System;
 using System.Collections.Generic;
@@ -19,17 +20,10 @@ namespace MIS.Controllers
             this.policeSectionService = policeSectionService;
         }
 
-        public IActionResult Index(Policeman policeman)
+        public IActionResult Index(SearchFilter filter)
         {
-            var policemen = policemanService.GetAll();
-            return View(policemen);
+            return View(policemanService.SearchUsingEngine(filter));
         }
-
-        //public IActionResult GetPolicemen()
-        //{
-        //    var policemen = policemanService.GetAll();
-        //    return View(policemen);
-        //}
 
         [HttpPost]
         public IActionResult Create(Policeman policeman)
@@ -46,15 +40,13 @@ namespace MIS.Controllers
         {
             if(ModelState.IsValid)
             {
-                policemanService.Update(policeman);
-                
+                policemanService.Update(policeman);              
             }
             return RedirectToAction("Index");
         }
 
         public IActionResult Delete(Guid id)
-        {
-            
+        {   
             policemanService.Delete(id);
             return RedirectToAction("Index");
         }

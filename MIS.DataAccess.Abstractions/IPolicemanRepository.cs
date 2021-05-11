@@ -9,5 +9,7 @@ namespace MIS.DataAccess.Abstractions
     {
         Policeman GetByUserId(Guid id);
         Policeman GetByEmail(string email);
+        IEnumerable<Policeman> GetPolicemanByName(string name);
+
     }
 }

@@ -32,7 +32,6 @@ namespace MIS.Controllers
             var policeSection = _policeSectionService.Get(id);
             _policeSectionService.AddPoliceToSection(policeSection, email);
             return RedirectToAction("Index");
-
         }
 
         

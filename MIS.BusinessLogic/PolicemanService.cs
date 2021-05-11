@@ -1,4 +1,5 @@
-﻿using MIS.DataAccess.Abstractions;
+﻿using MIS.BusinessLogic.Filtering;
+using MIS.DataAccess.Abstractions;
 using MSI.Model;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ namespace MIS.BusinessLogic
     {
         private readonly IPolicemanRepository policemanRepository;
         private readonly IPoliceSectionRepository policeSectionRepository;
-
         public PolicemanService(IPolicemanRepository policemanRepository, IPoliceSectionRepository policeSectionRepository)
         {
             this.policeSectionRepository = policeSectionRepository;
@@ -33,10 +33,17 @@ namespace MIS.BusinessLogic
 
         }
 
+        public IEnumerable<Policeman> SearchUsingEngine(SearchFilter searchFilter)
+        {
+            List<Policeman> criminalRecords = (List<Policeman>)policemanRepository.GetAll();
+            var _searchEngine = new PolicemanSearchEngine(policemanRepository);
+            return (_searchEngine.Search(searchFilter));
+        }
+
         public void Update(Policeman policeman)
         {
             policemanRepository.Update(policeman);
-            
+
         }
 
         public PoliceSection FindPolicemanSection(Policeman policeman)

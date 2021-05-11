@@ -21,7 +21,7 @@ namespace MIS.BusinessLogic.Filtering
             criminalRecordSearchStrategy["policemanName"] = new SearchCriminalRecordByPolicemanName(_criminalRecordPolicemanRepository, criminalRecords);
             criminalRecordSearchStrategy["criminalRecordsUsingId"] = new SearchCriminalRecordBySection(_criminalRecordRepository, criminalRecords);
         }
-
+            
         public IEnumerable<CriminalRecord> Search(SearchFilter searchFilter,Guid id=new Guid())
         
         {
