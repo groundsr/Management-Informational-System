@@ -17,6 +17,8 @@ namespace MIS.DataAccess
             this.context = context;
         }
 
+
+
         public Policeman GetByEmail(string email)
         {
             return context.Policemen.Where(x => x.Email == email).FirstOrDefault();
