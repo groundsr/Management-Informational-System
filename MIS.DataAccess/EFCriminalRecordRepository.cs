@@ -9,10 +9,10 @@ using System.Text;
 
 namespace MIS.DataAccess
 {
-    public class EFCriminalRecordRepository:EFRepository<CriminalRecord>,ICriminalRecordRepository
+    public class EFCriminalRecordRepository : EFRepository<CriminalRecord>, ICriminalRecordRepository
     {
 
-        public EFCriminalRecordRepository(PoliceContext policeContext):base(policeContext)
+        public EFCriminalRecordRepository(PoliceContext policeContext) : base(policeContext)
         {
 
         }
@@ -50,7 +50,7 @@ namespace MIS.DataAccess
             {
                 IEnumerable<CriminalRecord> criminalRecords = _context.CriminalRecords
                   .Where(x => x.Name.Contains(name));
-                
+
                 return criminalRecords;
 
             }
@@ -62,7 +62,7 @@ namespace MIS.DataAccess
         public void EnableStatus(Guid criminalRecordId)
         {
             CriminalRecord record = _context.CriminalRecords
-                    .Where(x=>x.Id==criminalRecordId)
+                    .Where(x => x.Id == criminalRecordId)
                     .FirstOrDefault();
 
             record.Status = Status.Active;
@@ -70,7 +70,7 @@ namespace MIS.DataAccess
             _context.SaveChanges();
         }
 
-        public void AddDocument(Document document,Guid criminalRecordId)
+        public void AddDocument(Document document, Guid criminalRecordId)
         {
             CriminalRecord criminalRecord = _context.CriminalRecords
                                            .Where(x => x.Id == criminalRecordId)
@@ -82,7 +82,7 @@ namespace MIS.DataAccess
 
         public bool CheckIfRecordExists(CriminalRecord criminalRecord)
         {
-            if(!_context.CriminalRecords.Any(x=>x.Name==criminalRecord.Name))
+            if (!_context.CriminalRecords.Any(x => x.Name == criminalRecord.Name))
             {
                 return false;
             }
@@ -92,6 +92,25 @@ namespace MIS.DataAccess
             }
         }
 
+        public IEnumerable<CriminalRecord> GetCriminalRecordByStatus(string boolFlag)
+        {
+            List<CriminalRecord> criminalRecords;
+
+            if (boolFlag == "true")
+            {
+                criminalRecords = _context.CriminalRecords
+                                .Where(x => x.Status == Status.Active)
+                                .ToList();
+            }
+            else
+            {
+                criminalRecords = _context.CriminalRecords
+                                    .Where(x => x.Status == Status.Closed)
+                                    .ToList();
+            }
+            return criminalRecords;
+        }
+
 
         public int GetStatus(CriminalRecord criminalRecord)
         {
@@ -99,11 +118,11 @@ namespace MIS.DataAccess
                     .Where(x => x.Id == criminalRecord.Id)
                     .FirstOrDefault();
 
-            if(criminalRecordToChange.Status==Status.Active)
+            if (criminalRecordToChange.Status == Status.Active)
             {
                 return 1;
             }
-            else if(criminalRecordToChange.Status==Status.Closed)
+            else if (criminalRecordToChange.Status == Status.Closed)
             {
                 return 0;
             }
@@ -121,15 +140,15 @@ namespace MIS.DataAccess
             return documents;
         }
 
-        public IEnumerable<CriminalRecord> GetCriminalRecordsByName(IEnumerable<CriminalRecord> criminalRecords,string name)
+        public IEnumerable<CriminalRecord> GetCriminalRecordsByName(IEnumerable<CriminalRecord> criminalRecords, string name)
         {
             List<CriminalRecord> filteredList = new List<CriminalRecord>();
             name = name.ToLower();
 
-            foreach(var item in criminalRecords)
+            foreach (var item in criminalRecords)
             {
                 var itemName = item.Name.ToLower();
-                if(itemName.Contains(name))
+                if (itemName.Contains(name))
                 {
                     filteredList.Add(item);
                 }
