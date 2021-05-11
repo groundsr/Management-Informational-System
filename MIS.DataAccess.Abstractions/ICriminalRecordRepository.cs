@@ -16,6 +16,7 @@ namespace MIS.DataAccess.Abstractions
         IEnumerable<CriminalRecord> GetCriminalRecordsByName(IEnumerable<CriminalRecord> criminalRecords, string name);
         IEnumerable<CriminalRecord> GetCriminalRecordBySection(Guid policeSectionId);
         IEnumerable<CriminalRecord> GetCriminalRecordsByNameBySection(Guid id, string name);
+        void EnableStatus(Guid criminalRecordId);
 
 
     }

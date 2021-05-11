@@ -1,6 +1,7 @@
 ﻿using MIS.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MSI.Model
 {
@@ -8,6 +9,7 @@ namespace MSI.Model
     public class CriminalRecord
     {
         public Guid Id { get; set; }
+        [Required]
         public string Name { get; set; }
         public DateTime CreatedOn { get; set; }
         public string Description { get; set; }

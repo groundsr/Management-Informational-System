@@ -37,9 +37,11 @@ namespace MIS.ApplicationLogic.Tests
             Meeting meeting3 = new Meeting() { Id = Guid.NewGuid(), Topic = "Consulting", Start = DateTime.Now, End = DateTime.Now };
             meeting3.Start = meeting3.Start.AddDays(2);
             meeting3.End = meeting3.End.AddDays(2);
+
             MeetingPoliceman meetingPoliceman1 = new MeetingPoliceman() { Id = Guid.NewGuid(), Policeman = policeman, Meeting = meeting1 };
             MeetingPoliceman meetingPoliceman2 = new MeetingPoliceman() { Id = Guid.NewGuid(), Policeman = policeman, Meeting = meeting2 };
             MeetingPoliceman meetingPoliceman3 = new MeetingPoliceman() { Id = Guid.NewGuid(), Policeman = policeman, Meeting = meeting3 };
+            
             List<MeetingPoliceman> meetings = new List<MeetingPoliceman>();
             meetings.Add(meetingPoliceman1);
             meetings.Add(meetingPoliceman2);

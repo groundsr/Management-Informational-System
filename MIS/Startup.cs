@@ -47,9 +47,7 @@ namespace MIS
             services.AddScoped<IMeetingPolicemanRepository, EFMeetingPolicemanRepository>();
             services.AddScoped<IMeetingRepository, EFMeetingRepository>();
             services.AddScoped<IDocumentRepository, EFDocumentRepository>();
-            
-            //services.AddScoped<ISearchEngine, SearchEngine>();
-            //services.AddScoped<ISearchFilter, SearchFilter>();
+           
 
             services.AddScoped<PoliceSectionService>();
             services.AddScoped<MeetingRequestService>();

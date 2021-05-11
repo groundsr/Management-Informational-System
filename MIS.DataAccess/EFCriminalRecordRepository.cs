@@ -58,7 +58,18 @@ namespace MIS.DataAccess
             return null;
 
         }
-         
+
+        public void EnableStatus(Guid criminalRecordId)
+        {
+            CriminalRecord record = _context.CriminalRecords
+                    .Where(x=>x.Id==criminalRecordId)
+                    .FirstOrDefault();
+
+            record.Status = Status.Active;
+            _context.CriminalRecords.Update(record);
+            _context.SaveChanges();
+        }
+
         public void AddDocument(Document document,Guid criminalRecordId)
         {
             CriminalRecord criminalRecord = _context.CriminalRecords

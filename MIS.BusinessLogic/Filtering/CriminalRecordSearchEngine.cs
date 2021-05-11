@@ -23,6 +23,7 @@ namespace MIS.BusinessLogic.Filtering
         }
 
         public IEnumerable<CriminalRecord> Search(SearchFilter searchFilter,Guid id=new Guid())
+        
         {
             try
             {

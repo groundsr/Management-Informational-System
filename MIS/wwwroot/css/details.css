@@ -1,8 +1,8 @@
 ﻿
 #recordStatus {
-    color:black ;
+    color: #374f6b;
     padding: 2px 2px 2px 2px;
-    font-style:oblique;
+    font-style: oblique;
 }
 
 
@@ -12,27 +12,25 @@
     justify - content:center;
 }
 
-#descriptionArea
-{   
-    margin-top:50px;
-    border:groove;
-    padding:10px 10px 10px 10px;
-    font-style:oblique;
-    border-color:darkblue;
-    color:darkblue;
-    font-size:19px;
+#descriptionArea {
+    margin-top: 50px;
+    border: groove;
+    padding: 10px 10px 10px 10px;
+    font-style: oblique;
+    border-color: #374f6b;
+    color: #374f6b;
+    font-size: 19px;
 }
 
-.list-group
-{   
-    color:aliceblue;
-    padding:5px 5px 5px 5px;
-    text-align:center;
+.list-group {
+    color: #374f6b;
+    padding: 5px 5px 5px 5px;
+    text-align: center;
 }
 
 #mySpan {
-    background-color:aliceblue;
-    color: black;
+    background-color: red;
+    color: #374f6b;
     margin-left: 10px;
     margin-right: 10px;
     padding: 5px 5px 5px 5px;
@@ -44,12 +42,11 @@
     cursor:pointer;
 }
 
-.carusel-item
-{
-    height:200rem;
-    background:#777;
-    color:white;
-    position:relative;
+.carusel-item {
+    height: 200rem;
+    background: #374f6b;
+    color: white;
+    position: relative;
 }
 
 #myContainer

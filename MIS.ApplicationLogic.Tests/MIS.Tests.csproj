@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
@@ -16,6 +16,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MIS.BusinessLogic\MIS.BusinessLogic.csproj" />
+    <ProjectReference Include="..\MIS.DataAccess.Abstractions\MIS.DataAccess.Abstractions.csproj" />
+    <ProjectReference Include="..\MIS.DataAccess\MIS.DataAccess.csproj" />
+    <ProjectReference Include="..\MIS\MIS.csproj" />
   </ItemGroup>
 
 </Project>

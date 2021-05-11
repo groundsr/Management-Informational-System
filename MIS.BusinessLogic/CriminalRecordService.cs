@@ -11,6 +11,7 @@ using MIS;
 using MIS.DTOs.BusinessLogic;
 using MIS.BusinessLogic.Filtering;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 
 namespace MIS.BusinessLogic
 {
@@ -22,7 +23,7 @@ namespace MIS.BusinessLogic
         private readonly IPoliceSectionRepository _policeSectionRepository;
         private readonly IDocumentRepository _documentRepository;
         private readonly IHostingEnvironment _env;
-        private  CriminalRecordSearchEngine _searchEngine;
+        private CriminalRecordSearchEngine _searchEngine;
 
         public CriminalRecordService(ICriminalRecordRepository criminalRecord
             , ICriminalRecordPolicemanRepository criminalRecordPoliceman
@@ -39,8 +40,6 @@ namespace MIS.BusinessLogic
 
         }
 
-        public int IdWrapper { get; set; }
-
         public IEnumerable<CriminalRecord> GetAllCriminalRecords()
         {
             return _criminalRecord.GetAll();
@@ -56,8 +55,14 @@ namespace MIS.BusinessLogic
 
         public void AddPolicemanToCriminalRecord(Policeman policeman, CriminalRecord criminalRecord)
         {
+            if(criminalRecord==null||policeman==null)
+            {
+                throw new Exception("Null found");
+            }
+            
             var recordPoliceman = _criminalRecordPoliceman.GetCriminalRecordPoliceman(criminalRecord);
             recordPoliceman.CriminalRecord = criminalRecord;
+            
 
             if (recordPoliceman.Policeman == null)
             {
@@ -69,7 +74,6 @@ namespace MIS.BusinessLogic
                 var newRecordPoliceman = new CriminalRecordPoliceman();
                 newRecordPoliceman.CriminalRecord = criminalRecord;
                 newRecordPoliceman.Policeman = policeman;
-
 
                 if (!(_criminalRecordPoliceman.CheckIfPolicemanWasAdded(newRecordPoliceman)))
                 {
@@ -84,12 +88,24 @@ namespace MIS.BusinessLogic
 
         public void AddCriminalRecord(CriminalRecord criminalRecord)
         {
-            _criminalRecord.Add(criminalRecord);
+            if (criminalRecord.Name == null||criminalRecord.Type==null||criminalRecord.Description.Length<20)
+            {
+                throw new Exception("Null or minLength");
+            }
+            else
+            {
+                _criminalRecord.Add(criminalRecord);
+            }
         }
 
         public IEnumerable<CriminalRecordPoliceman> GetCriminalRecordPolicemenById(Guid id)
         {
             return _criminalRecordPoliceman.GetCriminalRecordPolicemenByRecordId(id);
+        }
+
+        public List<CriminalRecordPoliceman> GetAllCriminalRecordsPoliceman()
+        {
+            return (List<CriminalRecordPoliceman>)_criminalRecordPoliceman.GetAll().AsEnumerable();
         }
 
         public IEnumerable<CriminalRecordPoliceman> GetAllCriminalRecordsPoliceman(CriminalRecord criminalRecord)
@@ -98,11 +114,6 @@ namespace MIS.BusinessLogic
                 (List<CriminalRecordPoliceman>)_criminalRecordPoliceman.GetAll();
 
             return criminalRecordPolicemen;
-        }
-
-        public void RemoveDocuments(Guid id)
-        {
-           
         }
 
         public void SaveCriminalRecord()
@@ -211,15 +222,12 @@ namespace MIS.BusinessLogic
            return( _policemanRepository.GetByEmail(email));
         }
 
-        public void EnableStatus(int enumValue,Guid criminalRecordId)
+        public void EnableStatus(Guid criminalRecordId)
         {
-            CriminalRecord record=_criminalRecord.Get(criminalRecordId);
-            record.Status = Status.Active;
-            _criminalRecord.Update(record);
-            _criminalRecord.Save();
+            _criminalRecord.EnableStatus(criminalRecordId);
         }
 
-        public void DisableStatus(int enumValue,Guid criminalRecordId)
+        public void DisableStatus(Guid criminalRecordId)
         {
             CriminalRecord record = _criminalRecord.Get(criminalRecordId);
 
@@ -271,10 +279,16 @@ namespace MIS.BusinessLogic
         {
             Document document = new Document();
 
-            document.Name = documentDTO.Name;
-            document.AddedDate = DateTime.Now;
-            document.Path = documentDTO.Path;
-
+            if (documentDTO.Name == null)
+            {
+                throw new Exception("Null exception");
+            }
+            else
+            {
+                document.Name = documentDTO.Name;
+                document.AddedDate = DateTime.Now;
+                document.Path = documentDTO.Path;
+            }
             _documentRepository.Add(document);
             _documentRepository.Save();
 
