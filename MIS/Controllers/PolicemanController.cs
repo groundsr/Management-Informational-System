@@ -52,6 +52,7 @@ namespace MIS.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
         public IActionResult Delete(Guid id)
         {
             
