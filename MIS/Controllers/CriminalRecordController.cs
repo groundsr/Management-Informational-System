@@ -33,6 +33,7 @@ namespace MIS.Controllers
 
         public IActionResult Index(SearchFilter searchEngine)
         {
+            
             return View(_criminalRecordService.SearchUsingEngine(searchEngine));
         }
 
