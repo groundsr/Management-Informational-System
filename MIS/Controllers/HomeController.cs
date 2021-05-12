@@ -14,16 +14,26 @@ namespace MIS.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<IdentityUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager)
+        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _logger = logger;
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         public IActionResult Index()
         {
             var user = userManager.GetUserAsync(User).GetAwaiter().GetResult();
+            if(roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult() == false)
+            {
+                var adminRole = new IdentityRole();
+                adminRole.Name = "Admin";
+                adminRole.NormalizedName = "ADMIN";
+                roleManager.CreateAsync(adminRole).GetAwaiter().GetResult();
+            }
             var admins = userManager.GetUsersInRoleAsync("Admin").GetAwaiter().GetResult();
             if (admins.Count == 0)
             {
