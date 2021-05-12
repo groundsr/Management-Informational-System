@@ -2,6 +2,8 @@
 @using Microsoft.AspNetCore.Identity
 @inject UserManager<IdentityUser> userManager
 @inject SignInManager<IdentityUser> signInManager;
+
+
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -33,7 +35,7 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if (signInManager.IsSignedIn(User))
                         {
-                            @if (userManager.IsInRoleAsync(userManager.GetUserAsync(User).GetAwaiter().GetResult(), "Admin").GetAwaiter().GetResult())
+                                @if (userManager.IsInRoleAsync(userManager.GetUserAsync(User).GetAwaiter().GetResult(), "Admin").GetAwaiter().GetResult())
                             {
 
                                 <li class="nav-item">

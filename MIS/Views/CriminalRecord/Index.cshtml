@@ -1,33 +1,68 @@
 ﻿@using MSI.Model
 @model IEnumerable<MSI.Model.CriminalRecord>
 
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> userManager
+@inject SignInManager<IdentityUser> signInManager
+
 <script src="~/lib/jquery/dist/jquery.js"></script>
 @{
     ViewData["Title"] = "Index";
 }
 
+@if (signInManager.IsSignedIn(User))
+{
+    @if (userManager.IsInRoleAsync(userManager.GetUserAsync(User).GetAwaiter().GetResult(), "Admin").GetAwaiter().GetResult())
+    {
+        <div class="d-inline-flex p-md-5">
+            <form asp-controller="CriminalRecord" asp-action="Index" method="get" id="searchFormAdmin">
+                <div class="search">
+                    <input type="search" class="search-input" placeholder="Policeman..." name="Term">
+                    <input type="hidden" class="search-input" placeholder="Policeman..." name="Name" value="policemanName">
+                    <button type="submit" class="search-icon" value="Filter">
+                        <i class="fa fa-search"> </i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <partial name="_Records" />
+        <div class="modal fade" id="editCriminalRecord" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form asp-controller="CriminalRecord" asp-action="EditCriminalRecord">
+                            <partial name="_EditAndBackToList" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+    else
+    {
 <div class="records-header">
     <div class="btn-police dropdown">
         <a id="dropdownMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-button dropdown-toggle">Records</a>
         <ul aria-labelledby="dropdownMenu1" class="dropdown-menu border-0 shadow">
-                <li><a href="#" class="dropdown-item" data-toggle="modal" data-target="#addRecord">Add </a></li>
-                <li><a href="#" class="dropdown-item" onclick="activateSearchForAll()" > Search by Criminal Record </a></li>
-                <li><a href="#" class="dropdown-item" onclick="activateSearchForAdmin()"> Search by Policeman </a></li>
-                <li><a href="#" class="dropdown-item" >Add </a></li>
-                 <li class="dropdown-divider"></li>
+            <li><a href="#" class="dropdown-item" data-toggle="modal" data-target="#addRecord">Add </a></li>
+            <li><a href="#" class="dropdown-item" onclick="activateSearchForAll()"> Search by Criminal Record </a></li>
+            <li><a href="#" class="dropdown-item" onclick="activateSearchForAdmin()"> Search by Policeman </a></li>
+            <li><a href="#" class="dropdown-item">Add </a></li>
+            <li class="dropdown-divider"></li>
 
             <li class="dropdown-submenu">
                 <a id="dropdownMenu2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle" style="cursor:pointer">Status </a>
                 <ul aria-labelledby="dropdownMenu2" class="dropdown-menu border-0 shadow">
-                        
-                        @*<li><  name="Term" value="true"  class="dropdown-item">Active</a></li>
+
+                    @*<li><  name="Term" value="true"  class="dropdown-item">Active</a></li>
                         <li><a asp-controller="CriminalRecord" asp-action="Index" name="Term" value="false" class="dropdown-item">Closed</a></li>*@
                     <form a asp-controller="CriminalRecord" asp-action="Index" method="get">
                         <button type="submit" name="Term" value="true" class="btn btn-primary"> Active</button>
                         <button type="submit" name="Term" value="false" class="btn btn-danger"> Closed</button>
                         <input type="hidden" name="Name" value="status" class="dropdown-item">
                     </form>
-                     
+
                 </ul>
             </li>
 
@@ -44,25 +79,13 @@
                 </button>
             </div>
         </form>
-    </div>  
+    </div>
 
-    <div class="d-inline-flex p-md-5">
-        <form asp-controller="CriminalRecord" asp-action="Index" method="get" id="searchFormAdmin"  style="display:none">
-            <div class="search">
-                <input type="search" class="search-input" placeholder="Policeman..." name="Term">
-                <input type="hidden" class="search-input" placeholder="Policeman..." name="Name" value="policemanName">
-                <button type="submit" class="search-icon" value="Filter">
-                    <i class="fa fa-search"> </i>
-                </button>
-            </div>
-        </form>
-    </div> 
-    
+
+
 </div>
 
 <partial name="_Records" />
-
-
 <div class="modal fade" id="editCriminalRecord" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -89,7 +112,6 @@
                         <label for="Type">Type</label>
                         <input type="text" class="form-control" id="Type" placeholder="Type" name="Type">
                     </div>
-
                     <div class="form-group">
                         <label for="Description">Description</label>
                         <textarea class="form-control" id="Description" rows="3" placeholder="Description.." name="Description"></textarea>
@@ -100,13 +122,15 @@
         </div>
     </div>
 </div>
+    }
+}
 <script>
 
 
 
 
 
-function next(id) {
+    function next(id) {
         $.ajax(
             {
                 url: "CriminalRecord/Details?recordId=" + id,
@@ -127,14 +151,14 @@ function next(id) {
         document.getElementById('searchFormSection').style.display = 'block';
     }
 
-function loadEditModal(id, name, description, type) {
+    function loadEditModal(id, name, description, type) {
         $("#editRecordId").val(id)
         $("#editRecordName").val(name)
         $("#editRecordDescription").val(description)
         $("#editRecordType").val(type)
     }
 
-function getRecordId() {
+    function getRecordId() {
         var id = document.getElementById('recordId').value;
         return id;
     }
@@ -147,7 +171,7 @@ function getRecordId() {
 
 
 
-function showList(value) {
+    function showList(value) {
         console.log(4);
         $('#testInput').val(value);
         var value = document.getElementById('testInput').value;
