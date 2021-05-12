@@ -34,26 +34,23 @@
             <span style="color : #3367d6">></span> Created : @criminalRecord.CreatedOn.ToShortDateString()
         </div>
     </div>
-    <div class="record-documents">
-        <div class="record-documents-header">
-            <div class="record-documents-text">Documents</div>
-            <div class="record-documents-add" data-target="#documentModal" data-toggle="modal">Add Document</div>
-        </div>
-        @foreach (var item in ViewData["documents"] as IList<Document>)
-        {
-            <div class="record-document">
-                <img class="record-document-photo" src="@item.Path" alt="title" asp-append-version="true">
-                <div class="record-document-info">
-                    <div class="record-document-name">@item.Name</div>
-                    <div class="record-document-date"> @item.AddedDate.ToShortDateString()</div>
-                    <a class="record-document-delete" href="/CriminalRecord/DeleteDocument?criminalRecordId=@criminalRecord.Id&documentId=@item.Id" target="_blank">Delete</a>
-                </div>
-            </div>
-        }
 
-    </div>
 </div>
-<table class="table table-striped" style="margin-top : 50px">
+
+<form asp-controller="CriminalRecord" asp-action="AddPolicemanToACriminalRecord" class="add-policeman-form">
+    <input type="hidden" name="criminalRecordId" value="@criminalRecord.Id" />
+    <div class="add-policeman" >
+        <input type="text" class=" form-control" name="policemanEmail" placeholder="Email.." id="emailValue" style="width : 90%" />
+
+        <button type="submit" class="record-status-enable" style="margin-left : auto">
+            Add policeman
+        </button>
+    </div>
+
+    <button type="button" id="myBackButton" style="display:none" class="btn btn-primary btn-sm col-2 " onclick="DisplayNone()"> Undo</button>
+
+</form>
+<table class="table table-striped" >
     <thead>
         <tr>
 
@@ -79,6 +76,9 @@
         }
     </tbody>
 </table>
+
+
+
 
 <div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -108,25 +108,29 @@
 </div>
 
 
-<form asp-controller="CriminalRecord" asp-action="AddPolicemanToACriminalRecord">
-    <input type="hidden" name="criminalRecordId" value="@criminalRecord.Id" />
-    <div class="add-policeman" style="display : flex;align-items:center">
-        <input type="text" class=" form-control" name="policemanEmail" placeholder="Email.." id="emailValue" style="width : 90%" />
 
-        <button type="submit" class="record-status-enable" style="margin-left : auto">
-            Add policeman
-        </button>
+
+
+
+
+<div class="record-documents">
+    <div class="record-documents-header">
+        <div class="record-documents-text">Documents</div>
+        <div class="record-documents-add" data-target="#documentModal" data-toggle="modal">Add Document</div>
     </div>
+    @foreach (var item in ViewData["documents"] as IList<Document>)
+    {
+        <div class="record-document">
+            <img class="record-document-photo" src="@item.Path" alt="title" asp-append-version="true" onclick="loadPhoto('@item.Path')">
+            <div class="record-document-info">
+                <div class="record-document-name">@item.Name</div>
+                <div class="record-document-date"> @item.AddedDate.ToShortDateString()</div>
+                <a class="record-document-delete" href="/CriminalRecord/DeleteDocument?criminalRecordId=@criminalRecord.Id&documentId=@item.Id" target="_blank">Delete</a>
+            </div>
+        </div>
+    }
 
-    <button type="button" id="myBackButton" style="display:none" class="btn btn-primary btn-sm col-2 " onclick="DisplayNone()"> Undo</button>
-
-</form>
-
-
-
-
-
-
+</div>
 
 
 
@@ -204,7 +208,10 @@
                 url: "/CriminalRecord/SetStatus?enumValue=0&criminalRecordId=" + "@Model.ElementAt(0).CriminalRecord.Id"
         })
     }
-
+    function loadPhoto(path) {
+        console.log(path.slice(1))
+        window.location.href = '/' + path.slice(2);
+    }
 
 
     //function setEnable(int id) {

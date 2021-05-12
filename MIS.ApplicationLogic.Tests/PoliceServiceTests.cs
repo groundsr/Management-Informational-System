@@ -19,7 +19,7 @@ namespace MIS.ApplicationLogic.Tests
         {
             policemanRepository = new Mock<IPolicemanRepository>();
             policeStationRepository = new Mock<IPoliceSectionRepository>();
-            policemanService = new PolicemanService(policemanRepository.Object,policeStationRepository.Object);
+            policemanService = new PolicemanService(policemanRepository.Object , policeStationRepository.Object);
         }
 
         [TestMethod]
