@@ -34,6 +34,14 @@ namespace MIS.Controllers
                 adminRole.NormalizedName = "ADMIN";
                 roleManager.CreateAsync(adminRole).GetAwaiter().GetResult();
             }
+            if (roleManager.RoleExistsAsync("Policeman").GetAwaiter().GetResult() == false)
+            {
+                var adminRole = new IdentityRole();
+                adminRole.Name = "Policeman";
+                adminRole.NormalizedName = "POLICEMAN";
+                roleManager.CreateAsync(adminRole).GetAwaiter().GetResult();
+            }
+
             var admins = userManager.GetUsersInRoleAsync("Admin").GetAwaiter().GetResult();
             if (admins.Count == 0)
             {
