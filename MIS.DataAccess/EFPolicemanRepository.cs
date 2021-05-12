@@ -18,6 +18,14 @@ namespace MIS.DataAccess
         }
 
 
+        public IEnumerable<Policeman> GetPolicemanByName(string name)
+        {
+            List<Policeman> policemen = (List<Policeman>)_context.Policemen
+                                .Where(x => x.Name.Contains(name))
+                                .ToList();
+
+            return policemen;
+        }
 
         public Policeman GetByEmail(string email)
         {

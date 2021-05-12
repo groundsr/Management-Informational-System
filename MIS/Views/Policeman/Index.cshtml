@@ -10,13 +10,19 @@
                 </a>
             </div>*@
             <div class="col col-8 text-center" style="width:400px; margin-left:auto">
-                <form asp-controller="Service" asp-action="Index" id="textsearch" method="get">
+                <form asp-controller="Policeman" asp-action="Index" id="textsearch" method="get">
                     <div class="input-group rounded">
                         <input type="text" class="form-control rounded" placeholder="Search" aria-label="Search"
-                               aria-describedby="search-addon" name="searchString" />
-                        <span class="input-group-text border-0" id="search-addon">
+                               aria-describedby="search-addon" name="Term" />
+                        <input type="hidden" class="search-input" placeholder="Search..." name="Name" value="searchPoliceman">
+
+                        <button type="submit" class="input-group-text border-0" id="search-addon"  value="Filter">
+                            <i class="fa fa-search"> </i>
+                        </button>
+
+                        @*<span >
                             <i class="fas fa-search"></i>
-                        </span>
+                        </span>*@
                     </div>
                 </form>
             </div>
