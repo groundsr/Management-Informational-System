@@ -117,20 +117,20 @@ namespace MIS.Controllers
             return View(policeSection);
         }
 
-        public IActionResult Delete(Guid id)
-        {
+        //public IActionResult Delete(Guid id)
+        //{
 
 
-            PoliceSection policeSection = _policeSectionService.Get(id);
+        //    PoliceSection policeSection = _policeSectionService.Get(id);
 
-            if (policeSection == null)
-            {
-                return NotFound();
-            }
+        //    if (policeSection == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(policeSection);
+        //    return View(policeSection);
 
-        }
+        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]

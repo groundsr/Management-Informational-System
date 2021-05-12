@@ -57,9 +57,13 @@
                             <i class="far fa-edit" style="font-size : 12px;"></i>Update</a>
                     </td>
                     <td>
-                            <a class="btn btn-record-delete" asp-route-Id="@obj.Id" asp-controller="Policeman" asp-action="Delete">
-                                Delete
-                            </a>
+                        <form asp-action="Delete" asp-controller="Policeman" asp-route-id="@obj.Id">
+                            <button type="submit" class="btn btn-record-delete">
+                                <i class="fas fa-trash" style="font-size : 12px;">
+
+                                </i> Delete
+                            </button>
+                        </form>
                     </td>
                 </tr>
             }

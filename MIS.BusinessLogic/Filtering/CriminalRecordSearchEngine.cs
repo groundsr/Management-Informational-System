@@ -10,11 +10,12 @@ namespace MIS.BusinessLogic.Filtering
     public class CriminalRecordSearchEngine
     {
         private readonly IDictionary<string,ISearchStrategy<CriminalRecord>> criminalRecordSearchStrategy=new Dictionary<string,ISearchStrategy<CriminalRecord>>();
-        
+        private readonly IEnumerable<CriminalRecord> criminalRecords;
         private readonly ICriminalRecordRepository _criminalRecordRepository;
         private readonly ICriminalRecordPolicemanRepository _criminalRecordPolicemanRepository;
         public CriminalRecordSearchEngine(IEnumerable<CriminalRecord> criminalRecords, ICriminalRecordRepository criminalRecordRepository, ICriminalRecordPolicemanRepository criminalRecordPolicemanRepository)
         {
+            this.criminalRecords = criminalRecords;
             this._criminalRecordRepository = criminalRecordRepository;
             _criminalRecordPolicemanRepository = criminalRecordPolicemanRepository;
             criminalRecordSearchStrategy["recordName"] = new SearchCriminalRecordByName(_criminalRecordRepository, criminalRecords);
@@ -45,7 +46,7 @@ namespace MIS.BusinessLogic.Filtering
             {
 
             }
-            return (IReadOnlyCollection<CriminalRecord>)_criminalRecordRepository.GetAll();
+            return criminalRecords;
         }
     }
 }

@@ -13,12 +13,32 @@
         width: 100%;
         height: 400px;
     }
+
+    .btn-record-eddit {
+        background-color: #F8F6FE;
+        border-radius: 4px;
+        display:inline-block;
+        color: #777;
+        font-size: 15.5px;
+        
+        margin-right: 10px;
+    }
+
+    .btn-record-ddelete {
+        background-color: #fff;
+        
+
+        border-radius :4px;
+
+        font-size: 17px;
+        
+    }
 </style>
 
 <div class="container mt-4 mb-5">
     <div class="row text-center">
         <div class="col col-4 text-center">
-            <a class="btn btn-primary text-center" asp-controller="PoliceSection" asp-action="Create" style="width:150px">
+            <a class="btn btn-primary text-center" data-toggle="modal" data-target="#addStation" asp-controller="PoliceSection"  style="width:150px">
                 <h4>Create</h4>
             </a>
         </div>
@@ -37,9 +57,83 @@
     </div>
 </div>
 
+<div class="modal fade" id="addStation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form asp-controller="PoliceSection" asp-action="Create">
+                    <div class="form-group">
+                        <label for="Name">Name</label>
+                        <input type="text" class="form-control" id="Name" placeholder="Name" name="Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="Address">Address</label>
+                        <div class="form-group row">
+                            <div class="col-4">
+                                <input type="text" class="form-control" id="Type" placeholder="City" name="Address.City">
+                            </div>
+                            <div class="col-4">
+                                <input type="text" class="form-control" id="Type" placeholder="Street" name="Address.Street">
+                            </div>
+                            <div class="col-4">
+                                <input type="text" class="form-control" id="Type" placeholder="Number" name="Address.Number">
+                            </div>
+                        </div>
+                        @*<input type="text" class="form-control" id="Type" placeholder="Type" name="Type">*@
+                    </div>
+                    <div class="form-group">
+                        <label for="RootPoliceman.Email">Email</label>
+                        <input type="text" class="form-control" id="Name" placeholder="Email" name="email">
+                    </div>
+                    <button class="btn btn-police btn-police-rounded">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
+<div class="modal fade" id="editPoliceStation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form asp-controller="PoliceSection" asp-action="Update">
+                    <input type="hidden" name="Id" id="editPoliceSection" />
+                    <div class="form-group">
+                        <label for="Name">Name</label>
+                        <input type="text" class="form-control" id="editPoliceSectionName" placeholder="Name" name="Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="Address">Address</label>
+                        <div class="form-group row" id="editPoliceSectionAddress">
+                            <div class="col-4">
+                                <input type="text" class="form-control" id="City" placeholder="City" name="Address.City">
+                            </div>
+                            <div class="col-4">
+                                <input type="text" class="form-control" id="Street" placeholder="Street" name="Address.Street">
+                            </div>
+                            <div class="col-4">
+                                <input type="text" class="form-control" id="Number" placeholder="Number" name="Address.Number">
+                            </div>
+                        </div>
+                        @*<input type="text" class="form-control" id="editPoliceSectionAddress" placeholder="Type" name="Type">*@
+                    </div>
+                    <div class="form-group">
+                        <label for="Policemen">Policemen</label>
+                        <input type="text" class="form-control" id="editPoliceSectionPolicemen" placeholder="Policemen" name="Policemen.Count">
+                    </div>
+
+                    @*<div class="form-group">
+            <label for="Description">Description</label>
+            <textarea class="form-control" id="editRecordDescription" rows="3" placeholder="Description.." name="Description"></textarea>
+        </div>*@
+                    <button class="btn btn-police btn-police-rounded">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -70,15 +164,27 @@
                                     <span>@obj.Address.Number</span>
                                 </p>
                                 <div class="row text-center mb-4">
-                                    <div class="col col-6">
-                                        <a class="btn btn-primary" asp-route-Id="@obj.Id" asp-controller="policesection" asp-action="Update">
+                                    <div class="col col-4">
+                                        <a class="btn btn-primary" data-toggle="modal" data-target="#editModal" onclick="loadEditModal('@obj.Id' , '@obj.Name' , '@obj.Address.Street' , '@obj.Address.City' , '@obj.Address.Number')">
                                             Update
                                         </a>
+
+
+                                        @*<a class="btn btn-primary" asp-route-Id="@obj.Id" asp-controller="policesection" asp-action="Update">
+            Update
+        </a>*@
                                     </div>
-                                    <div class="col col-4">
-                                        <a class="btn btn-danger" asp-route-Id="@obj.Id" asp-controller="policesection" asp-action="Delete">
-                                            Delete
-                                        </a>
+                                    <div class="col col-8">
+                                        <form asp-action="DeletePost" asp-controller="PoliceSection" asp-route-id="@obj.Id">
+                                            <button type="submit" class="btn btn-record-ddelete">
+                                                <i class="fas fa-trash" style="font-size : 12px;">
+
+                                                </i> Delete
+                                            </button>
+                                        </form>
+                                        @*<a class="btn btn-danger" asp-route-Id="@obj.Id" asp-controller="PoliceSection" asp-action="DeletePost">
+            Delete
+        </a>*@
                                     </div>
                                 </div>
                                 <a asp-controller="policesection" asp-action="Hierarchy" asp-route-Id="@obj.Id" class="btn btn-light">Go to section</a>
@@ -93,8 +199,66 @@
     </div>
 </div>
 
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Station</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="Update">
+                    <input id="stationId" name="Id" hidden />
+                    <div class="border p-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label >Name</label>
+                                    </div>
+                                    <div class="col-8 text-center align-items-center justify-content-center">
+                                        <input id="stationName" name="Name" class="form-control" />
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label>Address</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <input id="stationCity" name="Address.City" class="form-control" />
+                                    </div>
+                                    <div class="col-3">
+                                        <input id="stationStreet" name="Address.Street" class="form-control" />
+                                    </div>
+                                    <div class="col-2">
+                                        <input id="stationNumber" name="Address.Number" class="form-control" />
+                                    </div>
+                                </div>
+                                   <button class="btn btn-record-edit" >Update</button>
+                                </div>
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div id="map">
     <script>
+        function loadEditModal(id, name, street , city , number) {
+            $('#stationId').val(id);
+            $('#stationName').val(name);
+            $('#stationStreet').val(street);
+            $('#stationCity').val(city);
+            $('#stationNumber').val(number);
+        }
+
+
         var addresses = [];
         var geocoder;
 
@@ -125,23 +289,19 @@
                                         lng: results[0].geometry.location.lng()
                                     }
                                 });
-                                //console.log(results[0].geometry.location.lng())
                             } else {
                                 alert('Geocode was not successful for the following reason: ' + status);
                             }
                         })
-
-                //     $.ajax({
-                //    url: "https://maps.googleapis.com/maps/api/geocode/json?address=" + addresses[i].number + "+" + addresses[i].street + ",+" + addresses[i].city + ",+RO&key=AIzaSyBBoMY_7eHfch0A4ZJMQwIaxflMamkJpto",
-                //    function(data) {
-                //        console.log(url);
-                //        console.log(data);
-                //    }
-                //})
                 }
             }
-
         })
+        }
+
+      
+        function getPoliceSectionId() {
+            var id = document.getElementById('policeSectionId').value;
+            return id;
         }
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBoMY_7eHfch0A4ZJMQwIaxflMamkJpto&callback=initMap"
