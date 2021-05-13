@@ -81,6 +81,7 @@ namespace MIS.Controllers
 
                     CriminalRecordPoliceman criminalRecordPoliceman = new CriminalRecordPoliceman();
                     criminalRecordPoliceman.CriminalRecord = criminalRecord;
+                    criminalRecordPoliceman.DateWhenWasAdded = DateTime.Now;
                     var user = _userManager.GetUserAsync(User).GetAwaiter().GetResult();
                     criminalRecordPoliceman.Policeman = _criminalRecordService.GetPolicemanByEmail(user.Email);
                     _criminalRecordService.AddCriminalRecordPoliceman(criminalRecordPoliceman);

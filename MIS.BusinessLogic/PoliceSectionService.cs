@@ -56,7 +56,8 @@ namespace MIS.BusinessLogic
 
         public IEnumerable<CriminalRecord> GetCriminalRecordsByNameBySection(Guid id, SearchFilter searchedRecord)
         {
-            IEnumerable<CriminalRecord> criminalRecords = _criminalRecordRepository.GetAll();
+            var policemen = Get(id).Policemen;
+            var criminalRecords = _criminalRecordRepository.GetAll();
             CriminalRecordSearchEngine criminalRecordSearchEngine = new CriminalRecordSearchEngine(criminalRecords, _criminalRecordRepository, _criminalRecordPoliceman);
            return (criminalRecordSearchEngine.Search(searchedRecord,id));
         }
