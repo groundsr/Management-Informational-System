@@ -44,8 +44,6 @@ namespace MIS.Controllers
             {
 
             }
-
-
             return View(_criminalRecordService.SearchUsingEngine(searchEngine, policeman));
         }
 

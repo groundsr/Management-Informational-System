@@ -15,7 +15,7 @@ namespace MIS.BusinessLogic.Filtering
         public PoliceSectionSearchEngine(IEnumerable<PoliceSection> policeSections, IPoliceSectionRepository policeSectionRepository)
         {
             _policeSectionRepository = policeSectionRepository;
-            policeSectionSearchStrategy["searchByName"] = new SearchPoliceSectionByName(policeSectionRepository, policeSections);
+            policeSectionSearchStrategy["searchByName"] = new SearchPoliceSectionByName(policeSectionRepository);
         }
 
         public IEnumerable<PoliceSection> Search(SearchFilter searchFilter)

@@ -9,12 +9,10 @@ namespace MIS.BusinessLogic.Filtering.Filters
     public class SearchPoliceSectionByName:ISearchStrategy<PoliceSection>
     {
         private readonly IPoliceSectionRepository _policeSectionRepository;
-        private readonly IEnumerable<PoliceSection> _policeSections;
 
-        public SearchPoliceSectionByName(IPoliceSectionRepository policeSectionRepository, IEnumerable<PoliceSection> policeSections)
+        public SearchPoliceSectionByName(IPoliceSectionRepository policeSectionRepository)
         {
             _policeSectionRepository = policeSectionRepository;
-            _policeSections = policeSections;
         }
 
         public IEnumerable<PoliceSection> Search(string term)
