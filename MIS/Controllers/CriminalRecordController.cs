@@ -25,7 +25,7 @@ namespace MIS.Controllers
         private readonly PolicemanService policemanService;
 
         public CriminalRecordController(CriminalRecordService criminalRecordService, IHostingEnvironment env,
-            UserManager<IdentityUser> userManager , PolicemanService policemanService)
+            UserManager<IdentityUser> userManager, PolicemanService policemanService)
         {
             _criminalRecordService = criminalRecordService;
             _env = env;
@@ -36,8 +36,15 @@ namespace MIS.Controllers
         public IActionResult Index(SearchFilter searchEngine)
         {
             var user = _userManager.GetUserAsync(User).GetAwaiter().GetResult();
+            
             var policeman = policemanService.Get(Guid.Parse(user.Id));
-            return View(_criminalRecordService.SearchUsingEngine(searchEngine , policeman));
+            var admin =  _userManager.FindByIdAsync(user.Id);
+
+            if(policeman!=null)
+            {
+
+            }
+            return View(_criminalRecordService.SearchUsingEngine(searchEngine, policeman));
         }
 
         public int GetCriminalRecordStatus(Guid criminalRecordId)
@@ -57,7 +64,7 @@ namespace MIS.Controllers
             }
             else if (enumValue == 1)
             {
-                _criminalRecordService.EnableStatus( criminalRecordId);
+                _criminalRecordService.EnableStatus(criminalRecordId);
             }
             return RedirectToAction("Details", new { recordId = criminalRecordId });
         }
@@ -81,8 +88,12 @@ namespace MIS.Controllers
 
                     CriminalRecordPoliceman criminalRecordPoliceman = new CriminalRecordPoliceman();
                     criminalRecordPoliceman.CriminalRecord = criminalRecord;
+                    
+                    criminalRecordPoliceman.DateWhenWasAdded = DateTime.Now;
                     var user = _userManager.GetUserAsync(User).GetAwaiter().GetResult();
+
                     criminalRecordPoliceman.Policeman = _criminalRecordService.GetPolicemanByEmail(user.Email);
+
                     _criminalRecordService.AddCriminalRecordPoliceman(criminalRecordPoliceman);
 
                     _criminalRecordService.SaveCriminalRecordPoliceman();
@@ -108,10 +119,19 @@ namespace MIS.Controllers
             List<CriminalRecordPoliceman> criminalRecordPolicemenList =
                 (List<CriminalRecordPoliceman>)_criminalRecordService.GetCriminalRecordPolicemenById(id);
 
+            List<Document> documents = (List<Document>)_criminalRecordService.GetDocuments(id);
+
+
             for (int i = 0; i < criminalRecordPolicemenList.Count; i++)
             {
                 _criminalRecordService.RemoveCriminalRecordPoliceman(criminalRecordPolicemenList[i].Id);
             }
+
+            for (int i = 0; i < documents.Count; i++)
+            {
+                _criminalRecordService.DeleteDocument(documents[i].Id);
+            }
+
 
             _criminalRecordService.SaveCriminalRecordPoliceman();
 

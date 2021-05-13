@@ -52,7 +52,7 @@
                     <td>
                         <i  onclick="next('@obj.Id')"></i>
                         
-                            <a href="#editPoliceman" class="btn btn-record-edit" 
+                            <a data-target="#editPolicemanModal" data-toggle="modal" class="btn btn-record-edit" 
                                onclick="loadEditModal('@obj.Id', '@obj.Name', '@obj.Email')">
                             <i class="far fa-edit" style="font-size : 12px;"></i>Update</a>
                     </td>
@@ -71,7 +71,7 @@
         </tbody>
     </table>
 
-    <div class="modal fade" id="editPoliceman" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editPolicemanModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-body">

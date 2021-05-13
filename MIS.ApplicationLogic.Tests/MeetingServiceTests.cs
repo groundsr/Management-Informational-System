@@ -41,7 +41,7 @@ namespace MIS.ApplicationLogic.Tests
             MeetingPoliceman meetingPoliceman1 = new MeetingPoliceman() { Id = Guid.NewGuid(), Policeman = policeman, Meeting = meeting1 };
             MeetingPoliceman meetingPoliceman2 = new MeetingPoliceman() { Id = Guid.NewGuid(), Policeman = policeman, Meeting = meeting2 };
             MeetingPoliceman meetingPoliceman3 = new MeetingPoliceman() { Id = Guid.NewGuid(), Policeman = policeman, Meeting = meeting3 };
-            
+
             List<MeetingPoliceman> meetings = new List<MeetingPoliceman>();
             meetings.Add(meetingPoliceman1);
             meetings.Add(meetingPoliceman2);
@@ -52,16 +52,13 @@ namespace MIS.ApplicationLogic.Tests
             var groupedMeetings = meetingService.GetCurrentMonthMeetings(policeman);
 
             //assert
-            if (groupedMeetings != null && groupedMeetings.Count() > 1)
+            for (int i = 1; i < groupedMeetings.Count(); i++)
             {
-                for (int i = 1; i < groupedMeetings.Count(); i++)
-                {
-                    Assert.AreNotEqual(groupedMeetings.ElementAt(i).ElementAt(0).Start.Day, groupedMeetings.ElementAt(i - 1).ElementAt(0).Start.Day);
-                }
+                Assert.AreNotEqual(groupedMeetings.ElementAt(i).ElementAt(0).Start.Day, groupedMeetings.ElementAt(i - 1).ElementAt(0).Start.Day);
             }
         }
         [TestMethod]
-        public void GetById_ReturnsTheCorrectOfficer()
+        public void GetById_ReturnsTheRightOfficer()
         {
             Meeting meeting = new Meeting() { Topic = "Consulting", Id = Guid.NewGuid() };
             meetingRepository.Setup(x => x.Get(It.IsAny<Guid>())).Returns(meeting);
@@ -75,9 +72,9 @@ namespace MIS.ApplicationLogic.Tests
         [TestMethod]
         public void GetPreviousMeeting_ReturnsTheMostRecentPassedMeeting()
         {
-            Meeting meeting1 = new Meeting() { Topic = "Consulting", Id = Guid.NewGuid() , Start =DateTime.Now , End = DateTime.Now };
-            Meeting meeting2 = new Meeting() { Topic = "Consulting", Id = Guid.NewGuid() , Start =DateTime.Now , End = DateTime.Now };
-            Meeting meeting3 = new Meeting() { Topic = "Consulting", Id = Guid.NewGuid() , Start =DateTime.Now , End = DateTime.Now };
+            Meeting meeting1 = new Meeting() { Topic = "Consulting", Id = Guid.NewGuid(), Start = DateTime.Now, End = DateTime.Now };
+            Meeting meeting2 = new Meeting() { Topic = "Consulting", Id = Guid.NewGuid(), Start = DateTime.Now, End = DateTime.Now };
+            Meeting meeting3 = new Meeting() { Topic = "Consulting", Id = Guid.NewGuid(), Start = DateTime.Now, End = DateTime.Now };
             meeting1.Start = meeting1.Start.AddDays(1);
             meeting1.End = meeting1.End.AddDays(1);
             meeting2.Start = meeting2.Start.AddDays(-1);

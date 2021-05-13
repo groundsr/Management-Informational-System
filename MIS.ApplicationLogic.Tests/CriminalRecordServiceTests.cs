@@ -35,7 +35,7 @@ namespace MIS.Tests
         }
 
         [TestMethod]
-        public void AddPolicemanToCriminalRecord_ThrowExceptionForNull()
+        public void AddPolicemanToCriminalRecord_ThrowExceptionForNullPoliceman()
         {
             CriminalRecord criminalRecord=new CriminalRecord { Id=Guid.NewGuid(), Name="AnthonyMurder"};
             Policeman policeman = new Policeman { Id = Guid.NewGuid(), Name = "Bogdan Hurza", Email = "bogdan@bogdan.com" };
@@ -106,6 +106,8 @@ namespace MIS.Tests
 
             _criminalRecordsRepository.Setup(x => x.Remove(It.IsAny<Guid>())).Callback<Guid>((myGuid)
                 => _criminalRecordService.RemoveCriminalRecord(myGuid));                                       
+            
+
         }
 
     }
