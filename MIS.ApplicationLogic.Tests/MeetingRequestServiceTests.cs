@@ -26,7 +26,6 @@ namespace MIS.ApplicationLogic.Tests
             policemanRepository = new Mock<IPolicemanRepository>();
         }
 
-        [TestMethod]
         public void CreateRequest_CreatesARequestForAllPolicemen()
         {
             List<string> participantsEmail = new List<string>();

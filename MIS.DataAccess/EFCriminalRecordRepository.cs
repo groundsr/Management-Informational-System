@@ -41,7 +41,7 @@ namespace MIS.DataAccess
                 }
             }
 
-            return criminalRecords;
+            return criminalRecords.Distinct();
         }
         public IEnumerable<CriminalRecord> GetCriminalRecordsByName(string name)
         {
