@@ -31,11 +31,11 @@
 <form asp-controller="PoliceSection" asp-action="AddPolicemanToStation">
     <div class="row">
         <div class="input-group col">
-            <input type="hidden" name="id" value="@Model.Id" />
-            <input type="text" class="form-control" placeholder="Policeman e-mail ..." name="email">
-            <div class="input-group-append">
-                <button class="btn btn-primary form-control" type="submit">Add to section</button>
-            </div>
+                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="text" class="form-control" placeholder="Policeman e-mail ..." name="email">
+                <div class="input-group-append">
+                    <button class="btn btn-primary form-control" type="submit">Add to section</button>
+                </div>
         </div>
         <div class="col-4">
             <form asp-controller="PoliceSection" asp-action="Hierarchy" method="get" id="searchForm">
