@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.PageObjects;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,15 @@ namespace MIS.AutomatedTests.PageObjects
             this.webDriver = webDriver;
             PageFactory.InitElements(webDriver, this);
         }
-        [FindsBy(How = How.XPath, Using = "/html/body/header/nav/div/div/ul[2]/li[2]/a")]
+        [FindsBy(How = How.LinkText, Using = "Login")]
         private IWebElement loginButton;
         public LoginPage GoToLoginPage()
         {
+            WebDriverWait wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(3));
+            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementExists
+                (By.LinkText("Login")));
             loginButton.Click();
+            
             return new LoginPage(webDriver);
         }
         public void GoToPage()
