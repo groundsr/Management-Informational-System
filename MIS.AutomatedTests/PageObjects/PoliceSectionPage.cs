@@ -38,7 +38,7 @@ namespace MIS.AutomatedTests.PageObjects
             navbarButton.Click();
         }
 
-        public void 
+      
         public void DeclineTheLastRequest()
         {
             WebDriverWait wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(5));
