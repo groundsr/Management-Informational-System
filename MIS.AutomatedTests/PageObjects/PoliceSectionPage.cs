@@ -27,6 +27,8 @@ namespace MIS.AutomatedTests.PageObjects
         private IWebElement navbarButton;
         private int requests;
 
+
+
         public void GoToPage()
         {
             webDriver.Navigate().GoToUrl("https://localhost:44300/PoliceSection");
@@ -35,6 +37,8 @@ namespace MIS.AutomatedTests.PageObjects
         {
             navbarButton.Click();
         }
+
+        public void 
         public void DeclineTheLastRequest()
         {
             WebDriverWait wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(5));

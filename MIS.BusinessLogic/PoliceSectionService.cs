@@ -23,7 +23,11 @@ namespace MIS.BusinessLogic
             _criminalRecordRepository = criminalRecordService;
             _criminalRecordPoliceman = criminalRecordPolicemanRepository;
         }
-
+        public PoliceSectionService(IPoliceSectionRepository policeSectionRepository,IPolicemanRepository policemanRepository)
+        {
+            this._policeSectionRepository = policeSectionRepository;
+            this.policemanRepository = policemanRepository;
+        }
         public void AddPoliceToSection(PoliceSection policeSection, string email)
         {
             var policeman = policemanRepository.GetByEmail(email);
